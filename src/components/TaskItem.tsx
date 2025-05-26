@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import BulletIcon, { BulletTask } from "./BulletIcon";
+import BulletIcon from "./BulletIcon";
 import { useBulletStore } from "../shared/bulletStore";
+import { TaskCore } from "../shared/TaskCore";
 
-export default function Task({ bulletTask }: { bulletTask: BulletTask }) {
+export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   // 태스크 네임, 아이콘, 받아야하고 수정할 수 있어야함
-  const { id, icon, task, state } = bulletTask;
-
+  const { id, title, state } = bulletTask;
+  // console.log(state);
+  const deleteBullet = useBulletStore((state) => state.deleteBullet);
   const [isEdit, setIsEdit] = useState(false);
   const closeEdit = useCallback(() => setIsEdit(false), []);
-
-  const deleteBullet = useBulletStore((state) => state.deleteBullet);
 
   // // 단일컴포넌트에서 구독 시 예제
   // useEffect(() => {
@@ -28,27 +28,47 @@ export default function Task({ bulletTask }: { bulletTask: BulletTask }) {
   return (
     <div style={{ display: "flex", gap: 10 }}>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <button style={{ padding: "2px", cursor: "pointer" }} type='button' onClick={() => {}} onMouseDown={() => {}}>
-          <div className='icon-area' style={{ width: "24px", height: "24px", border: "1px solid black" }}>
-            <BulletIcon icon={{}} />
+        <button
+          style={{ padding: "2px", cursor: "pointer" }}
+          type='button'
+          onClick={() => {}}
+          onMouseDown={() => {}}
+        >
+          <div
+            className='icon-area'
+            style={{ width: "24px", height: "24px", border: "1px solid black" }}
+          >
+            <BulletIcon id={id} bulletState={state} />
           </div>
-          {/* <span>{task}</span> */}
         </button>
       </div>
-      <div>{isEdit ? <EditTask id={id} task={task} closeEdit={closeEdit} /> : <div onDoubleClick={() => setIsEdit(!isEdit)}>{task}</div>}</div>
+      <div>
+        {isEdit ? (
+          <EditTask id={id} title={title} closeEdit={closeEdit} />
+        ) : (
+          <div onDoubleClick={() => setIsEdit(!isEdit)}>{title}</div>
+        )}
+      </div>
       <button onClick={() => deleteBullet(id)}>X</button>
     </div>
   );
 }
 
-const EditTask = ({ id, task, closeEdit }: { id: string; task: string; closeEdit: () => void }) => {
-  const updateBullet = useBulletStore((state) => state.updateBullet);
+const EditTask = ({
+  id,
+  title,
+  closeEdit,
+}: {
+  id: string;
+  title: string;
+  closeEdit: () => void;
+}) => {
+  const editBullet = useBulletStore((state) => state.editBullet);
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState<{ title?: string; note?: string }>({});
 
   useEffect(() => {
-    setContent(task);
+    setContent({ title });
     if (inputRef.current) {
       // inputRef.current.focus();
       // inputRef.current.addEventListener("keypress", (e) => {
@@ -67,11 +87,11 @@ const EditTask = ({ id, task, closeEdit }: { id: string; task: string; closeEdit
       <input
         ref={inputRef}
         type='text'
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
+        value={content.title}
+        onChange={(e) => setContent({ title: e.target.value })}
         onKeyUp={(e) => {
           if (e.key === "Enter") {
-            updateBullet(id, { task: content });
+            editBullet(id, content);
             closeEdit();
           }
         }}

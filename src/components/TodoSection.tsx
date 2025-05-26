@@ -1,27 +1,20 @@
+import { useMemo } from "react";
 import Tab from "./Tab";
 import TodoContainer from "./TodoContainer";
-import Task from "./Task";
+import TaskItem from "./TaskItem";
 import { AddTaskIcon } from "./AddTask";
 import { useBulletStore } from "../shared/bulletStore";
-import { makeDateString } from "../utils/dateUtils";
 import { TaskCore } from "../shared/TaskCore";
-import { Bullet } from "../shared/types/taskType";
-import { useEffect, useState } from "react";
 
 const TodoSection = ({ isAddTaskIcon = false, tabPosition }: { isAddTaskIcon: boolean; tabPosition: "right" | "left" }) => {
-  const tasks = useBulletStore((state) => state.tasks);
-  const date = makeDateString();
-  const a = new TaskCore("테스트", { note: "howhowhow" });
-  const [task, setTask] = useState<TaskCore>(a);
+  const date = TaskCore.today();
+  const tasksMap = useBulletStore((state) => state.tasks);
 
-  console.log(tasks);
-  useEffect(() => {
-    console.log(task.state);
-    task.changeState(Bullet.DONE);
-    setTimeout(() => {
-      console.log(task.toJSON());
-    }, 3000);
-  }, [task]);
+  // 날짜별 필터 위치 확인해봐야함.
+  /** 날짜별 필터 */
+  const tasks = useMemo(() => {
+    return [...tasksMap.values()].filter((task) => task.createdAt === date || task.shouldCarryForward(date));
+  }, [date, tasksMap]);
 
   return (
     <div
@@ -45,9 +38,7 @@ const TodoSection = ({ isAddTaskIcon = false, tabPosition }: { isAddTaskIcon: bo
       )}
 
       <TodoContainer isAddIcon>
-        {[...tasks].map((bulletTask) => (
-          <Task key={bulletTask.id} bulletTask={bulletTask} />
-        ))}
+        {tasks.length > 0 && tasks.map((bulletTask) => <TaskItem key={bulletTask.id} bulletTask={bulletTask} />)}
       </TodoContainer>
       {isAddTaskIcon && <AddTaskIcon />}
     </div>

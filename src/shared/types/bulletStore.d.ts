@@ -10,8 +10,9 @@ export interface BulletStore {
   changeBulletState: (id: string, next: Bullet) => void;
   editBullet: (id: string, payload: Partial<Pick<TaskCore, "title" | "note">>) => void;
   deleteBullet: (id: string) => void;
+  toggleDone: (id: string) => void;
 
   // 날짜별 조회 & 이월
-  bulletFor: (date: string) => TaskCore[];
+  // bulletFor: (date: string) => TaskCore[];
   postpone: (today: string) => void;
 }

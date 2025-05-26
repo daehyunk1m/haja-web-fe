@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useAddModalStore } from "../shared/addModalStore";
 
-import Icon from "./BulletIcon";
 import { useBulletStore } from "../shared/bulletStore";
+import BulletIcon from "./BulletIcon";
+import { Bullet } from "../shared/types/taskType";
 
 export function AddTaskIcon({ size = 48 }: { size?: 18 | 24 | 48 }) {
   // 18 24 48
   // const size = '48'
 
-  const { toggleModal } = useAddModalStore((state) => state.actions);
+  const { toggleAddModal } = useAddModalStore((state) => state.actions);
 
   return (
     <div
@@ -32,7 +33,7 @@ export function AddTaskIcon({ size = 48 }: { size?: 18 | 24 | 48 }) {
           border: "1px solid red",
           cursor: "pointer",
         }}
-        onClick={() => toggleModal()}
+        onClick={() => toggleAddModal()}
       >
         +
       </button>
@@ -41,8 +42,8 @@ export function AddTaskIcon({ size = 48 }: { size?: 18 | 24 | 48 }) {
 }
 
 export function AddModal() {
-  const { toggleModal, closeModal } = useAddModalStore((state) => state.actions);
-  const createNewBullet = useBulletStore((state) => state.createNewBullet);
+  const { toggleAddModal, closeModal } = useAddModalStore((state) => state.actions);
+  const addBullet = useBulletStore((state) => state.addBullet);
 
   const [input, setInput] = useState("");
 
@@ -88,7 +89,7 @@ export function AddModal() {
         }}
       >
         <div style={{ display: "flex", gap: 10, border: "1px solid black" }}>
-          <Icon />
+          {/* <BulletIcon id={id} bulletState={Bullet.TODO}/> */}
           <input
             style={{ width: "100%" }}
             type='text'
@@ -119,7 +120,7 @@ export function AddModal() {
               cursor: "pointer",
             }}
             onClick={() => {
-              createNewBullet(input);
+              addBullet(input);
               closeModal();
             }}
           >

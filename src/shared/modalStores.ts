@@ -4,6 +4,7 @@ import { immer } from "zustand/middleware/immer";
 
 const initialState = {
   isModalOpen: false,
+  targetId: "",
 };
 
 export const useModalStore = create(
@@ -12,10 +13,11 @@ export const useModalStore = create(
       immer(
         combine(initialState, (set) => {
           // actions
-          const toggleModal = () => {
+          const toggleModal = (id: string) => {
             set((state) => {
-              console.log("toggle modal");
-              return { isModalOpen: !state.isModalOpen };
+              return { isModalOpen: !state.isModalOpen, targetId: id };
+              // state.isModalOpen = !state.isModalOpen;
+              // state.targetId = id;
             });
           };
           return {

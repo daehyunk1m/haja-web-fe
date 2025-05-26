@@ -1,16 +1,6 @@
 import { Bullet, TaskEvent } from "./types/taskType";
 import { recordDate } from "../utils/dateUtils";
 
-/** 데이터 레코드(DTO) */
-export interface TaskRecordDTO {
-  id: string;
-  title: string;
-  note?: string;
-  createdAt: string;
-  completedAt?: string;
-  events: TaskEvent[];
-}
-
 export class TaskCore {
   // <-- property -->
   /** 고유 Id값  */
@@ -75,18 +65,27 @@ export class TaskCore {
   // <-- method -->
   /** 불렛 상태 변경 */
   changeState(state: Bullet, date: string = TaskCore.today()) {
-    if (this.isClosed) return;
-    if (state === Bullet.DONE || state === Bullet.CANCEL) this._completedAt = date;
+    if (this.state === state) return this;
 
-    this._events.push({ state, date });
+    const clone = this.with({});
+
+    clone._completedAt = state === Bullet.DONE || state === Bullet.CANCEL ? date : undefined;
+    clone._events.push({ date, state });
+
+    return clone;
   }
-  /** 완료로 바로 설정 */
-  done(date?: string) {
-    this.changeState(Bullet.DONE, date);
-  }
-  /** 삭제로 바로 설정 */
-  cancel(date?: string) {
-    this.changeState(Bullet.CANCEL, date);
+
+  /** 새 인스턴스 반환 메서드 */
+  with(update: Partial<Pick<TaskCore, "title" | "note">>) {
+    const clone = new TaskCore(update.title ?? this._title, {
+      id: this.id,
+      note: update.note ?? this._note,
+      createdAt: this.createdAt,
+      completedAt: this._completedAt,
+    });
+    clone._events = [...this._events];
+
+    return clone;
   }
 
   /** 연기 대상인지 판별 */
@@ -124,4 +123,14 @@ export class TaskCore {
   static compareDate(a: string, b: string) {
     return new Date(a).getTime() - new Date(b).getTime();
   }
+}
+
+/** 데이터 레코드(DTO) */
+export interface TaskRecordDTO {
+  id: string;
+  title: string;
+  note?: string;
+  createdAt: string;
+  completedAt?: string;
+  events: TaskEvent[];
 }

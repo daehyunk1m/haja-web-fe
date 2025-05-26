@@ -12,7 +12,7 @@ export const useAddModalStore = create(
       immer(
         combine(initialState, (set) => {
           // actions
-          const toggleModal = () => {
+          const toggleAddModal = () => {
             set((state) => {
               console.log("toggle add modal", state.isAddModalOpen);
               return { isAddModalOpen: !state.isAddModalOpen };
@@ -20,7 +20,7 @@ export const useAddModalStore = create(
           };
           const closeModal = () => set(() => ({ isAddModalOpen: false }));
           return {
-            actions: { toggleModal, closeModal },
+            actions: { toggleAddModal, closeModal },
           };
         })
       )

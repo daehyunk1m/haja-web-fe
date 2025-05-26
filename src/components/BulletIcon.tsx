@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useModalStore } from "../shared/modalStores";
+import { Bullet } from "../shared/types/taskType";
+import { useBulletStore } from "../shared/bulletStore";
 
-const BulletIcon = ({ bulletState }: any) => {
-  // setStates
+const BulletIcon = ({ id, bulletState }: { id: string; bulletState: Bullet }) => {
   const isModalOpen = useModalStore((state) => state.isModalOpen);
   const { toggleModal } = useModalStore((state) => state.actions);
+
+  const changeBulletState = useBulletStore((state) => state.changeBulletState);
+  const toggleDone = useBulletStore((state) => state.toggleDone);
 
   // state for click
   const [clickTime, setClickTime] = useState(0);
@@ -17,16 +21,17 @@ const BulletIcon = ({ bulletState }: any) => {
         const clickEnd = Date.now();
 
         if (clickTime + clickDuration < clickEnd) {
-          // when hold
-          toggleModal();
-          // modal open
-          // setIsModalOpen(!isModalOpen);
+          // when hold - modal open
+          toggleModal(id);
         } else {
-          // setBulletState("Done");
+          if (isModalOpen) {
+            changeBulletState(id, bulletState);
+            toggleModal(id);
+          } else toggleDone(id);
         }
       }}
     >
-      <span>0</span>
+      <span style={{ display: "contents" }}>{bulletState}</span>
     </button>
   );
 };
