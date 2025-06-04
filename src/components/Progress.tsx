@@ -1,15 +1,27 @@
-import React, { useEffect, useState } from "react";
+import { useProgressStore } from "@/shared/progressStore";
 import PieChart from "./PieChart";
+// import { useEffect, useState } from "react";
+// import { useBulletStore } from "../shared/bulletStore";
+// import { useDateStore } from "@/shared/dateStore";
 
 const Progress = () => {
-  const [progressRange, setProgressRange] = useState(100);
+  const progressRange = useProgressStore((state) => state.progressRange);
 
-  useEffect(() => {
-    console.log(progressRange);
-    setTimeout(() => {
-      setProgressRange((range) => --range);
-    }, 500);
-  }, []);
+  // const tasks = useBulletStore((state) => state.tasks);
+  // const dateString = useDateStore(({ toBulletString }) => toBulletString());
+
+  // const [progressRange, setProgressRange] = useState(0);
+
+  // useEffect(() => {
+  //   console.log(tasks, dateString);
+  //   const countDone = tasks
+  //     .values()
+  //     .filter(({ isClosed }) => isClosed)
+  //     .toArray().length;
+
+  //   setProgressRange((countDone / tasks.size) * 100);
+  // }, [dateString, tasks]);
+
   return (
     <div>
       <div

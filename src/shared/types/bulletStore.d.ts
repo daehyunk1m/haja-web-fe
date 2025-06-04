@@ -6,11 +6,11 @@ export interface BulletStore {
   tasks: Map<string, TaskCore>;
 
   // CRUD
-  addBullet: (title: string, note?: string) => void;
-  changeBulletState: (id: string, next: Bullet) => void;
+  addBullet: (title: string, payload: Partial<Pick<TaskCore, "createdAt" | "note">>) => void;
+  changeBulletState: (id: string, next: Bullet, date?: string) => void;
   editBullet: (id: string, payload: Partial<Pick<TaskCore, "title" | "note">>) => void;
   deleteBullet: (id: string) => void;
-  toggleDone: (id: string) => void;
+  toggleDone: (id: string, date?: string) => void;
 
   // 날짜별 조회 & 이월
   // bulletFor: (date: string) => TaskCore[];

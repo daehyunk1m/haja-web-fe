@@ -1,4 +1,4 @@
-import { useBulletStore } from "../shared/bulletStore";
+// import { useBulletStore } from "../shared/bulletStore";
 import { useModalStore } from "../shared/modalStores";
 import { Bullet } from "../shared/types/taskType";
 import BulletIcon from "./BulletIcon";
@@ -14,8 +14,8 @@ export default function Modal() {
   ];
 
   const id = useModalStore((state) => state.targetId);
-  const { toggleModal } = useModalStore((state) => state.actions);
-  const changeBulletState = useBulletStore((state) => state.changeBulletState);
+  // const { toggleModal } = useModalStore((state) => state.actions);
+  // const changeBulletState = useBulletStore((state) => state.changeBulletState);
 
   return (
     <div className='modal' style={{ width: "fit-content", border: "1px solid black" }}>

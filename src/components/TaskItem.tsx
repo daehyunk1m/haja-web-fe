@@ -28,25 +28,30 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   return (
     <div style={{ display: "flex", gap: 10 }}>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <button
+        {/* <button
           style={{ padding: "2px", cursor: "pointer" }}
           type='button'
           onClick={() => {}}
           onMouseDown={() => {}}
         >
-          <div
-            className='icon-area'
-            style={{ width: "24px", height: "24px", border: "1px solid black" }}
-          >
-            <BulletIcon id={id} bulletState={state} />
-          </div>
-        </button>
+        </button> */}
+        <div
+          className='icon-area'
+          style={{ width: "36px", height: "36px", margin: "2px", border: "1px solid black" }}
+        >
+          <BulletIcon id={id} bulletState={state} />
+        </div>
       </div>
       <div>
         {isEdit ? (
           <EditTask id={id} title={title} closeEdit={closeEdit} />
         ) : (
-          <div onDoubleClick={() => setIsEdit(!isEdit)}>{title}</div>
+          <div
+            onClick={() => console.log(bulletTask.toJSON())}
+            onDoubleClick={() => setIsEdit(!isEdit)}
+          >
+            {title}
+          </div>
         )}
       </div>
       <button onClick={() => deleteBullet(id)}>X</button>
@@ -65,7 +70,7 @@ const EditTask = ({
 }) => {
   const editBullet = useBulletStore((state) => state.editBullet);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [content, setContent] = useState<{ title?: string; note?: string }>({});
+  const [content, setContent] = useState<Partial<Pick<TaskCore, "title" | "note">>>({});
 
   useEffect(() => {
     setContent({ title });

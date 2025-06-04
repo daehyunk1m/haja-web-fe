@@ -11,6 +11,9 @@ interface VitestConfigExport extends UserConfig {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [reactRouter(), tailwindcss()],
+  resolve: {
+    alias: [{ find: "@", replacement: "/src" }],
+  },
   // reactRouter 문서 다시 한번 확인해볼 것!
   test: {
     globals: true,

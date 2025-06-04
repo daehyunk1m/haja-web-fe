@@ -5,6 +5,7 @@ import { useAddModalStore } from "../shared/addModalStore";
 import { useBulletStore } from "../shared/bulletStore";
 import BulletIcon from "./BulletIcon";
 import { Bullet } from "../shared/types/taskType";
+import { useDateStore } from "@/shared/dateStore";
 
 export function AddTaskIcon({ size = 48 }: { size?: 18 | 24 | 48 }) {
   // 18 24 48
@@ -44,6 +45,7 @@ export function AddTaskIcon({ size = 48 }: { size?: 18 | 24 | 48 }) {
 export function AddModal() {
   const { toggleAddModal, closeModal } = useAddModalStore((state) => state.actions);
   const addBullet = useBulletStore((state) => state.addBullet);
+  const dateString = useDateStore((state) => state.toBulletString());
 
   const [input, setInput] = useState("");
 
@@ -120,7 +122,7 @@ export function AddModal() {
               cursor: "pointer",
             }}
             onClick={() => {
-              addBullet(input);
+              addBullet(input, { createdAt: dateString });
               closeModal();
             }}
           >

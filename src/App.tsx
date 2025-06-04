@@ -8,6 +8,7 @@ import { useModalStore } from "./shared/modalStores";
 import { useAddModalStore } from "./shared/addModalStore";
 import TodoSection from "./components/TodoSection";
 import { enableMapSet } from "immer";
+import { useDateStore } from "./shared/dateStore";
 
 // immer Map/Set 불면 처리 활성화
 enableMapSet();
@@ -15,6 +16,11 @@ enableMapSet();
 function App() {
   const isModalOpen = useModalStore((state) => state.isModalOpen);
   const isAddModalOpen = useAddModalStore((state) => state.isAddModalOpen);
+  const { setDate } = useDateStore((state) => state.actions);
+
+  useEffect(() => {
+    setDate(new Date());
+  }, []);
 
   // 첫 렌더 시 스토리지에 있는 데이터와 동기화
   useEffect(() => {

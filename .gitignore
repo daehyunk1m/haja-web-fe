@@ -26,5 +26,3 @@ dist-ssr
 
 # Bundlers
 .react-router/
-
-yarn.lock

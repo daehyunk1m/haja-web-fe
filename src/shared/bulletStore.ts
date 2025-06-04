@@ -22,17 +22,17 @@ export const useBulletStore = create<BulletStore>()(
             // 상태
             tasks: new Map<string, TaskCore>(),
             // 액션
-            addBullet: (title, note) => {
-              const task = new TaskCore(title, { note });
+            addBullet: (title, option) => {
+              const task = new TaskCore(title, option);
               set((state) => void state.tasks.set(task.id, task));
               // saveToBackend
             },
-            changeBulletState: (id, next) => {
+            changeBulletState: (id, next, date) => {
               set((state) => {
                 const task = state.tasks.get(id);
                 if (!task) return;
 
-                state.tasks.set(id, task.changeState(next));
+                state.tasks.set(id, task.changeState(next, date));
               });
               // saveToBackend
             },
@@ -51,16 +51,17 @@ export const useBulletStore = create<BulletStore>()(
               // const { session } = useAuthStore.getState();
               // if (session) supabase.from("tasks").delete().eq("id", id);
             },
-            toggleDone: (id: string) => {
+            toggleDone: (id, date) => {
               set((state) => {
+                // 이 부분 유저 플로우 한번 확인 필요
                 const task = state.tasks.get(id);
                 if (!task) return;
 
                 const lastState =
                   task.state === Bullet.TODO ? Bullet.DONE : task.events.at(-2)!.state;
-                const lastDate = task.events.at(-1)!.date;
+                // const lastDate = task.events.at(-1)!.date;
 
-                state.tasks.set(id, task.changeState(lastState, lastDate));
+                state.tasks.set(id, task.changeState(lastState, date));
               });
             },
             /** 날짜별 필터 */
