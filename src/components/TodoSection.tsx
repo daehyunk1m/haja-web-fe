@@ -15,24 +15,16 @@ const TodoSection = ({
   isAddTaskIcon: boolean;
   tabPosition: "right" | "left";
 }) => {
-  // const date = TaskCore.today();
-  // const [date, setDate] = useState<Date | undefined>(new Date(TaskCore.today()));
   const dateString = useDateStore((state) => state.toBulletString());
-  // const date = makeDateString("2025-05-29", "-", true);
-  // console.log(date);
   const tasksMap = useBulletStore((state) => state.tasks);
   const postpone = useBulletStore((state) => state.postpone);
 
   // 날짜별 필터 위치 확인해봐야함.
-  // @todo
-  // 컴플리트 된 것 도 함께 필터링 해야함
   /** 날짜별 필터 */
   const tasks = useMemo(() => {
     return [...tasksMap.values()].filter(
       (task) =>
-        // 여기 로직 수정, 컴플리트 먼저 필터링, 아닌 것들에 한해서 크리에이트 및 슈드캐리포워드 적용
-        task.createdAt === dateString ||
-        task.completedAt === dateString ||
+        (!task.completedAt ? task.createdAt === dateString : task.completedAt === dateString) ||
         task.shouldCarryForward(dateString)
     );
   }, [dateString, tasksMap]);
@@ -45,10 +37,9 @@ const TodoSection = ({
 
   useEffect(() => {
     postpone(dateString);
-  }, []);
+  }, [dateString, postpone]);
 
-  // useDateStore 만들기
-  const [isCalanederOpen, setIsCalanderOpen] = useState(false);
+  const [isCalenderOpen, setIsCalenderOpen] = useState(false);
 
   return (
     <div
@@ -67,8 +58,7 @@ const TodoSection = ({
       ) : (
         <div style={{ display: "flex", flexDirection: "row-reverse" }}>
           <Tab selected>TODAY</Tab>
-          <div onClick={() => setIsCalanderOpen((open) => !open)}>
-            {/* <Tab>{date?.toDateString()}</Tab> */}
+          <div onClick={() => setIsCalenderOpen((open) => !open)}>
             <Tab>{dateString}</Tab>
           </div>
         </div>
@@ -79,7 +69,7 @@ const TodoSection = ({
           tasks.map((bulletTask) => <TaskItem key={bulletTask.id} bulletTask={bulletTask} />)}
       </TodoContainer>
       {isAddTaskIcon && <AddTaskIcon />}
-      {isCalanederOpen && <CalendarContainer setIsOpen={setIsCalanderOpen} />}
+      {isCalenderOpen && <CalendarContainer setIsOpen={setIsCalenderOpen} />}
     </div>
   );
 };

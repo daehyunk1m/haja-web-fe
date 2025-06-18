@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Modal from "./components/Modal";
 import { AddModal } from "./components/AddTask";
 import Container from "./components/Container";

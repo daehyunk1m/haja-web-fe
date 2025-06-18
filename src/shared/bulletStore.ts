@@ -59,7 +59,6 @@ export const useBulletStore = create<BulletStore>()(
 
                 const lastState =
                   task.state === Bullet.TODO ? Bullet.DONE : task.events.at(-2)!.state;
-                // const lastDate = task.events.at(-1)!.date;
 
                 state.tasks.set(id, task.changeState(lastState, date));
               });

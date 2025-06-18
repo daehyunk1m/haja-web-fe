@@ -7,21 +7,6 @@ import PieChart from "./PieChart";
 const Progress = () => {
   const progressRange = useProgressStore((state) => state.progressRange);
 
-  // const tasks = useBulletStore((state) => state.tasks);
-  // const dateString = useDateStore(({ toBulletString }) => toBulletString());
-
-  // const [progressRange, setProgressRange] = useState(0);
-
-  // useEffect(() => {
-  //   console.log(tasks, dateString);
-  //   const countDone = tasks
-  //     .values()
-  //     .filter(({ isClosed }) => isClosed)
-  //     .toArray().length;
-
-  //   setProgressRange((countDone / tasks.size) * 100);
-  // }, [dateString, tasks]);
-
   return (
     <div>
       <div

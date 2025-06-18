@@ -32,10 +32,10 @@ export default function Modal() {
                 // toggleModal(id);
               }}
             >
-              <button style={{ display: "flex", flexDirection: "row", gap: 10 }}>
+              <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                 <BulletIcon id={id} bulletState={state} />
                 <div>{capital}</div>
-              </button>
+              </div>
             </div>
           );
         })}
