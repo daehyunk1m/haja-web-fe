@@ -2,8 +2,8 @@
 export enum Bullet {
   /** `할 일` - 생성 직후 */
   TODO = "todo",
-  /** `할 일` - 시작 */
-  START = "start",
+  // /** `할 일` - 시작 */
+  // START = "start",
   /** `할 일` - 진행 중 */
   ONGOING = "ongoing",
   /** `할 일` - 연기 */

@@ -12,7 +12,7 @@ const TodoSection = ({
   isAddTaskIcon = false,
   tabPosition,
 }: {
-  isAddTaskIcon: boolean;
+  isAddTaskIcon?: boolean;
   tabPosition: "right" | "left";
 }) => {
   const dateString = useDateStore((state) => state.toBulletString());
@@ -43,28 +43,12 @@ const TodoSection = ({
 
   return (
     <div
-      className='taskAndTabs'
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        flex: 1,
-        backgroundColor: "rgba(200,0,0, 0.1)",
-      }}
+      className={`w-full flex flex-col ${isAddTaskIcon ? "flex-1" : "max-h-[176px]"} ${
+        tabPosition === "left" ? "items-start" : "items-end"
+      }`}
     >
-      {tabPosition === "left" ? (
-        <div style={{ display: "flex", gap: 2, flexDirection: "row" }}>
-          <Tab selected>SOMEDAY</Tab>
-        </div>
-      ) : (
-        <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-          <Tab selected>TODAY</Tab>
-          <div onClick={() => setIsCalenderOpen((open) => !open)}>
-            <Tab>{dateString}</Tab>
-          </div>
-        </div>
-      )}
-
-      <TodoContainer isAddIcon>
+      <TabSection tabPosition={tabPosition} />
+      <TodoContainer isAddIcon={isAddTaskIcon}>
         {tasks.length > 0 &&
           tasks.map((bulletTask) => <TaskItem key={bulletTask.id} bulletTask={bulletTask} />)}
       </TodoContainer>
@@ -75,3 +59,31 @@ const TodoSection = ({
 };
 
 export default TodoSection;
+
+function TabSection({ tabPosition }: { tabPosition: "right" | "left" }) {
+  const dateString = useDateStore((state) => state.toBulletString());
+  return (
+    <div className='flex flex-row items-center'>
+      {tabPosition === "left" ? (
+        <Tab selected>
+          SOMEDAY <ArrowIcon direction='up' />
+        </Tab>
+      ) : (
+        <>
+          <Tab>{dateString}</Tab>
+          <Tab selected className='-ml-px'>
+            TODAY
+          </Tab>
+        </>
+      )}
+    </div>
+  );
+}
+
+// function DateTab() {
+
+// }
+
+function ArrowIcon({ direction }: { direction: "up" | "down" }) {
+  return <>{direction === "up" ? "" : ""}</>;
+}

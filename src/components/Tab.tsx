@@ -1,24 +1,21 @@
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 
-const Tab = ({ children, selected = false }: PropsWithChildren<{ selected?: boolean }>) => {
+const Tab = ({
+  children,
+  selected = false,
+  className,
+}: PropsWithChildren<{ selected?: boolean; className?: string }>) => {
   return (
-    <div
-      style={{
-        width: "125px",
-        height: "35px",
-        border: "1px solid black",
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        padding: "2 10",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: !selected ? "white" : "black",
-        color: selected ? "white" : "black",
+    <button
+      className={`h-[35px] w-[125px] flex items-center justify-center rounded-tl-[10px] rounded-tr-[10px] border border-black border-b-0 ${className} cursor-pointer ${
+        selected ? "bg-black text-white" : "bg-white text-black"
+      }`}
+      onClick={() => {
+        console.log("clicked");
       }}
     >
-      <span>{children}</span>
-    </div>
+      <span className='font-bold text-[16px] tracking-[-0.03em]'>{children}</span>
+    </button>
   );
 };
 

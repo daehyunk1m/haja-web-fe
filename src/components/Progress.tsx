@@ -8,17 +8,9 @@ const Progress = () => {
   const progressRange = useProgressStore((state) => state.progressRange);
 
   return (
-    <div>
-      <div
-        style={{
-          width: "70px",
-          height: "70px",
-          // border: "1px solid black",
-          justifyContent: "center",
-        }}
-      >
-        <PieChart progress={progressRange} size={70} fillColor='black' />
-      </div>
+    <div className='flex items-center justify-center rounded-[30px] w-[60px] h-[60px] p-[2px]'>
+      <PieChart progress={progressRange} size={70} fillColor='black' bgColor='white' />
+      {/* <div className='bg-gray-200 w-full h-full rounded-full' /> */}
     </div>
   );
 };

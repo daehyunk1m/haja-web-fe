@@ -3,9 +3,8 @@ import { createPortal } from "react-dom";
 import { useAddModalStore } from "../shared/addModalStore";
 
 import { useBulletStore } from "../shared/bulletStore";
-import BulletIcon from "./BulletIcon";
-import { Bullet } from "../shared/types/taskType";
 import { useDateStore } from "@/shared/dateStore";
+import Ico from "./Ico";
 
 export function AddTaskIcon({ size = 48 }: { size?: 18 | 24 | 48 }) {
   // 18 24 48
@@ -14,29 +13,12 @@ export function AddTaskIcon({ size = 48 }: { size?: 18 | 24 | 48 }) {
   const { toggleAddModal } = useAddModalStore((state) => state.actions);
 
   return (
-    <div
-      className='addTaskIcon'
-      style={{
-        width: size,
-        height: size,
-        // position: "relative",
-        display: "flex",
-        justifyContent: "center",
-        // right: "20px",
-        // bottom: "48px",
-        border: "1px solid black",
-        cursor: "pointer",
-      }}
-    >
+    <div className='relative h-5 w-10'>
       <button
-        style={{
-          flex: 1,
-          border: "1px solid red",
-          cursor: "pointer",
-        }}
+        className='absolute left-5 -top-5 bg-white w-10 h-10 flex items-center justify-center cursor-pointer'
         onClick={() => toggleAddModal()}
       >
-        +
+        <Ico.Add />
       </button>
     </div>
   );

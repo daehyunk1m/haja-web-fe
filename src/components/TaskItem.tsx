@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import BulletIcon from "./BulletIcon";
 import { useBulletStore } from "../shared/bulletStore";
 import { TaskCore } from "../shared/TaskCore";
+import Ico from "./Ico";
 
 export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   // 태스크 네임, 아이콘, 받아야하고 수정할 수 있어야함
@@ -26,35 +27,26 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   //   };
 
   return (
-    <div style={{ display: "flex", gap: 10 }}>
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-        {/* <button
-          style={{ padding: "2px", cursor: "pointer" }}
-          type='button'
-          onClick={() => {}}
-          onMouseDown={() => {}}
-        >
-        </button> */}
-        <div
-          className='icon-area'
-          style={{ width: "36px", height: "36px", margin: "2px", border: "1px solid black" }}
-        >
-          <BulletIcon id={id} bulletState={state} />
-        </div>
+    <div className='hover:bg-[#f0f0f0] transition-colors flex flex-row items-center w-full'>
+      <div className='h-[38px] flex flex-row items-center px-5 py-1 gap-2 w-full'>
+        <BulletIcon id={id} bulletState={state} />
+        <span className='font-medium text-[16px] text-black whitespace-nowrap'>
+          {isEdit ? (
+            <EditTask id={id} title={title} closeEdit={closeEdit} />
+          ) : (
+            <span
+              className='font-medium text-[16px] text-black whitespace-nowrap'
+              onClick={() => console.log(bulletTask.toJSON())}
+              onDoubleClick={() => setIsEdit(!isEdit)}
+            >
+              {title}
+            </span>
+          )}
+        </span>
+        <button onClick={() => deleteBullet(id)}>
+          <Ico.Delete />
+        </button>
       </div>
-      <div>
-        {isEdit ? (
-          <EditTask id={id} title={title} closeEdit={closeEdit} />
-        ) : (
-          <div
-            onClick={() => console.log(bulletTask.toJSON())}
-            onDoubleClick={() => setIsEdit(!isEdit)}
-          >
-            {title}
-          </div>
-        )}
-      </div>
-      <button onClick={() => deleteBullet(id)}>X</button>
     </div>
   );
 }

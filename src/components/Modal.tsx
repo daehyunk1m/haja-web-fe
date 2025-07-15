@@ -6,7 +6,7 @@ import BulletIcon from "./BulletIcon";
 export default function Modal() {
   const states = [
     Bullet.TODO,
-    Bullet.START,
+    // Bullet.START,
     Bullet.ONGOING,
     Bullet.DELAY,
     Bullet.DONE,

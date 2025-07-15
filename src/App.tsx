@@ -32,19 +32,8 @@ function App() {
   return (
     <>
       <Container>
-        <div style={{ display: "flex", marginBottom: "2v0px" }}>
-          <div style={{ flexDirection: "column", width: "100%" }}>
-            <Title />
-            <Progress />
-          </div>
-        </div>
-        <div
-          className='container'
-          style={{ display: "flex", flexDirection: "column", flex: 1, gap: 20 }}
-        >
-          <TodoSection isAddTaskIcon tabPosition='right' />
-          <TodoSection isAddTaskIcon tabPosition='left' />
-        </div>
+        <Header />
+        <Body />
         {isModalOpen && <Modal />}
       </Container>
       {isAddModalOpen && <AddModal />}
@@ -53,6 +42,24 @@ function App() {
 }
 
 export default App;
+
+function Header() {
+  return (
+    <div className='w-full flex flex-col gap-2.5'>
+      <Title />
+      <Progress />
+    </div>
+  );
+}
+
+function Body() {
+  return (
+    <div className='w-full flex flex-col flex-1 items-center pt-0.5 pr-3.5 pb-0.5 pl-0.5'>
+      <TodoSection isAddTaskIcon tabPosition='right' />
+      <TodoSection tabPosition='left' />
+    </div>
+  );
+}
 
 // 콜백 없이 스토어 훅을 호출하면 개별 상태나 액션이 아닌 스토어 객체를 얻을 수 있지만, 사용하지 않는 상태가 변경되도 컴포너트가 리렌더링 되기에 권장되지 않음.
 // const { count, inc } = useNameStore();
