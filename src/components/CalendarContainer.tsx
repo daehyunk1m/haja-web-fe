@@ -1,24 +1,12 @@
-import React from "react";
-import { Calendar } from "./ui/calendar";
 import { useDateStore } from "@/shared/dateStore";
+import { CalendarModal } from "./CalendarModal";
 
-const CalendarContainer = ({
-  setIsOpen,
-}: {
-  setIsOpen: (value: React.SetStateAction<boolean>) => void;
-}) => {
+const CalendarContainer = () => {
   const date = useDateStore((state) => state.date);
   const onSelect = useDateStore((state) => state.actions.setDate);
-
+  const { toggleCalendar } = useDateStore((state) => state.actions);
   return (
-    <Calendar
-      mode='single'
-      selected={date}
-      onSelect={onSelect}
-      onDayClick={() => {
-        setIsOpen((open) => !open);
-      }}
-    />
+    <CalendarModal open={true} onClose={() => toggleCalendar()} value={date} onSelect={onSelect} />
   );
 };
 

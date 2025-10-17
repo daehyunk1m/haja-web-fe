@@ -9,6 +9,8 @@ export default [
   route("/main", "./pages/MainPage.tsx"),
   route("/test", "./pages/Test.tsx"),
   route("/mcp", "./components/FigmaTest.tsx"),
+  route("/login", "./pages/Login.tsx"),
+  route("/auth/callback", "./pages/AuthCallback.tsx"),
   // Original app route
   // route("/app", "./pages/AppPage.tsx"),
   // Catch-all for other routes

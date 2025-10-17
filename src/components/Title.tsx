@@ -1,19 +1,12 @@
-import React from "react";
+import { useNavigate } from "react-router";
 
 const Title = () => {
+  const navigate = useNavigate();
+
   const lb = localStorage.getItem("localBullets") ?? "{}";
   const localBullets = JSON.parse(lb);
 
   return (
-    // <div
-    //   className='self-stretch inline-flex justify-between items-start'
-    //   style={{ display: "flex", flex: 1, justifyContent: "space-between" }}
-    // >
-    //   <h1 className='text-3xl font-bold'>HAJA</h1>
-    //   <h3 className='text-xl font-bold' onClick={() => console.log(localBullets)}>
-    //     {true ? "TO DO LIST" : "24.NOV"}
-    //   </h3>
-    // </div>
     <div className='flex flex-row items-start justify-between w-full'>
       <div className='font-black text-[32px] tracking-[-0.06em] font-dm-sans'>HAJA</div>
       <div
@@ -21,6 +14,9 @@ const Title = () => {
         onClick={() => console.log(localBullets)}
       >
         {true ? "TO DO LIST" : "24.NOV"}
+        <div className='flex justify-end'>
+          <button onClick={() => navigate("/login")}>로그인</button>
+        </div>
       </div>
     </div>
   );

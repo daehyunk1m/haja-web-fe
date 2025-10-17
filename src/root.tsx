@@ -9,7 +9,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <title>My App using Router</title>
         <Meta />
         {/* react-scan */}
-        <script crossOrigin='anonymous' src='//unpkg.com/react-scan/dist/auto.global.js' />
+        {/* <script crossOrigin='anonymous' src='//unpkg.com/react-scan/dist/auto.global.js' /> */}
         <Links />
       </head>
       <body>

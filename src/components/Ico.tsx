@@ -60,12 +60,12 @@ Ico.Cancel = () => {
   );
 };
 
-Ico.Add = () => {
+Ico.Add = ({ fill = "black" }: { fill?: string }) => {
   return (
     <Ico size={40}>
       <path
         d='M33 30.3333L26 37.3333H7V3.33331H33V30.3333ZM8 36.3333H25V29.3333H32V4.33331H8V36.3333ZM26 35.9193L31.5859 30.3333H26V35.9193ZM20.5 17.3333H27V18.3333H20.5V25.3333H19.5V18.3333H13V17.3333H19.5V11.3333H20.5V17.3333Z'
-        fill='black'
+        fill={fill}
       />
     </Ico>
   );
@@ -80,4 +80,30 @@ Ico.Delete = () => {
       />
     </Ico>
   );
+};
+
+Ico.Send = () => {
+  return (
+    <Ico>
+      <path
+        d='M21 12.3323V12.3333L12 21.3333H3V19.9193L10.5859 12.3333L3 4.74738V3.33331H12L21 12.3323ZM12 12.3323V12.3333L4 20.3333H11.5859L19.5859 12.3333L11.5859 4.33331H4L12 12.3323Z'
+        fill='black'
+      />
+    </Ico>
+  );
+};
+
+Ico.Arrow = ({ direction }: { direction: "up" | "down" | "left" | "right" }) => {
+  switch (direction) {
+    case "up":
+      return "";
+    case "down":
+      return "";
+    case "left":
+      return "";
+    case "right":
+      return "";
+    default:
+      return null;
+  }
 };

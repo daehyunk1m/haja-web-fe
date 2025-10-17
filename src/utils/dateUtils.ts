@@ -1,4 +1,8 @@
-export const makeDateString = (date: Date | string | number = new Date(), join?: "-" | "." | "/", forEvent?: boolean) => {
+export const makeDateString = (
+  date: Date | string | number = new Date(),
+  join?: "-" | "." | "/",
+  forEvent?: boolean
+) => {
   const d = date instanceof Date ? date : new Date(date);
 
   // 유효성 검사
@@ -19,4 +23,8 @@ export const makeDateString = (date: Date | string | number = new Date(), join?:
   return join ? [year, month, day].join(join) : `${year}. ${month}. ${day}`;
 };
 
-export const recordDate = (date: Date | string | number = new Date()) => makeDateString(date, "-", true);
+/** 날짜 문자열 생성
+ * @returns "YYYY-MM-DD"
+ */
+export const recordDate = (date: Date | string | number = new Date()) =>
+  makeDateString(date, "-", true);

@@ -5,6 +5,7 @@ import { recordDate } from "@/utils/dateUtils";
 
 const initialState = {
   date: new Date(),
+  isCalendarOpen: false,
 };
 
 export const useDateStore = create(
@@ -23,9 +24,21 @@ export const useDateStore = create(
             });
           };
 
+          const toggleCalendar = (isOpen?: boolean) => {
+            if (isOpen === undefined) {
+              set((state) => {
+                state.isCalendarOpen = !state.isCalendarOpen;
+              });
+            } else {
+              set((state) => {
+                state.isCalendarOpen = isOpen;
+              });
+            }
+          };
+
           return {
             toBulletString,
-            actions: { setDate },
+            actions: { setDate, toggleCalendar },
           };
         })
       )

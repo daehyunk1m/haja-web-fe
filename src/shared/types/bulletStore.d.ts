@@ -6,7 +6,10 @@ export interface BulletStore {
   tasks: Map<string, TaskCore>;
 
   // CRUD
-  addBullet: (title: string, payload: Partial<Pick<TaskCore, "createdAt" | "note">>) => void;
+  addBullet: (
+    title: string,
+    payload: Partial<Pick<TaskCore, "createdAt" | "note" | "type">>
+  ) => void;
   changeBulletState: (id: string, next: Bullet, date?: string) => void;
   editBullet: (id: string, payload: Partial<Pick<TaskCore, "title" | "note">>) => void;
   deleteBullet: (id: string) => void;

@@ -35,7 +35,7 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
             <EditTask id={id} title={title} closeEdit={closeEdit} />
           ) : (
             <span
-              className='font-medium text-[16px] text-black whitespace-nowrap'
+              className='font-medium text-[16px] text-black whitespace-nowrap cursor-default'
               onClick={() => console.log(bulletTask.toJSON())}
               onDoubleClick={() => setIsEdit(!isEdit)}
             >
@@ -43,7 +43,7 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
             </span>
           )}
         </span>
-        <button onClick={() => deleteBullet(id)}>
+        <button className='cursor-pointer' onClick={() => deleteBullet(id)}>
           <Ico.Delete />
         </button>
       </div>
@@ -65,7 +65,7 @@ const EditTask = ({
   const [content, setContent] = useState<Partial<Pick<TaskCore, "title" | "note">>>({});
 
   useEffect(() => {
-    setContent({ title });
+    setContent({ title: title ?? "" });
     if (inputRef.current) {
       // inputRef.current.focus();
       // inputRef.current.addEventListener("keypress", (e) => {
@@ -75,24 +75,21 @@ const EditTask = ({
   }, []);
 
   return (
-    <div
-      style={{ border: "1px solid black" }}
+    <input
+      ref={inputRef}
+      className='border-black border-b-[1px]'
+      type='text'
+      value={content.title ?? ""}
+      onChange={(e) => setContent({ title: e.target.value })}
       onKeyUp={(e) => {
-        if (e.key === "Escape") closeEdit();
+        if (e.key === "Enter") {
+          editBullet(id, content);
+          closeEdit();
+        }
+        if (e.key === "Escape") {
+          closeEdit();
+        }
       }}
-    >
-      <input
-        ref={inputRef}
-        type='text'
-        value={content.title}
-        onChange={(e) => setContent({ title: e.target.value })}
-        onKeyUp={(e) => {
-          if (e.key === "Enter") {
-            editBullet(id, content);
-            closeEdit();
-          }
-        }}
-      />
-    </div>
+    />
   );
 };

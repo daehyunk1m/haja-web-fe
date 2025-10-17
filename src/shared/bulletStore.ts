@@ -31,7 +31,6 @@ export const useBulletStore = create<BulletStore>()(
               set((state) => {
                 const task = state.tasks.get(id);
                 if (!task) return;
-
                 state.tasks.set(id, task.changeState(next, date));
               });
               // saveToBackend
@@ -58,13 +57,16 @@ export const useBulletStore = create<BulletStore>()(
                 if (!task) return;
 
                 const lastState =
-                  task.state === Bullet.TODO ? Bullet.DONE : task.events.at(-2)!.state;
+                  task.state === Bullet.TODO
+                    ? Bullet.DONE
+                    : (task.events.at(-2) ?? task.events[0]).state;
 
                 state.tasks.set(id, task.changeState(lastState, date));
               });
             },
             /** 날짜별 필터 */
             // bulletFor: (date) => Array.from(get().tasks.values()).filter((task) => task.createdAt === date || task.shouldCarryForward(date)),
+            // 연기할 때 로직 다시 체크해야할 듯
             /** 자정 이후 연기 */
             postpone: (today) => {
               set((state) =>

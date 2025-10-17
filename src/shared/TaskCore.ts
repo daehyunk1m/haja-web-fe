@@ -7,6 +7,8 @@ export class TaskCore {
   readonly id: string;
   private _title: string;
   private _note?: string;
+  /** 태스크 타입 */
+  private _type: "task" | "someday";
   /** 생성 시점  */
   readonly createdAt: string;
   private _completedAt?: string;
@@ -17,6 +19,7 @@ export class TaskCore {
     option?: {
       id?: string;
       note?: string;
+      type?: "task" | "someday";
       createdAt?: string;
       completedAt?: string;
     }
@@ -24,6 +27,7 @@ export class TaskCore {
     this.id = option?.id ?? crypto.randomUUID();
     this._title = title;
     this._note = option?.note;
+    this._type = option?.type ?? "task"; // toggleDone 할 때 기본값으로 설정되는 오류 수정해야함.
     this.createdAt = option?.createdAt ?? TaskCore.today();
     this._completedAt = option?.completedAt;
     this._events = [{ date: this.createdAt, state: Bullet.TODO }];
@@ -53,6 +57,13 @@ export class TaskCore {
   set note(desc: string | undefined) {
     this._note = desc;
   }
+  /** 태스크 타입 */
+  get type() {
+    return this._type;
+  }
+  set type(type: "task" | "someday") {
+    this._type = type;
+  }
   /** DONE | CANCEL 시점 */
   get completedAt() {
     return this._completedAt;
@@ -65,7 +76,9 @@ export class TaskCore {
   // <-- method -->
   /** 불렛 상태 변경 */
   changeState(state: Bullet, date: string = TaskCore.today()) {
-    if (this.state === state) return this;
+    if (this.state === state) {
+      return this;
+    }
 
     const clone = this.with({});
 
@@ -79,6 +92,7 @@ export class TaskCore {
   with(update: Partial<Pick<TaskCore, "title" | "note">>) {
     const clone = new TaskCore(update.title ?? this._title, {
       id: this.id,
+      type: this.type,
       note: update.note ?? this._note,
       createdAt: this.createdAt,
       completedAt: this._completedAt,
@@ -97,6 +111,7 @@ export class TaskCore {
   toJSON(): TaskRecordDTO {
     return {
       id: this.id,
+      type: this._type,
       title: this._title,
       note: this._note,
       createdAt: this.createdAt,
@@ -108,6 +123,7 @@ export class TaskCore {
   static from(dto: TaskRecordDTO) {
     const task = new TaskCore(dto.title, {
       id: dto.id,
+      type: dto.type,
       note: dto.note,
       createdAt: dto.createdAt,
     });
@@ -128,6 +144,7 @@ export class TaskCore {
 /** 데이터 레코드(DTO) */
 export interface TaskRecordDTO {
   id: string;
+  type: "task" | "someday";
   title: string;
   note?: string;
   createdAt: string;
