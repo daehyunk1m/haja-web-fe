@@ -8,6 +8,7 @@ import Body from "./components/Body";
 import { AddModal } from "./components/modal/AddModal";
 import { supabase } from "./lib/supabase";
 import { useAuth } from "./hooks/useAuth";
+import { get } from "lodash-es";
 
 // immer Map/Set 불면 처리 활성화
 enableMapSet();
@@ -51,3 +52,17 @@ export default App;
 
 // 권장
 // const count = useNameStore((state) => state.count);
+
+const getLatestYear = (type: "leap" | "common" = "common") => {
+  let year = new Date().getFullYear();
+  const isLeapYear = (year: number) => (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+
+  if (type === "leap") {
+    while (!isLeapYear(year)) year--;
+  } else {
+    while (isLeapYear(year)) year--;
+  }
+  return year;
+};
+
+getLatestYear("leap");
