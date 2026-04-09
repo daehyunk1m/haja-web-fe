@@ -57,11 +57,17 @@
 - 렌더링/날짜 선택(dateStore 업데이트)/캘린더 닫기(toggleCalendar) 검증
 - F005 passes: true 업데이트
 
+[2026-04-09] Step 8 완료: F006 AuthContext 테스트
+- src/contexts/AuthContext.test.tsx 생성 — 9개 테스트 Green
+- vi.mock('@/lib/supabase'), vi.mock('react-router') 활용
+- AuthProvider 렌더링/loading 상태/user 업데이트/subscription cleanup/signInWithGoogle/signOut/navigate/useAuthContext 에러 검증
+- F006 passes: true 업데이트
+
 === TDD STATE ===
 feature: PRD-AUDIT (전체 검증 테스트 구축)
-phase: RED
+phase: COMPLETE
 attempt: 0
-next_step: Step 8 — F006 AuthContext 테스트
+next_step: 전체 플랜 완료 — 커밋 후 TDD STATE 제거
 plan_ref: docs/exec-plans/prd-audit-test-buildout.md
 === END TDD STATE ===
 

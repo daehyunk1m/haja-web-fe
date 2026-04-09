@@ -83,9 +83,9 @@
       "ProtectedRoute 미인증 시 리다이렉트",
       "로그아웃"
     ],
-    "passes": false,
-    "last_session": null,
-    "notes": "코드 존재 — 검증 필요"
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "AuthContext 테스트 9개 Green — AuthProvider/signInWithGoogle/signOut/useAuthContext 에러 검증"
   },
   {
     "id": "F007",
