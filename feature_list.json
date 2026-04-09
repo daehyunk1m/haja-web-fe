@@ -110,9 +110,9 @@
       "carryForward로 새 날짜의 태스크 생성",
       "원본 태스크 상태 유지 확인"
     ],
-    "passes": false,
-    "last_session": null,
-    "notes": "이미 구현됨 — 테스트만 필요"
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "shouldCarryForward + carryForward 검증 테스트 13개 — 모두 Green"
   },
   {
     "id": "F010",

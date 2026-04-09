@@ -365,4 +365,101 @@ describe("TaskCore", () => {
       expect(task.events).toHaveLength(1);
     });
   });
+
+  // -------------------------------------------------------------------------
+  // F008: 자동 이관 (carry forward)
+  // -------------------------------------------------------------------------
+  describe("shouldCarryForward", () => {
+    it("미완료 태스크이고 기준일보다 이전에 생성됐으면 true를 반환한다", () => {
+      const task = new TaskCore("태스크", { createdAt: "2024-01-14" });
+      expect(task.shouldCarryForward("2024-01-15")).toBe(true);
+    });
+
+    it("미완료 태스크이고 기준일과 같은 날 생성됐으면 false를 반환한다", () => {
+      const task = new TaskCore("태스크", { createdAt: "2024-01-15" });
+      expect(task.shouldCarryForward("2024-01-15")).toBe(false);
+    });
+
+    it("미완료 태스크이고 기준일보다 이후에 생성됐으면 false를 반환한다", () => {
+      const task = new TaskCore("태스크", { createdAt: "2024-01-16" });
+      expect(task.shouldCarryForward("2024-01-15")).toBe(false);
+    });
+
+    it("완료(DONE) 상태이면 false를 반환한다", () => {
+      const task = new TaskCore("태스크", { createdAt: "2024-01-10" }).changeState(
+        Bullet.DONE,
+        "2024-01-14"
+      );
+      expect(task.shouldCarryForward("2024-01-15")).toBe(false);
+    });
+
+    it("취소(CANCEL) 상태이면 false를 반환한다", () => {
+      const task = new TaskCore("태스크", { createdAt: "2024-01-10" }).changeState(
+        Bullet.CANCEL,
+        "2024-01-14"
+      );
+      expect(task.shouldCarryForward("2024-01-15")).toBe(false);
+    });
+
+    it("연기(DELAY) 상태이면 true를 반환한다 (미완료)", () => {
+      const task = new TaskCore("태스크", { createdAt: "2024-01-10" }).changeState(
+        Bullet.DELAY,
+        "2024-01-14"
+      );
+      expect(task.shouldCarryForward("2024-01-15")).toBe(true);
+    });
+  });
+
+  describe("carryForward", () => {
+    it("미완료 태스크를 이관하면 새 인스턴스를 반환한다", () => {
+      const task = new TaskCore("태스크", { createdAt: "2024-01-14" });
+      const carried = task.carryForward("2024-01-15");
+      expect(carried).not.toBe(task);
+    });
+
+    it("이관된 태스크의 마지막 이벤트 날짜는 toDate이다", () => {
+      const task = new TaskCore("태스크", { createdAt: "2024-01-14" });
+      const carried = task.carryForward("2024-01-15");
+      const lastEvent = carried.events.at(-1)!;
+      expect(lastEvent.date).toBe("2024-01-15");
+    });
+
+    it("이관된 태스크의 상태는 이관 전 상태를 유지한다", () => {
+      const task = new TaskCore("태스크", { createdAt: "2024-01-10" }).changeState(
+        Bullet.DELAY,
+        "2024-01-14"
+      );
+      const carried = task.carryForward("2024-01-15");
+      expect(carried.state).toBe(Bullet.DELAY);
+    });
+
+    it("완료 상태 태스크를 이관하면 동일 인스턴스를 반환한다", () => {
+      const task = new TaskCore("태스크", { createdAt: "2024-01-10" }).changeState(
+        Bullet.DONE,
+        "2024-01-14"
+      );
+      const carried = task.carryForward("2024-01-15");
+      expect(carried).toBe(task);
+    });
+
+    it("이미 해당 날짜에 이벤트가 있으면 동일 인스턴스를 반환한다", () => {
+      const task = new TaskCore("태스크", { createdAt: "2024-01-15" });
+      const carried = task.carryForward("2024-01-15");
+      expect(carried).toBe(task);
+    });
+
+    it("원본 태스크의 events는 변경되지 않는다", () => {
+      const task = new TaskCore("태스크", { createdAt: "2024-01-14" });
+      const originalEventCount = task.events.length;
+      task.carryForward("2024-01-15");
+      expect(task.events).toHaveLength(originalEventCount);
+    });
+
+    it("이관된 태스크의 제목과 id는 원본과 동일하다", () => {
+      const task = new TaskCore("이관 태스크", { createdAt: "2024-01-14" });
+      const carried = task.carryForward("2024-01-15");
+      expect(carried.title).toBe(task.title);
+      expect(carried.id).toBe(task.id);
+    });
+  });
 });

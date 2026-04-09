@@ -23,11 +23,16 @@
 - 범위: 생성/changeState/with/isClosed/events 방어적 복사/toJSON+from
 - F001 passes: true 업데이트
 
+[2026-04-09] Step 2 완료: F008 자동 이관 테스트
+- src/shared/TaskCore.test.ts에 shouldCarryForward(6개) + carryForward(7개) describe 추가
+- 총 13개 테스트 모두 Green
+- F008 passes: true 업데이트
+
 === TDD STATE ===
 feature: PRD-AUDIT (전체 검증 테스트 구축)
 phase: RED
 attempt: 0
-next_step: Step 2 — F008 자동 이관 테스트 (src/shared/TaskCore.test.ts 내 별도 describe)
+next_step: Step 3 — F002 bulletStore 테스트 (src/shared/bulletStore.test.ts 생성)
 plan_ref: docs/exec-plans/prd-audit-test-buildout.md
 === END TDD STATE ===
 
