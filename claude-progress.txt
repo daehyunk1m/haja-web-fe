@@ -63,12 +63,4 @@
 - AuthProvider 렌더링/loading 상태/user 업데이트/subscription cleanup/signInWithGoogle/signOut/navigate/useAuthContext 에러 검증
 - F006 passes: true 업데이트
 
-=== TDD STATE ===
-feature: PRD-AUDIT (전체 검증 테스트 구축)
-phase: COMPLETE
-attempt: 0
-next_step: 전체 플랜 완료 — 커밋 후 TDD STATE 제거
-plan_ref: docs/exec-plans/prd-audit-test-buildout.md
-=== END TDD STATE ===
-
 === END ===
