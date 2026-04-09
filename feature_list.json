@@ -40,9 +40,9 @@
       "태스크 상태에 따른 아이콘 표시",
       "컨텍스트 메뉴로 상태 변경"
     ],
-    "passes": false,
-    "last_session": null,
-    "notes": "코드 존재 — 검증 필요"
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "PopupContainer 테스트 7개 Green + changeBulletState 버그 수정"
   },
   {
     "id": "F004",

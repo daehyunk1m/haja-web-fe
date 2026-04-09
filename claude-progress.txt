@@ -46,11 +46,16 @@
 - @testing-library/dom peer dependency 설치
 - F004 passes: true 업데이트
 
+[2026-04-09] Step 6 완료: F003 PopupContainer 테스트 + changeBulletState 버그 수정
+- src/components/PopupContainer.test.tsx 생성 — 7개 테스트 Green
+- 버그 수정: PopupContainer.tsx — useBulletStore import 복구 + useDateStore 추가 + onClick에서 changeBulletState 호출
+- F003 passes: true 업데이트
+
 === TDD STATE ===
 feature: PRD-AUDIT (전체 검증 테스트 구축)
 phase: RED
 attempt: 0
-next_step: Step 6 — F003 PopupContainer 테스트 + changeBulletState 버그 수정
+next_step: Step 7 — F005 캘린더 테스트
 plan_ref: docs/exec-plans/prd-audit-test-buildout.md
 === END TDD STATE ===
 

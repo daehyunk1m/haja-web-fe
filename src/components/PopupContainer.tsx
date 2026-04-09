@@ -1,6 +1,7 @@
-// import { useBulletStore } from "../shared/bulletStore";
+import { useBulletStore } from "../shared/bulletStore";
 import { useEffect, useRef } from "react";
 import { usePopupStore } from "../shared/popupStores";
+import { useDateStore } from "../shared/dateStore";
 import { Bullet } from "../shared/types/taskType";
 import BulletIcon from "./BulletIcon";
 
@@ -12,6 +13,8 @@ export default function PopupContainer() {
   const isModalOpen = usePopupStore((state) => state.isModalOpen);
 
   const { closePopup } = usePopupStore((state) => state.actions);
+  const { changeBulletState } = useBulletStore((state) => state);
+  const toBulletString = useDateStore((state) => state.toBulletString);
   const modalRef = useRef<HTMLDivElement>(null);
 
   // 모달 외부 클릭 시 닫기
@@ -104,8 +107,7 @@ export default function PopupContainer() {
               key={i}
               className='flex cursor-pointer items-center gap-2 px-5 py-2 hover:bg-gray-100 transition-colors duration- 150'
               onClick={() => {
-                /** @todo bullet 상태 변경 로직 구현 */
-                console.log(`Changing bullet ${targetId} to ${state}`);
+                changeBulletState(targetId, state, toBulletString());
                 closePopup();
               }}
             >
