@@ -5,4 +5,19 @@
 - 하네스 파일 생성: AGENTS.md, CLAUDE.md, ARCHITECTURE.md, agents/*.md, .claude/rules/*.md, scripts/*.ts
 - feature_list.json 초기 항목 7개 등록 (모두 passes: false — 검증 필요)
 
+[2026-04-09] PRD vs 구현 상태 감사 + 테스트 구축 플랜 수립
+- PRD 전수 조사 완료: 10개 요구사항 중 6개 완전 구현, 2개 부분 구현, 2개 미구현
+- 버그 2건 발견: PopupContainer changeBulletState 미호출, progressStore NaN
+- PRD "시작(START)" 상태 → 5상태 체계 유지로 결정 (PRD 수정 예정)
+- 드래그 순서 변경 → F010으로 등록 예정 (추후 구현)
+- 자동 이관 → F008로 등록 예정 (이미 구현됨, 테스트만 필요)
+- 플랜 파일: .claude/plans/snug-dancing-kay.md
+
+=== TDD STATE ===
+feature: PRD-AUDIT (전체 검증 테스트 구축)
+phase: PRE-RED
+attempt: 0
+plan_ref: .claude/plans/snug-dancing-kay.md
+=== END TDD STATE ===
+
 === END ===
