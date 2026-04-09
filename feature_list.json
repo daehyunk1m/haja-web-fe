@@ -68,9 +68,9 @@
       "useDateStore 상태 변경 확인",
       "선택 날짜에 따른 불렛 리스트 갱신"
     ],
-    "passes": false,
-    "last_session": null,
-    "notes": "코드 존재 — 검증 필요"
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "CalendarContainer 테스트 5개 Green — 렌더링/날짜 선택(dateStore 업데이트)/캘린더 닫기 검증"
   },
   {
     "id": "F006",
