@@ -34,7 +34,7 @@ useProgressStore.subscribe(
   (tasks) => {
     useProgressStore.setState((state) => {
       const countDone = tasks.filter(({ isClosed }) => isClosed).length;
-      state.progressRange = (countDone / tasks.length) * 100;
+      state.progressRange = tasks.length === 0 ? 0 : (countDone / tasks.length) * 100;
     });
   }
 );

@@ -35,11 +35,16 @@
 - eslint.config.js: .react-router 자동생성 폴더 ignore 추가
 - F002 passes: true 업데이트
 
+[2026-04-09] Step 4 완료: F007 progressStore 테스트 + NaN 버그 수정
+- src/shared/progressStore.test.ts 생성 — 9개 테스트 Green
+- 버그 수정: progressStore.ts L37 — tasks.length === 0 시 0 반환 (NaN 방지)
+- F007 passes: true 업데이트
+
 === TDD STATE ===
 feature: PRD-AUDIT (전체 검증 테스트 구축)
 phase: RED
 attempt: 0
-next_step: Step 4 — F007 progressStore 테스트 + NaN 버그 수정
+next_step: Step 5 — F004 AddTaskInput 테스트
 plan_ref: docs/exec-plans/prd-audit-test-buildout.md
 === END TDD STATE ===
 
