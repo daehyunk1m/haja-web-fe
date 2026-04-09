@@ -69,11 +69,13 @@ export const useBulletStore = create<BulletStore>()(
             // 연기할 때 로직 다시 체크해야할 듯
             /** 자정 이후 연기 */
             postpone: (today) => {
-              set((state) =>
-                state.tasks.forEach((task) => {
-                  if (task.shouldCarryForward(today)) task.changeState(task.state, today);
-                })
-              );
+              set((state) => {
+                state.tasks.forEach((task, id) => {
+                  if (task.shouldCarryForward(today)) {
+                    state.tasks.set(id, task.carryForward(today));
+                  }
+                });
+              });
               // 연기 후 backend 반영
               // if (session) {
               //   const records = Array.from(get().tasks.values()).map((t) => t.toJSON());

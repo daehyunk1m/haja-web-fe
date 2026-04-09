@@ -1,0 +1,103 @@
+[
+  {
+    "id": "F001",
+    "category": "core",
+    "priority": 1,
+    "description": "TaskCore 도메인 모델 — 불변 복제 패턴, 이벤트 소싱, 상태 전이 (TODO/ONGOING/DELAY/CANCEL/DONE)",
+    "steps": [
+      "TaskCore 인스턴스 생성",
+      "changeState()로 상태 전이",
+      "with()로 불변 복제 확인",
+      "toJSON()/TaskCore.from(dto) 직렬화/역직렬화",
+      "_events 이력 추적 확인"
+    ],
+    "passes": false,
+    "last_session": null,
+    "notes": "코드 존재 — 검증 필요"
+  },
+  {
+    "id": "F002",
+    "category": "core",
+    "priority": 1,
+    "description": "Zustand 기반 태스크 상태 관리 — useBulletStore (Map<string, TaskCore>), localStorage 영속화",
+    "steps": [
+      "useBulletStore에 태스크 추가",
+      "태스크 상태 변경",
+      "localStorage(localBullets) 영속화 확인",
+      "페이지 새로고침 후 데이터 복원"
+    ],
+    "passes": false,
+    "last_session": null,
+    "notes": "코드 존재 — 검증 필요"
+  },
+  {
+    "id": "F003",
+    "category": "ui",
+    "priority": 2,
+    "description": "불렛 리스트 UI — 날짜별 태스크 목록 표시, 상태 아이콘, 컨텍스트 메뉴",
+    "steps": [
+      "날짜 선택 시 해당 날짜의 태스크 목록 노출",
+      "태스크 상태에 따른 아이콘 표시",
+      "컨텍스트 메뉴로 상태 변경"
+    ],
+    "passes": false,
+    "last_session": null,
+    "notes": "코드 존재 — 검증 필요"
+  },
+  {
+    "id": "F004",
+    "category": "ui",
+    "priority": 2,
+    "description": "태스크 추가 모달 — 새 태스크 입력 및 저장",
+    "steps": [
+      "모달 열기",
+      "태스크 내용 입력",
+      "저장 후 리스트에 반영"
+    ],
+    "passes": false,
+    "last_session": null,
+    "notes": "코드 존재 — 검증 필요"
+  },
+  {
+    "id": "F005",
+    "category": "ui",
+    "priority": 2,
+    "description": "캘린더 컴포넌트 — 날짜 선택 및 useDateStore 연동",
+    "steps": [
+      "캘린더에서 날짜 선택",
+      "useDateStore 상태 변경 확인",
+      "선택 날짜에 따른 불렛 리스트 갱신"
+    ],
+    "passes": false,
+    "last_session": null,
+    "notes": "코드 존재 — 검증 필요"
+  },
+  {
+    "id": "F006",
+    "category": "auth",
+    "priority": 3,
+    "description": "Google OAuth 인증 — Supabase Auth 기반 로그인/로그아웃",
+    "steps": [
+      "Google OAuth 로그인 플로우",
+      "인증 상태 유지 (AuthContext)",
+      "ProtectedRoute 미인증 시 리다이렉트",
+      "로그아웃"
+    ],
+    "passes": false,
+    "last_session": null,
+    "notes": "코드 존재 — 검증 필요"
+  },
+  {
+    "id": "F007",
+    "category": "core",
+    "priority": 3,
+    "description": "진행률 추적 — useProgressStore 기반 태스크 완료율 계산",
+    "steps": [
+      "전체 태스크 대비 완료 태스크 비율 계산",
+      "진행률 UI 표시"
+    ],
+    "passes": false,
+    "last_session": null,
+    "notes": "코드 존재 — 검증 필요"
+  }
+]

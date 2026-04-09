@@ -9,7 +9,10 @@
     "test": "vitest",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint:arch": "npx tsx scripts/structural-test.ts",
+    "validate": "yarn build && yarn lint && yarn lint:arch && yarn test",
+    "doc:check": "npx tsx scripts/doc-freshness.ts"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",

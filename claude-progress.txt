@@ -1,0 +1,8 @@
+=== 세션 기록 ===
+
+[2026-04-09] 하네스 초기 셋업
+- 프로젝트 프로필 분석 완료 (레이어 기반 아키텍처)
+- 하네스 파일 생성: AGENTS.md, CLAUDE.md, ARCHITECTURE.md, agents/*.md, .claude/rules/*.md, scripts/*.ts
+- feature_list.json 초기 항목 7개 등록 (모두 passes: false — 검증 필요)
+
+=== END ===

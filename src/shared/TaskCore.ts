@@ -1,6 +1,15 @@
 import { Bullet, TaskEvent } from "./types/taskType";
 import { recordDate } from "../utils/dateUtils";
 
+/** 허용되는 상태 전이 맵 */
+const VALID_TRANSITIONS: Record<Bullet, readonly Bullet[]> = {
+  [Bullet.TODO]:    [Bullet.ONGOING, Bullet.DELAY, Bullet.DONE, Bullet.CANCEL],
+  [Bullet.ONGOING]: [Bullet.TODO, Bullet.DELAY, Bullet.DONE, Bullet.CANCEL],
+  [Bullet.DELAY]:   [Bullet.TODO, Bullet.ONGOING, Bullet.DONE, Bullet.CANCEL],
+  [Bullet.DONE]:    [Bullet.TODO],     // 완료 취소 → 다시 할 일로
+  [Bullet.CANCEL]:  [Bullet.TODO],     // 취소 철회 → 다시 할 일로
+} as const;
+
 export class TaskCore {
   // <-- property -->
   /** 고유 Id값  */
@@ -41,47 +50,41 @@ export class TaskCore {
     return [Bullet.DONE, Bullet.CANCEL].includes(this.state);
   }
 
-  // <-- Getter | Setter -->
+  // <-- Getter -->
 
   /** 태스크 명 */
   get title() {
     return this._title;
   }
-  set title(newTitle: string) {
-    this._title = newTitle;
-  }
   /** 태스크 상세 내용 */
   get note() {
     return this._note;
-  }
-  set note(desc: string | undefined) {
-    this._note = desc;
   }
   /** 태스크 타입 */
   get type() {
     return this._type;
   }
-  set type(type: "task" | "someday") {
-    this._type = type;
-  }
   /** DONE | CANCEL 시점 */
   get completedAt() {
     return this._completedAt;
   }
-  /** 이벤트 스택 */
-  get events() {
-    return this._events;
+  /** 이벤트 스택 (방어적 복사) */
+  get events(): TaskEvent[] {
+    return [...this._events];
   }
 
   // <-- method -->
   /** 불렛 상태 변경 */
   changeState(state: Bullet, date: string = TaskCore.today()) {
-    if (this.state === state) {
+    if (this.state === state) return this;
+
+    const allowed = VALID_TRANSITIONS[this.state];
+    if (!allowed.includes(state)) {
+      console.warn(`Invalid transition: ${this.state} → ${state}`);
       return this;
     }
 
     const clone = this.with({});
-
     clone._completedAt = state === Bullet.DONE || state === Bullet.CANCEL ? date : undefined;
     clone._events.push({ date, state });
 
@@ -89,16 +92,29 @@ export class TaskCore {
   }
 
   /** 새 인스턴스 반환 메서드 */
-  with(update: Partial<Pick<TaskCore, "title" | "note">>) {
+  with(update: Partial<Pick<TaskCore, "title" | "note" | "type">>) {
     const clone = new TaskCore(update.title ?? this._title, {
       id: this.id,
-      type: this.type,
+      type: update.type ?? this._type,
       note: update.note ?? this._note,
       createdAt: this.createdAt,
       completedAt: this._completedAt,
     });
     clone._events = [...this._events];
 
+    return clone;
+  }
+
+  /** 해당 날짜로 이관 (carry forward) - 새 인스턴스 반환 */
+  carryForward(toDate: string) {
+    if (this.isClosed) return this;
+
+    const lastEvent = this._events.at(-1)!;
+    // 이미 해당 날짜에 이벤트가 있으면 중복 방지
+    if (lastEvent.date === toDate) return this;
+
+    const clone = this.with({});
+    clone._events.push({ date: toDate, state: lastEvent.state });
     return clone;
   }
 
