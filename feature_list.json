@@ -54,9 +54,9 @@
       "태스크 내용 입력",
       "저장 후 리스트에 반영"
     ],
-    "passes": false,
-    "last_session": null,
-    "notes": "코드 존재 — 검증 필요"
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "AddTaskInput 7개 테스트 Green — 렌더링/입력/전송(addBullet 호출, closeModal, createdAt) 검증"
   },
   {
     "id": "F005",
