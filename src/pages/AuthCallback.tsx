@@ -24,7 +24,7 @@ const AuthCallback = () => {
           // 세션이 없으면 로그인 페이지로 리다이렉트
           navigate("/login");
         }
-      } catch (err) {
+      } catch {
         setError("인증 처리 중 오류가 발생했습니다.");
         setTimeout(() => navigate("/login"), 3000);
       }

@@ -208,7 +208,7 @@ const createCalendarStyles = () => ({
   },
 });
 
-export function CalendarModal({ open = true, onClose, value, onSelect }: CalendarModalProps) {
+export function CalendarModal({ open = true, value, onSelect }: CalendarModalProps) {
   if (!open) return null;
 
   // 현재 코드에서는 스타일이 정적이므로 상수 객체로 변경하는 것이 가장 효율적입니다:

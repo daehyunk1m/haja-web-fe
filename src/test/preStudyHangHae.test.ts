@@ -5,7 +5,7 @@
 import { TaskCore } from "@/shared/TaskCore";
 import { Bullet } from "@/shared/types/taskType";
 import { recordDate } from "@/utils/dateUtils";
-import { assert, beforeEach, describe, expect, it, test, vi } from "vitest";
+import { assert, describe, expect, it, test } from "vitest";
 
 // 테스트할 함수를 받고 테스트를 수행하는 단위 (@it)
 test("root 4는 2이다.", () => {

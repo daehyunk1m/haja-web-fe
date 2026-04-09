@@ -33,22 +33,6 @@ const BulletIcon = ({ id, bulletState }: { id: string; bulletState: Bullet }) =>
     return { x: 0, y: 0 };
   };
 
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const clearTimer = () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-  };
-
-  const handleMouseDown = () => {
-    clearTimer();
-    timerRef.current = setTimeout(() => {
-      const position = calculatePosition();
-      togglePopup(id, position);
-    }, clickDuration);
-  };
-
   return (
     <button
       className='w-6 h-6 cursor-pointer'

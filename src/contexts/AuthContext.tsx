@@ -6,7 +6,7 @@ interface AuthContextType {
   user: AuthUser | null;
   loading: boolean;
   error: AuthError | null;
-  signInWithGoogle: () => Promise<{ data: any; error: any }>;
+  signInWithGoogle: () => Promise<{ data: unknown; error: unknown }>;
   signOut: () => Promise<void>;
   isAuthenticated: boolean;
 }

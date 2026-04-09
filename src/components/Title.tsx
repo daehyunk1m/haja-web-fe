@@ -13,7 +13,7 @@ const Title = () => {
         className='font-light text-[14px] tracking-[0.03em] font-dm-sans'
         onClick={() => console.log(localBullets)}
       >
-        {true ? "TO DO LIST" : "24.NOV"}
+        {"TO DO LIST"}
         <div className='flex justify-end'>
           <button onClick={() => navigate("/login")}>로그인</button>
         </div>

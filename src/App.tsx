@@ -8,8 +8,6 @@ import Body from "./components/Body";
 import { AddModal } from "./components/modal/AddModal";
 import { supabase } from "./lib/supabase";
 import { useAuth } from "./hooks/useAuth";
-import { get } from "lodash-es";
-
 // immer Map/Set 불면 처리 활성화
 enableMapSet();
 
@@ -19,7 +17,7 @@ function App() {
 
   useEffect(() => {
     setDate(new Date());
-    supabase.auth.getUser().then(({ data, error }) => {
+    supabase.auth.getUser().then(() => {
       // console.log(data, error);
     });
   }, []);

@@ -7,7 +7,7 @@ export default function Test({ state }: { state: string }) {
     // 마운트 될 때 구독 시작
     const unsubscribe = useTestStore.subscribe(
       (state) => state.count,
-      (count) => {
+      () => {
         // ...
       }
     );

@@ -28,11 +28,18 @@
 - 총 13개 테스트 모두 Green
 - F008 passes: true 업데이트
 
+[2026-04-09] Step 3 완료: F002 bulletStore 테스트 + 기존 빌드/린트 오류 수정
+- src/shared/bulletStore.test.ts 생성 — 22개 테스트 Green
+- src/test/setup.ts에 enableMapSet() 추가 (Immer MapSet 플러그인)
+- 기존 TS/ESLint 오류 수정: App.tsx, BulletIcon.tsx, CalendarModal.tsx, Test.tsx, useTaskStoreHydrated.ts, storesZustand.ts, useAuth.ts, AuthCallback.tsx, Title.tsx, AuthContext.tsx
+- eslint.config.js: .react-router 자동생성 폴더 ignore 추가
+- F002 passes: true 업데이트
+
 === TDD STATE ===
 feature: PRD-AUDIT (전체 검증 테스트 구축)
 phase: RED
 attempt: 0
-next_step: Step 3 — F002 bulletStore 테스트 (src/shared/bulletStore.test.ts 생성)
+next_step: Step 4 — F007 progressStore 테스트 + NaN 버그 수정
 plan_ref: docs/exec-plans/prd-audit-test-buildout.md
 === END TDD STATE ===
 

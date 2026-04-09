@@ -26,9 +26,9 @@
       "localStorage(localBullets) 영속화 확인",
       "페이지 새로고침 후 데이터 복원"
     ],
-    "passes": false,
-    "last_session": null,
-    "notes": "코드 존재 — 검증 필요"
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "bulletStore 22개 테스트 Green — addBullet/changeBulletState/editBullet/deleteBullet/toggleDone/postpone/persist 검증"
   },
   {
     "id": "F003",

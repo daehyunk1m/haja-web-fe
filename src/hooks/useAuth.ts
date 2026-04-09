@@ -26,7 +26,7 @@ export const useAuth = () => {
             user_metadata: user.user_metadata,
           });
         }
-      } catch (err) {
+      } catch {
         setError({ message: "사용자 정보를 가져오는데 실패했습니다." });
       } finally {
         setLoading(false);
@@ -100,7 +100,7 @@ export const useAuth = () => {
         setUser(null);
         navigate("/login");
       }
-    } catch (err) {
+    } catch {
       setError({ message: "로그아웃에 실패했습니다." });
     } finally {
       setLoading(false);

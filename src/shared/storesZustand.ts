@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { combine, devtools, subscribeWithSelector, persist, createJSONStorage } from "zustand/middleware";
+import { combine, devtools, subscribeWithSelector } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 // 미들웨어 사용 가능 (타입 추론, 중첩 객체 변경 등)
@@ -69,7 +69,7 @@ export const useTestStore = create(
     // persist(
     subscribeWithSelector(
       immer(
-        combine(initialState, (set, get) => {
+        combine(initialState, (set) => {
           const increase = () => {
             set((state) => ({ count: state.count + 1 }));
             increaseDouble();
