@@ -13,11 +13,22 @@
 - 자동 이관 → F008로 등록 예정 (이미 구현됨, 테스트만 필요)
 - 플랜 파일: .claude/plans/snug-dancing-kay.md
 
+[2026-04-09] Step 0 완료: PRD 수정 + feature 등록
+- PRD.md에서 "시작" 상태 제거 (5상태 유지)
+- feature_list.json에 F008(자동 이관), F010(드래그 순서 변경) 추가
+- 커밋: c38519e
+
+[2026-04-09] Step 1 완료: F001 TaskCore 테스트
+- src/shared/TaskCore.test.ts 생성 — 48개 테스트 전부 통과
+- 범위: 생성/changeState/with/isClosed/events 방어적 복사/toJSON+from
+- F001 passes: true 업데이트
+
 === TDD STATE ===
 feature: PRD-AUDIT (전체 검증 테스트 구축)
-phase: PRE-RED
+phase: RED
 attempt: 0
-plan_ref: .claude/plans/snug-dancing-kay.md
+next_step: Step 2 — F008 자동 이관 테스트 (src/shared/TaskCore.test.ts 내 별도 describe)
+plan_ref: docs/exec-plans/prd-audit-test-buildout.md
 === END TDD STATE ===
 
 === END ===

@@ -11,9 +11,9 @@
       "toJSON()/TaskCore.from(dto) 직렬화/역직렬화",
       "_events 이력 추적 확인"
     ],
-    "passes": false,
-    "last_session": null,
-    "notes": "코드 존재 — 검증 필요"
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "48개 테스트 통과 — 생성/changeState/with/isClosed/events 방어적 복사/toJSON+from 검증 완료"
   },
   {
     "id": "F002",

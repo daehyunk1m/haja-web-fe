@@ -14,16 +14,16 @@ PRD 대비 구현 상태를 감사한 결과:
 
 각 Step은 독립 커밋 단위. 완료 시 `yarn build && yarn test && yarn lint` 검증 후 커밋.
 
-### Step 0: PRD 수정 + feature 등록
+### ✅ Step 0: PRD 수정 + feature 등록 (완료 2026-04-09)
 - `docs/product-specs/PRD.md` L28: "시작" 제거 → `todo / 진행중 / 연기 / 취소 / 완료`
 - `feature_list.json`에 F008(자동 이관), F010(드래그 순서 변경) 추가
-- 커밋: `docs(types): PRD에서 START 상태 제거 + F008/F010 feature 등록`
+- 커밋: `c38519e docs(types): PRD에서 START 상태 제거 + F008/F010 feature 등록`
 
-### Step 1: F001 TaskCore 테스트
+### ✅ Step 1: F001 TaskCore 테스트 (완료 2026-04-09)
 - 생성: `src/shared/TaskCore.test.ts`
 - 범위: changeState, with, toJSON/from, isClosed, events 방어적 복사
 - 모킹: `vi.spyOn(TaskCore, 'today')`
-- 예상: 모두 즉시 Green
+- 결과: 48개 테스트 모두 Green (코드 기존재)
 - 커밋: `test(shared): F001 TaskCore 도메인 모델 검증 테스트`
 
 ### Step 2: F008 자동 이관 테스트
