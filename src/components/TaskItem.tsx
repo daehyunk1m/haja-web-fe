@@ -36,8 +36,8 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
           ) : (
             <span
               className='font-medium text-[16px] text-black whitespace-nowrap cursor-default'
-              onClick={() => console.log(bulletTask.toJSON())}
-              onDoubleClick={() => setIsEdit(!isEdit)}
+              onClick={() => setIsEdit(true)}
+              onDoubleClick={() => console.log(bulletTask.toJSON())}
             >
               {title}
             </span>
@@ -67,10 +67,7 @@ const EditTask = ({
   useEffect(() => {
     setContent({ title: title ?? "" });
     if (inputRef.current) {
-      // inputRef.current.focus();
-      // inputRef.current.addEventListener("keypress", (e) => {
-      //   e.key;
-      // });
+      inputRef.current.focus();
     }
   }, []);
 
