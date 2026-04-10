@@ -10,7 +10,7 @@ export interface BulletStore {
     title: string,
     payload: Partial<Pick<TaskCore, "createdAt" | "note" | "type">>
   ) => void;
-  changeBulletState: (id: string, next: Bullet, date?: string) => void;
+  changeBulletState: (id: string, next: Bullet, date?: string, force?: boolean) => void;
   editBullet: (id: string, payload: Partial<Pick<TaskCore, "title" | "note">>) => void;
   deleteBullet: (id: string) => void;
   toggleDone: (id: string, date?: string) => void;

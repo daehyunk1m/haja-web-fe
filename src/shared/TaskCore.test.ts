@@ -175,6 +175,31 @@ describe("TaskCore", () => {
       const next = task.changeState(Bullet.ONGOING);
       expect(next.events.at(-1)!.date).toBe(FIXED_DATE);
     });
+
+    it("force=true일 때 DONE → ONGOING 전이가 가능하다", () => {
+      const task = new TaskCore("태스크").changeState(Bullet.DONE);
+      const result = task.changeState(Bullet.ONGOING, FIXED_DATE, true);
+      expect(result.state).toBe(Bullet.ONGOING);
+      expect(result).not.toBe(task);
+    });
+
+    it("force=true일 때 CANCEL → DELAY 전이가 가능하다", () => {
+      const task = new TaskCore("태스크").changeState(Bullet.CANCEL);
+      const result = task.changeState(Bullet.DELAY, FIXED_DATE, true);
+      expect(result.state).toBe(Bullet.DELAY);
+    });
+
+    it("force=true여도 같은 상태로의 전이는 동일 인스턴스를 반환한다", () => {
+      const task = new TaskCore("태스크").changeState(Bullet.DONE);
+      const result = task.changeState(Bullet.DONE, FIXED_DATE, true);
+      expect(result).toBe(task);
+    });
+
+    it("force=true로 DONE → ONGOING 전이 시 completedAt이 초기화된다", () => {
+      const done = new TaskCore("태스크").changeState(Bullet.DONE, "2024-01-20");
+      const ongoing = done.changeState(Bullet.ONGOING, FIXED_DATE, true);
+      expect(ongoing.completedAt).toBeUndefined();
+    });
   });
 
   // -------------------------------------------------------------------------

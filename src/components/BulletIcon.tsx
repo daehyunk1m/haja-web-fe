@@ -46,7 +46,7 @@ const BulletIcon = ({ id, bulletState }: { id: string; bulletState: Bullet }) =>
           togglePopup(id, position);
         } else {
           if (isModalOpen) {
-            changeBulletState(id, bulletState, dateString);
+            changeBulletState(id, bulletState, dateString, true);
             togglePopup(id);
           } else toggleDone(id, dateString);
         }

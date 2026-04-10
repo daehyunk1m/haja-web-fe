@@ -107,7 +107,7 @@ export default function PopupContainer() {
               key={i}
               className='flex cursor-pointer items-center gap-2 px-5 py-2 hover:bg-gray-100 transition-colors duration- 150'
               onClick={() => {
-                changeBulletState(targetId, state, toBulletString());
+                changeBulletState(targetId, state, toBulletString(), true);
                 closePopup();
               }}
             >

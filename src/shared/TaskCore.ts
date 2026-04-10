@@ -74,14 +74,16 @@ export class TaskCore {
   }
 
   // <-- method -->
-  /** 불렛 상태 변경 */
-  changeState(state: Bullet, date: string = TaskCore.today()) {
+  /** 불렛 상태 변경 (force: true → 전이 규칙 무시, 팝오버 등에서 사용) */
+  changeState(state: Bullet, date: string = TaskCore.today(), force = false) {
     if (this.state === state) return this;
 
-    const allowed = VALID_TRANSITIONS[this.state];
-    if (!allowed.includes(state)) {
-      console.warn(`Invalid transition: ${this.state} → ${state}`);
-      return this;
+    if (!force) {
+      const allowed = VALID_TRANSITIONS[this.state];
+      if (!allowed.includes(state)) {
+        console.warn(`Invalid transition: ${this.state} → ${state}`);
+        return this;
+      }
     }
 
     const clone = this.with({});

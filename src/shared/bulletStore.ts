@@ -27,11 +27,11 @@ export const useBulletStore = create<BulletStore>()(
               set((state) => void state.tasks.set(task.id, task));
               // saveToBackend
             },
-            changeBulletState: (id, next, date) => {
+            changeBulletState: (id, next, date, force) => {
               set((state) => {
                 const task = state.tasks.get(id);
                 if (!task) return;
-                state.tasks.set(id, task.changeState(next, date));
+                state.tasks.set(id, task.changeState(next, date, force));
               });
               // saveToBackend
             },
@@ -52,14 +52,15 @@ export const useBulletStore = create<BulletStore>()(
             },
             toggleDone: (id, date) => {
               set((state) => {
-                // 이 부분 유저 플로우 한번 확인 필요
                 const task = state.tasks.get(id);
                 if (!task) return;
 
                 const lastState =
                   task.state === Bullet.TODO
                     ? Bullet.DONE
-                    : (task.events.at(-2) ?? task.events[0]).state;
+                    : task.isClosed
+                      ? Bullet.TODO
+                      : (task.events.at(-2) ?? task.events[0]).state;
 
                 state.tasks.set(id, task.changeState(lastState, date));
               });

@@ -82,6 +82,24 @@ describe("changeBulletState", () => {
     useBulletStore.getState().changeBulletState(id, Bullet.DONE);
     expect(getTask(id)!.completedAt).toBeDefined();
   });
+
+  it("force=true일 때 DONE → ONGOING 전이가 가능하다 (팝오버)", () => {
+    useBulletStore.getState().addBullet("태스크", {});
+    const id = getTasks()[0].id;
+
+    useBulletStore.getState().changeBulletState(id, Bullet.DONE);
+    useBulletStore.getState().changeBulletState(id, Bullet.ONGOING, undefined, true);
+    expect(getTask(id)!.state).toBe(Bullet.ONGOING);
+  });
+
+  it("force 없이 DONE → ONGOING 전이는 무시된다", () => {
+    useBulletStore.getState().addBullet("태스크", {});
+    const id = getTasks()[0].id;
+
+    useBulletStore.getState().changeBulletState(id, Bullet.DONE);
+    useBulletStore.getState().changeBulletState(id, Bullet.ONGOING);
+    expect(getTask(id)!.state).toBe(Bullet.DONE);
+  });
 });
 
 // -------------------------------------------------------------------------
@@ -144,6 +162,32 @@ describe("toggleDone", () => {
 
     // TODO → DONE → 이전(TODO)
     useBulletStore.getState().toggleDone(id);
+    useBulletStore.getState().toggleDone(id);
+    expect(getTask(id)!.state).toBe(Bullet.TODO);
+  });
+
+  it("중간 상태(ONGOING)를 거쳐 DONE된 태스크도 toggleDone으로 TODO로 복귀한다", () => {
+    useBulletStore.getState().addBullet("태스크", {});
+    const id = getTasks()[0].id;
+
+    // TODO → ONGOING → DONE → toggleDone → TODO
+    useBulletStore.getState().changeBulletState(id, Bullet.ONGOING);
+    useBulletStore.getState().changeBulletState(id, Bullet.DONE);
+    expect(getTask(id)!.state).toBe(Bullet.DONE);
+
+    useBulletStore.getState().toggleDone(id);
+    expect(getTask(id)!.state).toBe(Bullet.TODO);
+  });
+
+  it("중간 상태(DELAY)를 거쳐 CANCEL된 태스크도 toggleDone으로 TODO로 복귀한다", () => {
+    useBulletStore.getState().addBullet("태스크", {});
+    const id = getTasks()[0].id;
+
+    // TODO → DELAY → CANCEL → toggleDone → TODO
+    useBulletStore.getState().changeBulletState(id, Bullet.DELAY);
+    useBulletStore.getState().changeBulletState(id, Bullet.CANCEL);
+    expect(getTask(id)!.state).toBe(Bullet.CANCEL);
+
     useBulletStore.getState().toggleDone(id);
     expect(getTask(id)!.state).toBe(Bullet.TODO);
   });
