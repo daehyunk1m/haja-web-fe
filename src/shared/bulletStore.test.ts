@@ -242,6 +242,78 @@ describe("postpone", () => {
 });
 
 // -------------------------------------------------------------------------
+describe("reorderTasks", () => {
+  it("orderKey에 orderedIds를 저장하면 taskOrder에 반영된다", () => {
+    useBulletStore.getState().addBullet("A", {});
+    useBulletStore.getState().addBullet("B", {});
+    const ids = getTasks().map((t) => t.id);
+
+    const orderKey = "2024-01-15|task";
+    useBulletStore.getState().reorderTasks(orderKey, ids);
+
+    expect(useBulletStore.getState().taskOrder[orderKey]).toEqual(ids);
+  });
+
+  it("같은 orderKey에 새 순서를 저장하면 이전 순서가 교체된다", () => {
+    useBulletStore.getState().addBullet("A", {});
+    useBulletStore.getState().addBullet("B", {});
+    const ids = getTasks().map((t) => t.id);
+
+    const orderKey = "2024-01-15|task";
+    useBulletStore.getState().reorderTasks(orderKey, ids);
+    const reversed = [...ids].reverse();
+    useBulletStore.getState().reorderTasks(orderKey, reversed);
+
+    expect(useBulletStore.getState().taskOrder[orderKey]).toEqual(reversed);
+  });
+
+  it("서로 다른 orderKey는 독립적으로 관리된다", () => {
+    useBulletStore.getState().addBullet("A", {});
+    useBulletStore.getState().addBullet("B", {});
+    const ids = getTasks().map((t) => t.id);
+
+    const keyTask = "2024-01-15|task";
+    const keySomeday = "2024-01-15|someday";
+    useBulletStore.getState().reorderTasks(keyTask, ids);
+    const reversed = [...ids].reverse();
+    useBulletStore.getState().reorderTasks(keySomeday, reversed);
+
+    expect(useBulletStore.getState().taskOrder[keyTask]).toEqual(ids);
+    expect(useBulletStore.getState().taskOrder[keySomeday]).toEqual(reversed);
+  });
+});
+
+// -------------------------------------------------------------------------
+describe("deleteBullet — taskOrder 클린업", () => {
+  it("태스크 삭제 시 taskOrder의 모든 키에서 해당 id가 제거된다", () => {
+    useBulletStore.getState().addBullet("A", {});
+    useBulletStore.getState().addBullet("B", {});
+    const [a, b] = getTasks().map((t) => t.id);
+
+    const orderKey = "2024-01-15|task";
+    useBulletStore.getState().reorderTasks(orderKey, [a, b]);
+
+    useBulletStore.getState().deleteBullet(a);
+    expect(useBulletStore.getState().taskOrder[orderKey]).toEqual([b]);
+  });
+
+  it("여러 orderKey에 있는 id가 모두 제거된다", () => {
+    useBulletStore.getState().addBullet("A", {});
+    useBulletStore.getState().addBullet("B", {});
+    const [a, b] = getTasks().map((t) => t.id);
+
+    const key1 = "2024-01-15|task";
+    const key2 = "2024-01-16|task";
+    useBulletStore.getState().reorderTasks(key1, [a, b]);
+    useBulletStore.getState().reorderTasks(key2, [b, a]);
+
+    useBulletStore.getState().deleteBullet(a);
+    expect(useBulletStore.getState().taskOrder[key1]).toEqual([b]);
+    expect(useBulletStore.getState().taskOrder[key2]).toEqual([b]);
+  });
+});
+
+// -------------------------------------------------------------------------
 describe("persist (localStorage 직렬화)", () => {
   it("태스크 추가 후 localStorage에 직렬화된 데이터가 저장된다", () => {
     useBulletStore.getState().addBullet("저장 태스크", {});
@@ -257,5 +329,39 @@ describe("persist (localStorage 직렬화)", () => {
     const raw = localStorage.getItem(LS_KEY);
     const parsed = JSON.parse(raw!);
     expect(Array.isArray(parsed.state.tasks[0].events)).toBe(true);
+  });
+
+  it("taskOrder가 localStorage에 직렬화되어 저장된다", () => {
+    useBulletStore.getState().addBullet("A", {});
+    useBulletStore.getState().addBullet("B", {});
+    const ids = getTasks().map((t) => t.id);
+
+    const orderKey = "2024-01-15|task";
+    useBulletStore.getState().reorderTasks(orderKey, ids);
+
+    // localStorage에 직렬화된 데이터가 taskOrder를 포함하는지 확인
+    const raw = localStorage.getItem(LS_KEY);
+    expect(raw).not.toBeNull();
+    const parsed = JSON.parse(raw!);
+    expect(parsed.state.taskOrder).toBeDefined();
+    expect(parsed.state.taskOrder[orderKey]).toEqual(ids);
+  });
+
+  it("직렬화된 taskOrder가 merge 함수를 통해 복원된다", () => {
+    // persist의 merge 옵션 동작을 검증: raw DTO → 스토어 상태 복원
+    const orderKey = "2024-01-15|task";
+    const ids = ["id-a", "id-b"];
+    const persisted = {
+      tasks: [],
+      taskOrder: { [orderKey]: ids },
+    };
+    const current = useBulletStore.getState();
+
+    // merge 함수를 직접 호출하여 taskOrder 복원을 검증
+    const options = useBulletStore.persist.getOptions();
+    const merged = options.merge!(persisted, current) as ReturnType<
+      typeof useBulletStore.getState
+    >;
+    expect(merged.taskOrder[orderKey]).toEqual(ids);
   });
 });

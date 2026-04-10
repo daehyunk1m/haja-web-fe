@@ -21,6 +21,7 @@ export const useBulletStore = create<BulletStore>()(
           return {
             // 상태
             tasks: new Map<string, TaskCore>(),
+            taskOrder: {} as Record<string, string[]>,
             // 액션
             addBullet: (title, option) => {
               const task = new TaskCore(title, option);
@@ -45,7 +46,14 @@ export const useBulletStore = create<BulletStore>()(
               // saveToBackend
             },
             deleteBullet: (id) => {
-              set((state) => void state.tasks.delete(id));
+              set((state) => {
+                state.tasks.delete(id);
+                for (const key in state.taskOrder) {
+                  const arr = state.taskOrder[key];
+                  const idx = arr.indexOf(id);
+                  if (idx !== -1) arr.splice(idx, 1);
+                }
+              });
               // setToBackend
               // const { session } = useAuthStore.getState();
               // if (session) supabase.from("tasks").delete().eq("id", id);
@@ -68,6 +76,11 @@ export const useBulletStore = create<BulletStore>()(
             /** 날짜별 필터 */
             // bulletFor: (date) => Array.from(get().tasks.values()).filter((task) => task.createdAt === date || task.shouldCarryForward(date)),
             // 연기할 때 로직 다시 체크해야할 듯
+            reorderTasks: (orderKey, orderedIds) => {
+              set((state) => {
+                state.taskOrder[orderKey] = orderedIds;
+              });
+            },
             /** 자정 이후 연기 */
             postpone: (today) => {
               set((state) => {
@@ -89,12 +102,15 @@ export const useBulletStore = create<BulletStore>()(
           name: LS_KEY,
           partialize: (state) => ({
             tasks: Array.from(state.tasks.values()).map((task) => task.toJSON()),
+            taskOrder: state.taskOrder,
           }),
           merge: (persisted, current) => {
-            const dtoArr = (persisted as { tasks?: TaskRecordDTO[] })?.tasks ?? [];
+            const raw = persisted as { tasks?: TaskRecordDTO[]; taskOrder?: Record<string, string[]> };
+            const dtoArr = raw?.tasks ?? [];
             return {
               ...current,
               tasks: new Map(dtoArr.map((dto) => [dto.id, TaskCore.from(dto)])),
+              taskOrder: raw?.taskOrder ?? {},
             };
           },
         }

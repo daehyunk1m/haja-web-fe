@@ -124,8 +124,8 @@
       "드래그 위치에 따른 순서 변경",
       "변경된 순서 영속화"
     ],
-    "passes": false,
-    "last_session": null,
-    "notes": "미구현 — 추후 개발"
+    "passes": true,
+    "last_session": "2026-04-10",
+    "notes": "구현 완료 — @dnd-kit 기반 드래그 순서 변경, taskOrder를 bulletStore에 별도 관리, 15개 테스트 Green"
   }
 ]

@@ -1,13 +1,24 @@
 import { useBulletStore } from "@/shared/bulletStore";
 import { useDateStore } from "@/shared/dateStore";
 import { useProgressStore } from "@/shared/progressStore";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import TodoContainer from "../TodoContainer";
-import TaskItem from "../TaskItem";
 import AddBulletBtn from "./AddBulletBtn";
+import SortableTaskItem from "./SortableTaskItem";
 import PopupContainer from "../PopupContainer";
 import { usePopupStore } from "@/shared/popupStores";
 import { TaskCore } from "@/shared/TaskCore";
+import { useOrderedTasks } from "@/hooks/useOrderedTasks";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import type { DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 
 const SectionList = ({ type }: { type: "task" | "someday" }) => {
   const isPopupOpen = usePopupStore((state) => state.isModalOpen);
@@ -34,6 +45,30 @@ const SectionList = ({ type }: { type: "task" | "someday" }) => {
     return tasks.filter(filters[type]);
   }, [tasks, type]);
 
+  const { orderedTasks, handleReorder } = useOrderedTasks(visibleTasks, dateString, type);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor)
+  );
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+      if (!over || active.id === over.id) return;
+
+      const oldIndex = orderedTasks.findIndex((t) => t.id === active.id);
+      const newIndex = orderedTasks.findIndex((t) => t.id === over.id);
+      const newOrder = arrayMove(
+        orderedTasks.map((t) => t.id),
+        oldIndex,
+        newIndex
+      );
+      handleReorder(newOrder);
+    },
+    [orderedTasks, handleReorder]
+  );
+
   const { setSelectedTasks } = useProgressStore(({ actions }) => actions);
 
   useEffect(() => {
@@ -43,9 +78,20 @@ const SectionList = ({ type }: { type: "task" | "someday" }) => {
   return (
     <>
       <TodoContainer>
-        {visibleTasks.map((bulletTask) => (
-          <TaskItem key={bulletTask.id} bulletTask={bulletTask} />
-        ))}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={orderedTasks.map((t) => t.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {orderedTasks.map((bulletTask) => (
+              <SortableTaskItem key={bulletTask.id} bulletTask={bulletTask} />
+            ))}
+          </SortableContext>
+        </DndContext>
       </TodoContainer>
       <AddBulletBtn type={type} />
       {isPopupOpen && <PopupContainer />}

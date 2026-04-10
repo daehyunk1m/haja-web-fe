@@ -63,4 +63,13 @@
 - AuthProvider 렌더링/loading 상태/user 업데이트/subscription cleanup/signInWithGoogle/signOut/navigate/useAuthContext 에러 검증
 - F006 passes: true 업데이트
 
+[2026-04-10] F010 완료: 드래그 순서 변경
+- @dnd-kit/core + @dnd-kit/sortable + @dnd-kit/utilities 패키지 추가
+- bulletStore에 taskOrder: Record<string, string[]> 추가 (날짜+타입별 독립 순서)
+- buildOrderKey 유틸, useOrderedTasks 훅, SortableTaskItem 컴포넌트 신규 생성
+- SectionList에 DndContext + SortableContext 통합
+- TaskCore 도메인 모델 미변경, localStorage 키 변경 없음
+- 테스트 15개 Green (orderKey 2 + bulletStore 8 + useOrderedTasks 5)
+- Architect 검증 PASS, Reviewer 판정 PASS
+
 === END ===
