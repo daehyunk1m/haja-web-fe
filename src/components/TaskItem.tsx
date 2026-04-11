@@ -11,20 +11,23 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   const deleteBullet = useBulletStore((state) => state.deleteBullet);
   const [isEdit, setIsEdit] = useState(false);
   const closeEdit = useCallback(() => setIsEdit(false), []);
+  const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // // 단일컴포넌트에서 구독 시 예제
-  // useEffect(() => {
-  //   // 마운트 될 때 구독 시작
-  //   const unsubscribe = useTestStore.subscribe(
-  //     (state) => state.count,
-  //     (count) => {
-  //       // ...
-  //     }
-  //   );
-  //   return () => {
-  //     // 언마운트 시 리턴하여 구독 해제
-  //     unsubscribe();
-  //   };
+  const handleClick = useCallback(() => {
+    if (clickTimer.current) return;
+    clickTimer.current = setTimeout(() => {
+      clickTimer.current = null;
+      setIsEdit(true);
+    }, 250);
+  }, []);
+
+  const handleDoubleClick = useCallback(() => {
+    if (clickTimer.current) {
+      clearTimeout(clickTimer.current);
+      clickTimer.current = null;
+    }
+    console.log(bulletTask.toJSON());
+  }, [bulletTask]);
 
   return (
     <div className='hover:bg-[#f0f0f0] transition-colors flex flex-row items-center w-full'>
@@ -36,8 +39,8 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
           ) : (
             <span
               className='font-medium text-[16px] text-black whitespace-nowrap cursor-default'
-              onClick={() => setIsEdit(true)}
-              onDoubleClick={() => console.log(bulletTask.toJSON())}
+              onClick={handleClick}
+              onDoubleClick={handleDoubleClick}
             >
               {title}
             </span>

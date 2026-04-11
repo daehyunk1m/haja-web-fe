@@ -1,9 +1,9 @@
 {
   "harness": {
-    "version": "3.3",
-    "skillVersion": "3.3",
+    "version": "1.0.0",
+    "skillVersion": "1.0.0",
     "installedAt": "2026-04-09T12:00:00Z",
-    "upgradedAt": null,
+    "upgradedAt": "2026-04-11T09:30:00Z",
     "upgradeInProgress": false,
     "preset": "custom"
   },
@@ -74,13 +74,13 @@
     },
     ".claude/rules/session-routine.md": {
       "category": "managed",
-      "templateHash": "sha256:f50c4cb75ff437bacbe21c59a2ab3abcb39ae7f22faa8fd133f5e1894b03e3ea",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:3b3f628350e39c544072df7248e12912b0a5707e29fd7d7f2b8905b2595a9645",
+      "generatedAt": "2026-04-11T09:30:00Z"
     },
     ".claude/rules/coding-standards.md": {
       "category": "managed",
-      "templateHash": "sha256:3e311922dd2547bf6b0c3461ff1b726d4411b4c5de62c21fe2cdcba17b268ca2",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:9f1c8e348fa693937420bf0098b6491a1b9b3a9f36df43e748c6e24aa485cec0",
+      "generatedAt": "2026-04-11T09:30:00Z"
     },
     ".claude/rules/git-workflow.md": {
       "category": "managed",
@@ -94,8 +94,8 @@
     },
     "agents/test-engineer.md": {
       "category": "managed",
-      "templateHash": "sha256:6ebfd3992d9575e26c044cc1bda0183a8677f99007b922b2735329b008f2ffd5",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:7998aa6de32f310f471cffc0414038403c139a3c91d8c94b3c706344b12ca4bd",
+      "generatedAt": "2026-04-11T09:30:00Z"
     },
     "agents/implementer.md": {
       "category": "managed",
@@ -140,7 +140,7 @@
     "scripts/structural-test.ts": {
       "category": "managed",
       "templateHash": "sha256:61535c0eb19f94710aad58720a2e57b7692e8b05aa3606fae1a68f278a7d6f1e",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "generatedAt": "2026-04-11T09:30:00Z"
     },
     "scripts/doc-freshness.ts": {
       "category": "managed",

@@ -154,5 +154,32 @@
   "existingFiles": ["AGENTS.md", "CLAUDE.md"],
   "skipFiles": [],
   "approved": true,
-  "approvedAt": "2026-04-09T12:00:00Z"
+  "approvedAt": "2026-04-11T09:30:00Z",
+  "mode": "upgrade",
+  "fromVersion": "3.3",
+  "toVersion": "1.0.0",
+  "migrations": [],
+  "fileActions": {
+    ".claude/rules/session-routine.md": { "action": "overwrite", "reason": "템플릿 변경 감지, 사용자 수정 없음", "source": "auto-detect" },
+    ".claude/rules/coding-standards.md": { "action": "overwrite", "reason": "템플릿 변경 감지, 사용자 수정 없음", "source": "auto-detect" },
+    ".claude/rules/git-workflow.md": { "action": "skip", "reason": "변경 없음", "source": "auto-detect" },
+    "agents/architect.md": { "action": "skip", "reason": "변경 없음", "source": "auto-detect" },
+    "agents/test-engineer.md": { "action": "overwrite", "reason": "템플릿 변경 감지, 사용자 수정 없음", "source": "auto-detect" },
+    "agents/implementer.md": { "action": "skip", "reason": "변경 없음", "source": "auto-detect" },
+    "agents/reviewer.md": { "action": "skip", "reason": "변경 없음", "source": "auto-detect" },
+    "agents/simplifier.md": { "action": "skip", "reason": "변경 없음", "source": "auto-detect" },
+    "agents/debugger.md": { "action": "skip", "reason": "변경 없음", "source": "auto-detect" },
+    "agents/security-reviewer.md": { "action": "skip", "reason": "변경 없음", "source": "auto-detect" },
+    "init.sh": { "action": "skip", "reason": "변경 없음", "source": "auto-detect" },
+    "scripts/structural-test.ts": { "action": "overwrite", "reason": "템플릿 변경 감지, 사용자 수정 없음", "source": "auto-detect" },
+    "scripts/doc-freshness.ts": { "action": "skip", "reason": "변경 없음", "source": "auto-detect" },
+    "CLAUDE.md": { "action": "skip", "reason": "custom, 마이그레이션 없음", "source": "category" },
+    "AGENTS.md": { "action": "skip", "reason": "custom, 마이그레이션 없음", "source": "category" },
+    "ARCHITECTURE.md": { "action": "skip", "reason": "custom, 마이그레이션 없음", "source": "category" },
+    "feature_list.json": { "action": "skip", "reason": "data", "source": "category" },
+    "claude-progress.txt": { "action": "skip", "reason": "data", "source": "category" },
+    "docs/QUALITY_SCORE.md": { "action": "skip", "reason": "data", "source": "category" },
+    "docs/TECH_DEBT.md": { "action": "skip", "reason": "data", "source": "category" },
+    "docs/HARNESS_FRICTION.md": { "action": "skip", "reason": "data", "source": "category" }
+  }
 }
