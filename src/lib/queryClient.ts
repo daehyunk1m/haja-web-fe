@@ -1,0 +1,12 @@
+import { QueryClient } from "@tanstack/react-query";
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5분
+      gcTime: 1000 * 60 * 30, // 30분
+      retry: 2,
+      refetchOnWindowFocus: true, // 멀티 디바이스 동기화
+    },
+  },
+});

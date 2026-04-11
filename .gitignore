@@ -32,5 +32,11 @@ dist-ssr
 *.sln
 *.sw?
 
+# Sensitive infrastructure docs (SQL schemas, RLS policies)
+docs/private/
+
+# Build output
+build/
+
 # Bundlers
 .react-router/

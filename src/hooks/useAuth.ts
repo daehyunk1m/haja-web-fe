@@ -66,11 +66,7 @@ export const useAuth = () => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          // redirectTo: `${window.location.origin}/auth/callback`,
-          // redirectTo: `${window.location.origin}/auth/google/callback`,
-          redirectTo: `${import.meta.env.VITE_SUPABASE_URL}/auth/v1/callback`,
-
-          // redirectTo: `${window.location.origin}`,
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
