@@ -81,3 +81,35 @@ describe("팝업 닫힘", () => {
     expect(usePopupStore.getState().isModalOpen).toBe(false);
   });
 });
+
+// -------------------------------------------------------------------------
+describe("타입 변경", () => {
+  it("task 타입 태스크에 대해 'Someday로 이동' 버튼이 렌더링된다", () => {
+    render(<PopupContainer />);
+    expect(screen.getByText("Someday로 이동")).toBeInTheDocument();
+  });
+
+  it("someday 타입 태스크에 대해 'Task로 이동' 버튼이 렌더링된다", () => {
+    const somedayTask = new TaskCore("someday 태스크", { type: "someday" });
+    useBulletStore.setState({ tasks: new Map([[somedayTask.id, somedayTask]]) });
+    usePopupStore.setState({ targetId: somedayTask.id });
+
+    render(<PopupContainer />);
+    expect(screen.getByText("Task로 이동")).toBeInTheDocument();
+  });
+
+  it("'Someday로 이동' 클릭 시 태스크 type이 someday로 변경된다", () => {
+    render(<PopupContainer />);
+    fireEvent.click(screen.getByText("Someday로 이동"));
+
+    const updated = useBulletStore.getState().tasks.get(task.id);
+    expect(updated?.type).toBe("someday");
+  });
+
+  it("타입 변경 후 팝업이 닫힌다", () => {
+    render(<PopupContainer />);
+    fireEvent.click(screen.getByText("Someday로 이동"));
+
+    expect(usePopupStore.getState().isModalOpen).toBe(false);
+  });
+});

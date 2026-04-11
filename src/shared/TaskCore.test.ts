@@ -433,6 +433,17 @@ describe("TaskCore", () => {
       );
       expect(task.shouldCarryForward("2024-01-15")).toBe(true);
     });
+
+    it("someday 타입 태스크는 기준일 이전 생성이어도 false를 반환한다", () => {
+      const task = new TaskCore("태스크", { type: "someday", createdAt: "2024-01-10" });
+      expect(task.shouldCarryForward("2024-01-15")).toBe(false);
+    });
+
+    it("someday에서 task로 type 변경 후에는 carry-forward 대상이 된다", () => {
+      const task = new TaskCore("태스크", { type: "someday", createdAt: "2024-01-10" });
+      const converted = task.with({ type: "task" });
+      expect(converted.shouldCarryForward("2024-01-15")).toBe(true);
+    });
   });
 
   describe("carryForward", () => {

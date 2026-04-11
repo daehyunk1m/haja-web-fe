@@ -127,5 +127,21 @@
     "passes": true,
     "last_session": "2026-04-10",
     "notes": "구현 완료 — @dnd-kit 기반 드래그 순서 변경, taskOrder를 bulletStore에 별도 관리, 15개 테스트 Green"
+  },
+  {
+    "id": "F011",
+    "category": "ui",
+    "priority": 4,
+    "description": "Someday 컨테이너 — 날짜 무관 태스크(someday)와 일반 태스크(task)를 분리된 컨테이너로 표시, 타입 선택 UI",
+    "steps": [
+      "태스크 추가 시 타입 선택 (task / someday)",
+      "일반 태스크는 날짜별 컨테이너에 표시",
+      "someday 태스크는 별도 컨테이너에 표시 (날짜 무관)",
+      "someday 태스크는 자동 이관 대상에서 제외",
+      "someday ↔ task 타입 변경 가능"
+    ],
+    "passes": true,
+    "last_session": "2026-04-11",
+    "notes": "구현 완료 — shouldCarryForward someday 제외, SectionList 날짜 필터 바이패스, PopupContainer 타입 전환 UI 추가. 9개 테스트 Green"
   }
 ]

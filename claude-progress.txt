@@ -72,4 +72,12 @@
 - 테스트 15개 Green (orderKey 2 + bulletStore 8 + useOrderedTasks 5)
 - Architect 검증 PASS, Reviewer 판정 PASS
 
+[2026-04-11] F011 완료: Someday 컨테이너
+- shouldCarryForward에 someday 타입 제외 조건 추가 (TaskCore.ts)
+- SectionList 날짜 필터에 someday 바이패스 추가 (SectionList.tsx)
+- editBullet 타입 정의에 type 추가 (bulletStore.d.ts)
+- PopupContainer에 타입 전환 버튼 추가 ("Someday로 이동" / "Task로 이동")
+- 테스트 9개 Green (TaskCore 2 + bulletStore 3 + PopupContainer 4)
+- Plan 모드로 설계 후 TDD RED → GREEN 사이클 완료
+
 === END ===

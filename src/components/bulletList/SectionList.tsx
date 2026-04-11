@@ -36,6 +36,7 @@ const SectionList = ({ type }: { type: "task" | "someday" }) => {
   const tasks = useMemo(() => {
     return [...tasksMap.values()].filter(
       (task) =>
+        task.type === "someday" ||
         (!task.completedAt ? task.createdAt === dateString : task.completedAt === dateString) ||
         task.shouldCarryForward(dateString)
     );

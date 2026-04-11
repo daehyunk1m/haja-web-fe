@@ -120,9 +120,9 @@ export class TaskCore {
     return clone;
   }
 
-  /** 연기 대상인지 판별 */
+  /** 연기 대상인지 판별 (someday 타입은 자동 이관 제외) */
   shouldCarryForward(referenceDate: string) {
-    return !this.isClosed && TaskCore.compareDate(this.createdAt, referenceDate) < 0;
+    return this._type !== "someday" && !this.isClosed && TaskCore.compareDate(this.createdAt, referenceDate) < 0;
   }
 
   // <-- 직렬화 | 역직렬화 -->

@@ -13,7 +13,8 @@ export default function PopupContainer() {
   const isModalOpen = usePopupStore((state) => state.isModalOpen);
 
   const { closePopup } = usePopupStore((state) => state.actions);
-  const { changeBulletState } = useBulletStore((state) => state);
+  const { changeBulletState, editBullet } = useBulletStore((state) => state);
+  const targetTask = useBulletStore((state) => state.tasks.get(targetId));
   const toBulletString = useDateStore((state) => state.toBulletString);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -116,6 +117,19 @@ export default function PopupContainer() {
             </div>
           );
         })}
+        <div className='border-t border-gray-200 my-2' />
+        <div
+          className='flex cursor-pointer items-center gap-2 px-5 py-2 hover:bg-gray-100 transition-colors duration-150'
+          onClick={() => {
+            const newType = targetTask?.type === "someday" ? "task" : "someday";
+            editBullet(targetId, { type: newType });
+            closePopup();
+          }}
+        >
+          <span className='text-sm font-medium text-black'>
+            {targetTask?.type === "someday" ? "Task로 이동" : "Someday로 이동"}
+          </span>
+        </div>
       </div>
     </div>
   );

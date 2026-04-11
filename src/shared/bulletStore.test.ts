@@ -127,6 +127,22 @@ describe("editBullet", () => {
     useBulletStore.getState().editBullet("nonexistent", { title: "수정 시도" });
     expect(getTasks()[0].title).toBe(titleBefore);
   });
+
+  it("태스크의 type을 task에서 someday로 변경할 수 있다", () => {
+    useBulletStore.getState().addBullet("태스크", {});
+    const id = getTasks()[0].id;
+
+    useBulletStore.getState().editBullet(id, { type: "someday" });
+    expect(getTask(id)!.type).toBe("someday");
+  });
+
+  it("태스크의 type을 someday에서 task로 변경할 수 있다", () => {
+    useBulletStore.getState().addBullet("태스크", { type: "someday" });
+    const id = getTasks()[0].id;
+
+    useBulletStore.getState().editBullet(id, { type: "task" });
+    expect(getTask(id)!.type).toBe("task");
+  });
 });
 
 // -------------------------------------------------------------------------
@@ -222,6 +238,15 @@ describe("postpone", () => {
 
   it("기준일과 같은 날 생성된 태스크는 이관되지 않는다", () => {
     useBulletStore.getState().addBullet("오늘 태스크", { createdAt: "2024-01-15" });
+    const id = getTasks()[0].id;
+    const eventCountBefore = getTask(id)!.events.length;
+
+    useBulletStore.getState().postpone("2024-01-15");
+    expect(getTask(id)!.events).toHaveLength(eventCountBefore);
+  });
+
+  it("someday 타입 태스크는 postpone 시 이관되지 않는다", () => {
+    useBulletStore.getState().addBullet("someday 태스크", { type: "someday", createdAt: "2024-01-10" });
     const id = getTasks()[0].id;
     const eventCountBefore = getTask(id)!.events.length;
 
