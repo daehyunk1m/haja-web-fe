@@ -2,16 +2,6 @@
 
 @AGENTS.md
 
-## 명령어
-
-- 개발 서버: `yarn dev` (포트: 5173)
-- 테스트: `yarn test`
-- 빌드 (타입체크 포함): `yarn build`
-- 린트: `yarn lint`
-- 전체 검증: `yarn build && yarn test && yarn lint`
-- 아키텍처 검증: `yarn lint:arch`
-- 문서 최신성 검사: `yarn doc:check`
-
 ## TDD Subagent 파이프라인
 
 기능 구현은 TDD 사이클(Red → Green → Refactor)을 따른다.
@@ -72,11 +62,21 @@
 - 새 패키지 추가 시 사용자 확인
 - 기존 패키지 메이저 버전 업그레이드 시 사용자 확인
 
+## 운영 사이클
+
+| 주기 | 작업 |
+|------|------|
+| 일간 | `yarn validate` (CI 자동화 권장) |
+| 주간 | `yarn doc:check` + docs/QUALITY_SCORE.md 갱신 |
+| 격주 | docs/TECH_DEBT.md 검토 (자동 검사 승격 대기 큐 포함) + 리팩터링 세션 |
+| 월간 | AGENTS.md/ARCHITECTURE.md 전면 검토 + feature_list passes 재검증 + `yarn harness:check` |
+
 ## 금지 사항
 
 - `feature_list.json`의 기능 설명을 수정/삭제하지 않는다
 - 한 번에 여러 기능을 구현하지 않는다
 - 테스트 없이 기능을 완료 처리하지 않는다
+- 기존에 `passes: true`였던 기능의 회귀를 무시하고 새 기능을 진행하지 않는다 (회귀 복구 우선)
 - `node_modules/`, `dist/`, `.env*` 파일을 git에 추가하지 않는다
 
 ## 하네스 이슈 보고

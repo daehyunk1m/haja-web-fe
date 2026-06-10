@@ -1,9 +1,9 @@
 {
   "harness": {
-    "version": "1.0.0",
-    "skillVersion": "1.0.0",
+    "version": "1.2.0",
+    "skillVersion": "1.2.0",
     "installedAt": "2026-04-09T12:00:00Z",
-    "upgradedAt": "2026-04-11T09:30:00Z",
+    "upgradedAt": "2026-06-10T08:45:00Z",
     "upgradeInProgress": false,
     "preset": "custom"
   },
@@ -12,17 +12,86 @@
     "srcRoot": "src/",
     "pathAlias": "@/",
     "layers": {
-      "order": ["types", "utils", "lib", "shared", "hooks", "contexts", "components", "pages", "app"],
+      "order": [
+        "types",
+        "utils",
+        "lib",
+        "shared",
+        "hooks",
+        "contexts",
+        "components",
+        "pages",
+        "app"
+      ],
       "rules": {
-        "types": { "allowedImports": [] },
-        "utils": { "allowedImports": ["types"] },
-        "lib": { "allowedImports": ["types"] },
-        "shared": { "allowedImports": ["types", "utils", "lib"] },
-        "hooks": { "allowedImports": ["types", "utils", "lib", "shared"] },
-        "contexts": { "allowedImports": ["types", "lib", "shared", "hooks"] },
-        "components": { "allowedImports": ["types", "utils", "lib", "shared", "hooks"] },
-        "pages": { "allowedImports": ["types", "utils", "lib", "shared", "hooks", "contexts", "components"] },
-        "app": { "allowedImports": ["types", "utils", "lib", "shared", "hooks", "contexts", "components", "pages"] }
+        "types": {
+          "allowedImports": []
+        },
+        "utils": {
+          "allowedImports": [
+            "types"
+          ]
+        },
+        "lib": {
+          "allowedImports": [
+            "types"
+          ]
+        },
+        "shared": {
+          "allowedImports": [
+            "types",
+            "utils",
+            "lib"
+          ]
+        },
+        "hooks": {
+          "allowedImports": [
+            "types",
+            "utils",
+            "lib",
+            "shared"
+          ]
+        },
+        "contexts": {
+          "allowedImports": [
+            "types",
+            "lib",
+            "shared",
+            "hooks"
+          ]
+        },
+        "components": {
+          "allowedImports": [
+            "types",
+            "utils",
+            "lib",
+            "shared",
+            "hooks"
+          ]
+        },
+        "pages": {
+          "allowedImports": [
+            "types",
+            "utils",
+            "lib",
+            "shared",
+            "hooks",
+            "contexts",
+            "components"
+          ]
+        },
+        "app": {
+          "allowedImports": [
+            "types",
+            "utils",
+            "lib",
+            "shared",
+            "hooks",
+            "contexts",
+            "components",
+            "pages"
+          ]
+        }
       }
     },
     "naming": {
@@ -38,8 +107,8 @@
       "readyCheck": "curl -s -o /dev/null -w '%{http_code}' http://localhost:5173"
     },
     "scripts": {
-      "validate": "yarn build && yarn test && yarn lint",
-      "test": "yarn test",
+      "validate": "yarn build && yarn test:run && yarn lint",
+      "test": "yarn test:run",
       "build": "yarn build",
       "lint": "yarn lint"
     },
@@ -51,7 +120,13 @@
     "git": {
       "commitScopes": null,
       "commitLang": "ko",
-      "branchPrefixes": ["feature/", "fix/", "docs/", "refactor/", "chore/"],
+      "branchPrefixes": [
+        "feature/",
+        "fix/",
+        "docs/",
+        "refactor/",
+        "chore/"
+      ],
       "mainBranch": "main"
     },
     "docFreshnessDays": 14
@@ -64,28 +139,28 @@
     },
     "AGENTS.md": {
       "category": "custom",
-      "templateHash": "sha256:e98aeba95619ec5ead63c1f02a738f2c3849356db05146394c1f0bc7b97a0fc2",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:3a918f9bd6b33342ca6b5fdf9fbca5163eb194e88e90defb9baf796d420efc80",
+      "generatedAt": "2026-06-10T05:54:07Z"
     },
     "CLAUDE.md": {
       "category": "custom",
-      "templateHash": "sha256:ac57a1f79b1ca4fed282720b841a6c20da26078d9f171acf9ee25145beef286e",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:24e65e67c90acf6fe2b0214b249820010650d4f8d108cc2c229337ba8e68c486",
+      "generatedAt": "2026-06-10T05:54:07Z"
     },
     ".claude/rules/session-routine.md": {
       "category": "managed",
-      "templateHash": "sha256:3b3f628350e39c544072df7248e12912b0a5707e29fd7d7f2b8905b2595a9645",
-      "generatedAt": "2026-04-11T09:30:00Z"
+      "templateHash": "sha256:25b8ceac2fba37b301d7fd8f0775fa3de021f642bdee01563db123fa89e52992",
+      "generatedAt": "2026-06-10T08:45:00Z"
     },
     ".claude/rules/coding-standards.md": {
       "category": "managed",
-      "templateHash": "sha256:9f1c8e348fa693937420bf0098b6491a1b9b3a9f36df43e748c6e24aa485cec0",
-      "generatedAt": "2026-04-11T09:30:00Z"
+      "templateHash": "sha256:6f0842b0ff15013038da618045b7469b69ad7a65e7f092a0ce61504c726c8ef2",
+      "generatedAt": "2026-06-10T05:54:07Z"
     },
     ".claude/rules/git-workflow.md": {
       "category": "managed",
-      "templateHash": "sha256:f311e0772d473715cf6db218bbc812938bb141f4e902bd7f7bddd6b77c40274a",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:a4181089728f477ed83125dfb568ce586af119a1fa9bca68779af5a737678020",
+      "generatedAt": "2026-06-10T08:45:00Z"
     },
     "agents/architect.md": {
       "category": "managed",
@@ -94,28 +169,28 @@
     },
     "agents/test-engineer.md": {
       "category": "managed",
-      "templateHash": "sha256:7998aa6de32f310f471cffc0414038403c139a3c91d8c94b3c706344b12ca4bd",
-      "generatedAt": "2026-04-11T09:30:00Z"
+      "templateHash": "sha256:f7211144d992b562c604ccf0461ec0991a87e20183f5eacc2bfac280acff432f",
+      "generatedAt": "2026-06-10T08:45:00Z"
     },
     "agents/implementer.md": {
       "category": "managed",
-      "templateHash": "sha256:f6b43c7c220fd6fa95ba4e2c5b6d50cdb874109595f420bf6986042c84b2ace5",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:d5d5bfa15cdf6505c32e782f0ab63fae9932f0f7b342635d5d198a906cccb1ab",
+      "generatedAt": "2026-06-10T08:45:00Z"
     },
     "agents/reviewer.md": {
       "category": "managed",
-      "templateHash": "sha256:ccd9a61baff25c3501a0723bf407f12abfa90ab41fc1416f7af3b2d7643cadd0",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:73e3f1a3b00ae68b03597a4e828a6d8a4bc3bcafb3bcdb413e6c14aa33b998a9",
+      "generatedAt": "2026-06-10T05:54:07Z"
     },
     "agents/simplifier.md": {
       "category": "managed",
-      "templateHash": "sha256:eff43276d6cbe753e3711706207802450b64087d458ce854351ac4a10a6c101f",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:e1a478b3e5ea5b5bacaa89b751d2d5a3c006d6bb69e839fe600b6dc4297fb926",
+      "generatedAt": "2026-06-10T08:45:00Z"
     },
     "agents/debugger.md": {
       "category": "managed",
-      "templateHash": "sha256:e421c2e9605f9d01e0473505b7949140ef4edd8a4ec53135d6d1d29dd37056bd",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:4f91006cdb3f5542dba947a774654f675814722b8e8898b68b04022e955aac38",
+      "generatedAt": "2026-06-10T08:45:00Z"
     },
     "agents/security-reviewer.md": {
       "category": "managed",
@@ -124,12 +199,12 @@
     },
     "feature_list.json": {
       "category": "data",
-      "templateHash": "sha256:6447ad04e1f956264427228b1908fe341136de2208dd0c990fd62c8ba04c1d08",
+      "templateHash": "sha256:f8aa41bb431ca6cdd2782b28f665ce1684b3670af8464fd8c0b230b7ca861405",
       "generatedAt": "2026-04-09T12:00:00Z"
     },
     "claude-progress.txt": {
       "category": "data",
-      "templateHash": "sha256:b9cd7250939b39ad4bae266822219c614131c639424480c6b31181789ba7433d",
+      "templateHash": "sha256:7d6a2814408b238f265114029e68d39ca95edbf2fa2674cd2b4973e41ba87cf0",
       "generatedAt": "2026-04-09T12:00:00Z"
     },
     "init.sh": {
@@ -149,18 +224,23 @@
     },
     "docs/QUALITY_SCORE.md": {
       "category": "data",
-      "templateHash": "sha256:cd0dac87cc330bd0e36cddc97925ff7bbb3a4a7243fda547279e4c88a65d684d",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:11f8845ed33cbd34673f2aa2f5d70ceb6735f65cc89baedad5485e21a846e68b",
+      "generatedAt": "2026-06-10T05:54:07Z"
     },
     "docs/TECH_DEBT.md": {
       "category": "data",
-      "templateHash": "sha256:29b639f1ea3233172cef8971802080fd51780a692a592e7e4f62d0e545b970a3",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:a5fd6e18f536a0949c1119a702bd7cd18766e8a7c39fa8e3da976bbdea917917",
+      "generatedAt": "2026-06-10T05:54:07Z"
     },
     "docs/HARNESS_FRICTION.md": {
       "category": "data",
       "templateHash": "sha256:fed758d3a093cef54ba2f9bc96df3ce60bcd757a647cb2cc9ab63bbb15097887",
       "generatedAt": "2026-04-09T12:00:00Z"
+    },
+    "scripts/harness-check.sh": {
+      "category": "managed",
+      "templateHash": "sha256:78e8e1b6dd23413dd1eb2b65a3158aa7e7313ef4c9b61f4c534b209aa174ea61",
+      "generatedAt": "2026-06-10T08:45:00Z"
     }
   }
 }

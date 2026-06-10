@@ -32,6 +32,7 @@
 
 | 날짜 | 이벤트 | 심각도 | feature | 상세 |
 |------|--------|--------|---------|------|
+| 2026-06-10 | setup-mismatch | high | — | test 스크립트(vitest watch)로 validate가 비대화형에서 hang (CI=1 필요) |
 
 ## 이슈 보고
 

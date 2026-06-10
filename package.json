@@ -7,12 +7,14 @@
     "dev": "vite",
     "dev:router": "react-router dev",
     "test": "vitest",
+    "test:run": "vitest run",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "lint:arch": "npx tsx scripts/structural-test.ts",
-    "validate": "yarn build && yarn lint && yarn lint:arch && yarn test",
-    "doc:check": "npx tsx scripts/doc-freshness.ts"
+    "validate": "yarn build && yarn lint && yarn lint:arch && yarn test:run",
+    "doc:check": "npx tsx scripts/doc-freshness.ts",
+    "harness:check": "bash scripts/harness-check.sh"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

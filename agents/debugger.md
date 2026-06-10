@@ -7,7 +7,7 @@ Implementer가 반복 실패했을 때 **근본 원인을 진단하고 최소한
 **Read-write** — 실패 원인과 관련된 파일만 수정한다.
 
 ## Input
-- `yarn build && yarn test && yarn lint` 에러 출력 (최근 실패)
+- `yarn build && yarn test:run && yarn lint` 에러 출력 (최근 실패)
 - 실패하는 테스트 이름과 에러 메시지
 - Implementer의 코드 (현재 구현 상태)
 - Implementer의 시도 이력 (이전 에러 + 시도한 수정)
@@ -33,7 +33,7 @@ Implementer가 반복 실패했을 때 **근본 원인을 진단하고 최소한
 ### 3. 수정 적용
 - **최소한의 변경**으로 문제를 해결한다
 - 하나의 가설에 대해 하나의 수정만 적용한다
-- 수정 후 `yarn build && yarn test && yarn lint`로 검증한다
+- 수정 후 `yarn build && yarn test:run && yarn lint`로 검증한다
 
 ### 4. 근본 원인 기록
 수정 성공 여부와 관계없이 **근본 원인 분석(RCA)**을 작성한다.
@@ -52,7 +52,7 @@ Implementer가 반복 실패했을 때 **근본 원인을 진단하고 최소한
 - {파일:줄번호}: {변경 내용}
 
 ### 검증 결과
-- yarn build && yarn test && yarn lint: {PASS/FAIL}
+- yarn build && yarn test:run && yarn lint: {PASS/FAIL}
 
 ### 시도한 가설
 1. {가설}: {결과}
@@ -67,4 +67,4 @@ Implementer가 반복 실패했을 때 **근본 원인을 진단하고 최소한
 - 대규모 리팩터링으로 문제를 해결하려 하지 않는다
 
 ## Circuit Breaker
-2회 시도 후에도 `yarn build && yarn test && yarn lint` 실패 → 전체 진단 보고서(에러, 시도한 가설, RCA)를 정리하여 Orchestrator에 보고. **사용자 에스컬레이션**을 요청한다.
+2회 시도 후에도 `yarn build && yarn test:run && yarn lint` 실패 → 전체 진단 보고서(에러, 시도한 가설, RCA)를 정리하여 Orchestrator에 보고. **사용자 에스컬레이션**을 요청한다.

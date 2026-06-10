@@ -30,6 +30,8 @@
 
 ## 세션 시작
 
+세션 시작 절차(Step 1~3)는 **5분 내 완료**를 목표로 한다. 더 오래 걸리면 하네스 문서가 부실한 것이다 — 마찰 로그(`doc-stale` 또는 `setup-mismatch`)에 기록한다.
+
 ### Step 1: 상태 복원
 ```
 1. claude-progress.txt를 읽는다
@@ -46,9 +48,11 @@
 3. 선택한 기능의 category, description, steps를 기록한다
 ```
 
+**회귀 우선 규칙**: 작업 선택 또는 진행 중에 기존에 `passes: true`였던 기능이 깨진 것을 발견하면, 새 기능보다 **회귀 복구를 우선**한다. 해당 기능의 passes를 false로 되돌리고(notes에 회귀 사유 기록) 복구를 이번 작업으로 선택한다.
+
 ### Step 3: 회귀 체크
 ```
-1. yarn build && yarn test && yarn lint 실행
+1. yarn build && yarn test:run && yarn lint 실행
 2. PASS → TDD 사이클 시작
 3. FAIL → Debugger 호출하여 회귀 수정 후 진행
 ```
@@ -101,7 +105,7 @@ Plan 모드가 세션 시작 루틴(§ 세션 시작)을 대체하지는 않는�
 - Input: Architect 계획 + feature.steps
 - Output: 실패하는 테스트 파일
 
-**확인**: `yarn test`으로 새 테스트가 FAIL하는지 확인.
+**확인**: `yarn test:run`으로 새 테스트가 FAIL하는지 확인.
 - 이미 PASS → 기능이 이미 존재할 수 있음. feature_list.json의 해당 기능을 재검토한다.
 
 **간소화**: 테스트 불가한 변경(타입만, 문서만)이면 Test Engineer를 스킵.
@@ -117,7 +121,7 @@ Plan 모드가 세션 시작 루틴(§ 세션 시작)을 대체하지는 않는�
 attempt = 1
 while attempt <= 3:
     Implementer 호출 (이전 에러 컨텍스트 포함)
-    yarn build && yarn test && yarn lint 실행
+    yarn build && yarn test:run && yarn lint 실행
     if PASS → Review로 진행
     if attempt >= 2 → 마찰 로그 기록 (implementer-retry)
     attempt += 1
@@ -132,7 +136,7 @@ if 실패:
 debugger_attempt = 1
 while debugger_attempt <= 2:
     Debugger 호출 (에러 + Implementer 시도 이력)
-    yarn build && yarn test && yarn lint 실행
+    yarn build && yarn test:run && yarn lint 실행
     if PASS → Review로 진행
     debugger_attempt += 1
 
@@ -153,6 +157,17 @@ if 실패:
 - PASS → Security 체크 (해당 시) → Complete
 - NEEDS_REFACTOR → Phase 5 (Refactor)
 - NEEDS_FIX → 마찰 로그 기록 (review-fix) → Phase 3 (Green) 재진입 (시도 횟수 누적)
+
+**자동 검사 승격 처리**: Reviewer Output에 "자동 검사 승격 후보"가 있으면 (Reviewer는 read-only이므로 기록은 오케스트레이터가 한다):
+1. `docs/TECH_DEBT.md`의 "자동 검사 승격 대기 큐"에서 같은 규칙의 기존 행을 찾는다
+2. 있으면 횟수 +1, 최근 지적일 갱신 / 없으면 새 행 추가
+3. 횟수가 **2 이상**이 되면 자동 검사(ESLint 규칙, structural-test 확장, 테스트)로의 승격을 사용자에게 제안한다
+
+기록 매핑 (Reviewer Output → 큐 테이블 컬럼):
+```
+규칙 → 지적 규칙 / 오늘 날짜 → 최근 지적일 / 현재 feature ID → 관련 feature
+제안 검사 → 제안 검사 방법 / 상태 → "대기"로 시작, 승격 완료 시 "승격됨"
+```
 
 **간소화**: 30줄 이하 단일 파일 변경이면 Reviewer를 스킵 (validate만 의존).
 
@@ -176,7 +191,7 @@ Reviewer가 NEEDS_REFACTOR를 반환했을 때만 실행.
 - Input: Reviewer 소견 + 현재 구현
 - Output: 리팩터링된 코드
 
-**검증**: `yarn build && yarn test && yarn lint` 실행
+**검증**: `yarn build && yarn test:run && yarn lint` 실행
 - PASS → Complete
 - FAIL (2회) → 마찰 로그 기록 (refactor-rollback) → 리팩터링 전부 되돌리고, un-refactored 코드로 Complete
 
@@ -206,7 +221,7 @@ TDD 사이클이 성공적으로 완료되면:
 ## 세션 종료
 
 ```
-1. yarn build && yarn test && yarn lint 최종 실행
+1. yarn build && yarn test:run && yarn lint 최종 실행
 2. feature_list.json 상태 확인
 3. claude-progress.txt 세션 요약 작성
 4. 진행 중인 TDD 사이클이 있으면:

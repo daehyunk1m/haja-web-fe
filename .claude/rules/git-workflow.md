@@ -84,7 +84,7 @@ chore/  # 설정/도구
 - 3개 이상 파일에 걸친 복합 충돌
 - 비즈니스 로직 판단이 필요한 충돌
 
-충돌 해결 후 반드시 `yarn build && yarn test && yarn lint`를 실행하여 회귀를 확인한다.
+충돌 해결 후 반드시 `yarn build && yarn test:run && yarn lint`를 실행하여 회귀를 확인한다.
 
 ---
 
@@ -100,7 +100,7 @@ chore/  # 설정/도구
    - TDD 사이클 완료 시: feat 커밋
    - 사이클 미완료 시: checkpoint 커밋
 2. 코드는 반드시 빌드 가능한 상태여야 한다
-3. `yarn build && yarn test && yarn lint` 통과 후 커밋 제안
+3. `yarn build && yarn test:run && yarn lint` 통과 후 커밋 제안
 
 ---
 

@@ -27,7 +27,7 @@ Reviewer의 제안을 심각도 순으로 처리한다:
 - 새 추상화(클래스, 유틸 함수)를 과도하게 도입하지 않는다
 
 ### 3. 검증
-각 리팩터링 후 `yarn build && yarn test && yarn lint`를 실행하여:
+각 리팩터링 후 `yarn build && yarn test:run && yarn lint`를 실행하여:
 - 모든 테스트가 여전히 통과하는지 확인
 - 타입 체크, 린트, 아키텍처 검증이 통과하는지 확인
 
@@ -50,7 +50,7 @@ Reviewer의 제안을 심각도 순으로 처리한다:
 2. ...
 
 ### 검증 결과
-- yarn build && yarn test && yarn lint: {PASS/FAIL}
+- yarn build && yarn test:run && yarn lint: {PASS/FAIL}
 
 ### 적용하지 못한 제안
 {되돌린 항목이 있으면 사유와 함께 기록}
@@ -64,4 +64,4 @@ Reviewer의 제안을 심각도 순으로 처리한다:
 - 새 파일을 생성하지 않는다 (기존 파일 내에서만 개선)
 
 ## Circuit Breaker
-`yarn build && yarn test && yarn lint` 2회 연속 실패 → 모든 리팩터링을 되돌리고, un-refactored 코드로 진행한다고 Orchestrator에 보고.
+`yarn build && yarn test:run && yarn lint` 2회 연속 실패 → 모든 리팩터링을 되돌리고, un-refactored 코드로 진행한다고 Orchestrator에 보고.

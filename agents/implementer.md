@@ -27,7 +27,7 @@
 - 새 외부 의존성을 추가하지 않는다 (기존 의존성만 사용)
 
 ### 3. 검증
-구현 후 `yarn build && yarn test && yarn lint`를 실행한다:
+구현 후 `yarn build && yarn test:run && yarn lint`를 실행한다:
 - 모든 테스트 통과 (새 테스트 + 기존 테스트)
 - 타입 체크 통과
 - 린트 통과
@@ -48,7 +48,7 @@
 - {파일 경로}: {변경 요약}
 
 ### 검증 결과
-- yarn build && yarn test && yarn lint: {PASS/FAIL}
+- yarn build && yarn test:run && yarn lint: {PASS/FAIL}
 - 테스트: {통과 수}/{전체 수}
 
 ### 구현 요약
@@ -64,4 +64,4 @@
 - 기존에 동작하는 코드를 리팩터링하지 않는다 (그건 Simplifier의 역할)
 
 ## Circuit Breaker
-`yarn build && yarn test && yarn lint` 3회 연속 실패 → 에러 로그와 시도 내역을 정리하여 Orchestrator에 보고. Debugger 에스컬레이션을 요청한다.
+`yarn build && yarn test:run && yarn lint` 3회 연속 실패 → 에러 로그와 시도 내역을 정리하여 Orchestrator에 보고. Debugger 에스컬레이션을 요청한다.
