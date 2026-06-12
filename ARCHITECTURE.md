@@ -31,9 +31,11 @@ types → utils → lib → shared → hooks → contexts → components → pag
 | `src/components/bulletList/` | 불렛 리스트 관련 컴포넌트 | ✅ 존재 |
 | `src/components/modal/` | 모달 컴포넌트 | ✅ 존재 |
 | `src/pages/` | 라우트별 페이지 | ✅ 존재 |
-| `src/app/` | 앱 진입점, 라우트 설정 | ✅ 존재 |
+| `src/` 루트 | 앱 진입점·라우트 설정 (root.tsx, App.tsx, routes.ts, entry.client.tsx, catchall.tsx) | ✅ 존재 |
 | `src/test/` | 테스트 파일 | ✅ 존재 |
 | `src/assets/` | 정적 자산 | ✅ 존재 |
+
+> `app` 레이어의 전용 폴더(`src/app/`)는 현재 없다 — react-router.config.ts의 `appDirectory`가 `src`라서 진입점 파일이 src 루트에 위치한다. 의존성 규칙상 app 레이어는 src 루트의 진입점 파일들이 담당한다.
 
 ---
 
@@ -86,7 +88,7 @@ types → utils → lib → shared → hooks → contexts → components → pag
 
 - **모델**: `TaskCore` 클래스 (`src/shared/TaskCore.ts`)
 - **패턴**: 불변 복제 (immutable-copy) — `with()` 메서드로 새 인스턴스 반환
-- **상태 전이**: `TODO → ONGOING → DELAY → CANCEL / DONE`
+- **상태 전이**: 활성 상태(`TODO`·`ONGOING`·`DELAY`) 간 자유 전이, 활성 → `DONE`/`CANCEL` 종결. 복귀는 `DONE → TODO`(완료 취소), `CANCEL → TODO`(취소 철회)만 허용
 - **이벤트 소싱**: `_events: TaskEvent[]`로 상태 변화 이력 추적
 - **직렬화**: `toJSON()` / `TaskCore.from(dto)`
 
@@ -94,6 +96,7 @@ types → utils → lib → shared → hooks → contexts → components → pag
 
 ## 라우팅
 
-- **프레임워크**: React Router v7 (프레임워크 모드, SSR 비활성)
-- **라우트 정의**: `src/routes.ts`
-- **진입점**: `src/entry.client.tsx`
+- **프레임워크**: React Router v7 (프레임워크 모드, `ssr: false` — SPA 모드)
+- **앱 디렉토리**: `src/` (react-router.config.ts의 `appDirectory`)
+- **라우트 정의**: `src/routes.ts` (폴백: `catchall.tsx`)
+- **진입점**: `src/entry.client.tsx` / 루트 레이아웃: `src/root.tsx`
