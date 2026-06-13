@@ -49,7 +49,11 @@ const SectionList = ({ type }: { type: "task" | "someday" }) => {
   const { orderedTasks, handleReorder } = useOrderedTasks(visibleTasks, dateString, type);
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    // 세로 드래그(순서변경)와 가로 스와이프(삭제)를 축으로 분리한다.
+    // 세로 10px↑ 이동 시 순서변경 활성, 활성 전 가로 12px↑ 이동 시 드래그를 취소해 스와이프에 양보한다.
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: { y: 10 }, tolerance: { x: 12 } },
+    }),
     useSensor(KeyboardSensor)
   );
 

@@ -80,4 +80,12 @@
 - 테스트 9개 Green (TaskCore 2 + bulletStore 3 + PopupContainer 4)
 - Plan 모드로 설계 후 TDD RED → GREEN 사이클 완료
 
+[2026-06-14] F012 완료: 스와이프 삭제
+- 삭제 아이콘 상시노출 → 왼쪽 슬라이드 시 노출로 UX 변경
+- src/hooks/useSwipeToReveal.ts 신규 — window 포인터 리스너, 첫 이동에서 가로/세로 축 잠금, 떼는 순간 임계값 기준 열림/닫힘 스냅. jsdom 호환 위해 setPointerCapture 미사용
+- TaskItem 재구성 — 오른쪽 고정 삭제 버튼(평소 aria-hidden + pointer-events-none) 위로 본문이 translateX로 슬라이드. 열린 상태에서 본문 클릭 시 닫기 우선
+- SectionList dnd-kit 센서 축 분리: activationConstraint { distance:{y:10}, tolerance:{x:12} } — 세로 이동은 순서변경 활성, 활성 전 가로 이동은 드래그 취소해 스와이프에 양보 (F010 회귀 없음)
+- 테스트 12개 Green (useSwipeToReveal 7 + TaskItem 5), 전체 validate 통과 (176 passed / 1 skipped)
+- 참고: 데스크톱에서는 마우스로 좌측 드래그 = 스와이프. 터치 세로 순서변경은 touch-action:pan-y 영향(기존부터 제한적, 회귀 아님)
+
 === END ===

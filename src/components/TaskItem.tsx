@@ -3,6 +3,9 @@ import BulletIcon from "./BulletIcon";
 import { useBulletStore } from "../shared/bulletStore";
 import { TaskCore } from "../shared/TaskCore";
 import Ico from "./Ico";
+import { useSwipeToReveal } from "@/hooks/useSwipeToReveal";
+
+const REVEAL_WIDTH = 64;
 
 export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   // 태스크 네임, 아이콘, 받아야하고 수정할 수 있어야함
@@ -13,13 +16,23 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   const closeEdit = useCallback(() => setIsEdit(false), []);
   const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const { offset, isOpen, isDragging, onPointerDown, close } = useSwipeToReveal({
+    revealWidth: REVEAL_WIDTH,
+    threshold: REVEAL_WIDTH / 2,
+  });
+
   const handleClick = useCallback(() => {
+    // 삭제 영역이 열려 있으면 편집 대신 먼저 닫는다
+    if (isOpen) {
+      close();
+      return;
+    }
     if (clickTimer.current) return;
     clickTimer.current = setTimeout(() => {
       clickTimer.current = null;
       setIsEdit(true);
     }, 250);
-  }, []);
+  }, [isOpen, close]);
 
   const handleDoubleClick = useCallback(() => {
     if (clickTimer.current) {
@@ -29,26 +42,55 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
     console.log(bulletTask.toJSON());
   }, [bulletTask]);
 
+  const handleDelete = useCallback(() => deleteBullet(id), [deleteBullet, id]);
+
   return (
-    <div className='hover:bg-[#f0f0f0] transition-colors flex flex-row items-center w-full'>
-      <div className='h-[38px] flex flex-row items-center px-5 py-1 gap-2 w-full'>
-        <BulletIcon id={id} bulletState={state} />
-        <span className='font-medium text-[16px] text-black whitespace-nowrap'>
-          {isEdit ? (
-            <EditTask id={id} title={title} closeEdit={closeEdit} />
-          ) : (
-            <span
-              className='font-medium text-[16px] text-black whitespace-nowrap cursor-default'
-              onClick={handleClick}
-              onDoubleClick={handleDoubleClick}
-            >
-              {title}
-            </span>
-          )}
-        </span>
-        <button className='cursor-pointer' onClick={() => deleteBullet(id)}>
-          <Ico.Delete />
-        </button>
+    <div className='relative w-full overflow-hidden'>
+      {/* 슬라이드로 드러나는 삭제 영역 (오른쪽 고정, 본문 뒤) */}
+      <button
+        type='button'
+        data-testid='delete-action'
+        aria-label='삭제'
+        aria-hidden={!isOpen}
+        tabIndex={isOpen ? 0 : -1}
+        onClick={handleDelete}
+        className={`absolute inset-y-0 right-0 flex w-16 items-center justify-center bg-red-100 transition-colors hover:bg-red-200 ${
+          isOpen ? "cursor-pointer" : "pointer-events-none"
+        }`}
+      >
+        <Ico.Delete />
+      </button>
+
+      {/* 좌측으로 슬라이드되는 본문 */}
+      <div
+        data-testid='swipe-content'
+        data-swipe-open={isOpen}
+        onPointerDown={onPointerDown}
+        style={{
+          transform: `translateX(${offset}px)`,
+          touchAction: "pan-y",
+          transition: isDragging
+            ? "none"
+            : "transform 0.2s ease, background-color 0.15s ease",
+        }}
+        className='relative z-10 flex w-full flex-row items-center bg-white hover:bg-[#f0f0f0]'
+      >
+        <div className='h-[38px] flex flex-row items-center px-5 py-1 gap-2 w-full'>
+          <BulletIcon id={id} bulletState={state} />
+          <span className='font-medium text-[16px] text-black whitespace-nowrap'>
+            {isEdit ? (
+              <EditTask id={id} title={title} closeEdit={closeEdit} />
+            ) : (
+              <span
+                className='font-medium text-[16px] text-black whitespace-nowrap cursor-default'
+                onClick={handleClick}
+                onDoubleClick={handleDoubleClick}
+              >
+                {title}
+              </span>
+            )}
+          </span>
+        </div>
       </div>
     </div>
   );
