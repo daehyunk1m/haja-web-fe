@@ -32,12 +32,12 @@
 2. `git status` → 미커밋 변경 확인
 3. `git log --oneline -10`
 4. `feature_list.json` → `passes: false` 중 최고 우선순위 선택
-5. `yarn build && yarn test && yarn lint` (회귀 체크)
+5. `yarn validate` (회귀 체크)
 6. TDD 사이클 시작 (상세: `.claude/rules/session-routine.md`)
 
 ### 종료
 
-1. `yarn build && yarn test && yarn lint`
+1. `yarn validate`
 2. `feature_list.json` 업데이트
 3. `claude-progress.txt` 세션 요약 + TDD STATE 갱신
 4. `git-workflow.md` 규칙에 따라 커밋 제안
@@ -70,6 +70,8 @@
 | 주간 | `yarn doc:check` + docs/QUALITY_SCORE.md 갱신 |
 | 격주 | docs/TECH_DEBT.md 검토 (자동 검사 승격 대기 큐 포함) + 리팩터링 세션 |
 | 월간 | AGENTS.md/ARCHITECTURE.md 전면 검토 + feature_list passes 재검증 + `yarn harness:check` |
+
+주간/격주/월간 작업은 harness-cleanup 컴패니언 스킬로 실행할 수 있다 (--add-dir 등록 후 "하네스 정리" 요청).
 
 ## 금지 사항
 

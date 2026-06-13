@@ -12,10 +12,10 @@
 ## 명령어
 
 - 개발 서버: `yarn dev` (포트: 5173)
-- 테스트: `yarn test`
+- 테스트: `yarn test:run` (watch 모드: `yarn test`)
 - 빌드 (타입체크 포함): `yarn build`
 - 린트: `yarn lint`
-- 전체 검증: `yarn build && yarn test && yarn lint`
+- 전체 검증: `yarn validate` (build + lint + lint:arch + test:run)
 - 아키텍처 검증: `yarn lint:arch`
 - 문서 최신성 검사: `yarn doc:check`
 - 하네스 자가진단: `yarn harness:check`
@@ -42,6 +42,15 @@
 5. localStorage 키(`localBullets`) 변경 금지 — 데이터 유실 위험
 6. `feature_list.json`의 기능 설명을 수정/삭제하지 않는다
 7. `passes`는 실제 검증 통과 후에만 true로 바꾼다
+
+## 보조 스킬 (superpowers 연계)
+
+- 복잡한 설계 결정/트레이드오프 분석: `brainstorming`
+- 재현 어려운 버그의 체계적 추적: `systematic-debugging` (TDD 중 validate 실패는 agents/debugger.md 우선)
+- 다단계 작업의 계획 문서 작성: `writing-plans`
+
+> superpowers 플러그인(v5.1.0) 연계 — 미설치 환경에서는 무시된다.
+> TDD·코드 리뷰·검증은 본 하네스 자체 워크플로를 사용한다.
 
 ## 문서 맵
 

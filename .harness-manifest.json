@@ -1,9 +1,9 @@
 {
   "harness": {
-    "version": "1.2.0",
-    "skillVersion": "1.2.0",
+    "version": "1.5.0",
+    "skillVersion": "1.5.0",
     "installedAt": "2026-04-09T12:00:00Z",
-    "upgradedAt": "2026-06-10T08:45:00Z",
+    "upgradedAt": "2026-06-12T10:36:05Z",
     "upgradeInProgress": false,
     "preset": "custom"
   },
@@ -129,7 +129,20 @@
       ],
       "mainBranch": "main"
     },
-    "docFreshnessDays": 14
+    "docFreshnessDays": 14,
+    "integrations": {
+      "superpowers": {
+        "enabled": true,
+        "source": "plugin",
+        "detectedVersion": "5.1.0",
+        "installPath": "/Users/daehyun/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0",
+        "linkedSkills": [
+          "brainstorming",
+          "systematic-debugging",
+          "writing-plans"
+        ]
+      }
+    }
   },
   "files": {
     "ARCHITECTURE.md": {
@@ -139,18 +152,18 @@
     },
     "AGENTS.md": {
       "category": "custom",
-      "templateHash": "sha256:3a918f9bd6b33342ca6b5fdf9fbca5163eb194e88e90defb9baf796d420efc80",
-      "generatedAt": "2026-06-10T05:54:07Z"
+      "templateHash": "sha256:2f8c41f94baf842c7ae6364e7790aa192235e9eaa885941cf40df78d14c4dc8b",
+      "generatedAt": "2026-06-12T10:36:05Z"
     },
     "CLAUDE.md": {
       "category": "custom",
-      "templateHash": "sha256:24e65e67c90acf6fe2b0214b249820010650d4f8d108cc2c229337ba8e68c486",
-      "generatedAt": "2026-06-10T05:54:07Z"
+      "templateHash": "sha256:d8d838ab9a313f127b6cbcc6c9fddbb85a1db9b5015fcce2628ce84a2c0acaf2",
+      "generatedAt": "2026-06-12T10:36:05Z"
     },
     ".claude/rules/session-routine.md": {
       "category": "managed",
-      "templateHash": "sha256:25b8ceac2fba37b301d7fd8f0775fa3de021f642bdee01563db123fa89e52992",
-      "generatedAt": "2026-06-10T08:45:00Z"
+      "templateHash": "sha256:23d699a653689a1d609ed41aa81ce718bdbcde5dd1df0bffa8cdf72b20d1f4c1",
+      "generatedAt": "2026-06-12T10:36:05Z"
     },
     ".claude/rules/coding-standards.md": {
       "category": "managed",

@@ -85,6 +85,8 @@ Plan 모드가 세션 시작 루틴(§ 세션 시작)을 대체하지는 않는�
 - **feature_list.json 선택**(Step 2)은 Plan 승인 후 해당 기능을 선택한다
 - **기능 완료 처리**(§ 기능 완료 처리)는 반드시 수행한다
 
+계획 문서의 작성 절차가 필요하면 superpowers의 writing-plans 스킬을 보조로 활용할 수 있다 (PRE-RED 정규 경로는 Architect/Plan 모드).
+
 ---
 
 ## TDD 사이클

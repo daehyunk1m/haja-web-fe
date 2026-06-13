@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.5.0",
   "preset": "custom",
   "projectName": "haja-web-fe",
   "description": "이벤트 히스토리 모델과 불렛저널 시스템을 결합한 하루 단위 태스크 관리 웹 앱",
@@ -115,7 +115,7 @@
       "contexts": "React Context (AuthContext)",
       "components": "UI 컴포넌트 (bulletList/, modal/, ui/)",
       "pages": "라우트 페이지 컴포넌트",
-      "app": "앱 진입점, 라우팅 (routes/)"
+      "app": "앱 진입점·라우팅 — 전용 폴더 없음, src 루트의 진입점 파일(root.tsx, App.tsx, routes.ts, entry.client.tsx, catchall.tsx)이 담당"
     }
   },
   "folderRoles": {
@@ -130,7 +130,6 @@
     "src/components/bulletList": "불렛 리스트 관련 컴포넌트",
     "src/components/modal": "모달 컴포넌트",
     "src/pages": "라우트별 페이지",
-    "src/app": "앱 진입점, 라우트 설정",
     "src/test": "테스트 파일",
     "src/assets": "정적 자산"
   },
@@ -172,8 +171,8 @@
     "readyCheck": "curl -s -o /dev/null -w '%{http_code}' http://localhost:5173"
   },
   "scripts": {
-    "validate": "yarn build && yarn test && yarn lint",
-    "test": "yarn test",
+    "validate": "yarn build && yarn test:run && yarn lint",
+    "test": "yarn test:run",
     "build": "yarn build",
     "lint": "yarn lint"
   },
@@ -195,6 +194,19 @@
     "mainBranch": "main"
   },
   "docFreshnessDays": 14,
+  "integrations": {
+    "superpowers": {
+      "enabled": true,
+      "source": "plugin",
+      "detectedVersion": "5.1.0",
+      "installPath": "/Users/daehyun/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0",
+      "linkedSkills": [
+        "brainstorming",
+        "systematic-debugging",
+        "writing-plans"
+      ]
+    }
+  },
   "extras": {
     "stateManagement": {
       "tool": "Zustand 5",
@@ -215,13 +227,13 @@
       "pattern": "immutable-copy",
       "model": "TaskCore",
       "location": "src/shared/TaskCore.ts",
-      "stateTransitions": "TODO → ONGOING → DELAY → CANCEL / DONE",
+      "stateTransitions": "활성 상태(TODO·ONGOING·DELAY) 간 자유 전이, 활성 → DONE/CANCEL 종결, DONE → TODO·CANCEL → TODO만 복귀 허용",
       "eventSourcing": true,
       "methods": "with() 메서드로 새 인스턴스 반환, toJSON()/TaskCore.from(dto) 직렬화"
     },
     "routing": {
       "framework": "React Router v7",
-      "mode": "framework (SSR 비활성)",
+      "mode": "framework (ssr: false — SPA 모드, appDirectory: src)",
       "routeDefinition": "src/routes.ts",
       "entryPoint": "src/entry.client.tsx"
     }
@@ -232,32 +244,37 @@
   ],
   "skipFiles": [],
   "approved": true,
-  "approvedAt": "2026-06-10T05:50:03Z",
+  "approvedAt": "2026-06-12T10:32:09Z",
   "mode": "upgrade",
-  "fromVersion": "1.0.0",
-  "toVersion": "1.1.0",
+  "fromVersion": "1.2.0",
+  "toVersion": "1.5.0",
   "migrations": [
-    "M-1.0.0-to-1.1.0"
+    "M-1.2.0-to-1.3.0",
+    "M-1.3.0-to-1.4.0"
   ],
   "fileActions": {
     ".claude/rules/session-routine.md": {
       "action": "overwrite",
-      "reason": "템플릿 변경 감지, 사용자 수정 없음",
+      "reason": "템플릿 변경 감지 (1.5.0 INTEGRATION_NOTES 플레이스홀더 추가), 사용자 수정 없음. integrations.superpowers 옵트인 + writing-plans 생존 → INTEGRATION_NOTES를 매핑 정본의 연계 1줄로 렌더링",
       "source": "auto-detect"
+    },
+    "CLAUDE.md": {
+      "action": "surgical",
+      "changes": [
+        "M-1.3.0-to-1.4.0: '## 운영 사이클' 테이블 아래에 안내 1줄 추가 — '주간/격주/월간 작업은 harness-cleanup 컴패니언 스킬로 실행할 수 있다 (--add-dir 등록 후 \"하네스 정리\" 요청).' 해당 문구가 없으면 추가 (멱등)"
+      ],
+      "source": "migration"
+    },
+    "AGENTS.md": {
+      "action": "surgical",
+      "changes": [
+        "superpowers 옵트인 (1.5.0 § 5.16): '## 보조 스킬 (superpowers 연계)' 섹션 추가 — linkedSkills 3종(brainstorming, systematic-debugging, writing-plans) 실존 검증 완료, 매핑 정본 문구로 렌더링, v5.1.0 표기. 섹션이 이미 있으면 스킵 (멱등). 추가 후 100줄 이내 유지 확인"
+      ],
+      "source": "migration"
     },
     ".claude/rules/coding-standards.md": {
-      "action": "overwrite",
-      "reason": "템플릿 변경 감지, 사용자 수정 없음",
-      "source": "auto-detect"
-    },
-    "agents/reviewer.md": {
-      "action": "overwrite",
-      "reason": "템플릿 변경 감지, 사용자 수정 없음",
-      "source": "auto-detect"
-    },
-    "agents/test-engineer.md": {
-      "action": "overwrite",
-      "reason": "템플릿 변경 감지, 사용자 수정 없음",
+      "action": "skip",
+      "reason": "템플릿/프로필 변경 없음",
       "source": "auto-detect"
     },
     ".claude/rules/git-workflow.md": {
@@ -270,7 +287,17 @@
       "reason": "템플릿/프로필 변경 없음",
       "source": "auto-detect"
     },
+    "agents/test-engineer.md": {
+      "action": "skip",
+      "reason": "템플릿/프로필 변경 없음",
+      "source": "auto-detect"
+    },
     "agents/implementer.md": {
+      "action": "skip",
+      "reason": "템플릿/프로필 변경 없음",
+      "source": "auto-detect"
+    },
+    "agents/reviewer.md": {
       "action": "skip",
       "reason": "템플릿/프로필 변경 없음",
       "source": "auto-detect"
@@ -297,7 +324,7 @@
     },
     "scripts/structural-test.ts": {
       "action": "skip",
-      "reason": "템플릿/프로필 변경 없음",
+      "reason": "템플릿/프로필 변경 없음 (layer-based 매핑 structural-test-layer.ts 변경 없음)",
       "source": "auto-detect"
     },
     "scripts/doc-freshness.ts": {
@@ -306,48 +333,9 @@
       "source": "auto-detect"
     },
     "scripts/harness-check.sh": {
-      "action": "create",
-      "reason": "[new] 하네스 자가진단 스크립트 (templates/harness-check.sh, § 5.14 치환)",
-      "source": "migration",
-      "category": "managed"
-    },
-    "package.json": {
-      "action": "surgical",
-      "changes": [
-        "scripts에 harness:check 추가 (기존 키 보존)"
-      ],
-      "source": "migration"
-    },
-    "AGENTS.md": {
-      "action": "surgical",
-      "changes": [
-        "'## 프로젝트 개요' 뒤에 '## 명령어' 섹션 추가 — 명령어 source of truth (dev+포트/test/validate/lint:arch/doc:check/harness:check)",
-        "'## 주요 규칙'에 없는 규칙만 추가: 'feature_list.json의 기능 설명을 수정/삭제하지 않는다', 'passes는 실제 검증 통과 후에만 true로 바꾼다'"
-      ],
-      "source": "migration"
-    },
-    "CLAUDE.md": {
-      "action": "surgical",
-      "changes": [
-        "'## 명령어' 섹션 제거 — 표준 명령만 존재하므로 @AGENTS.md import가 커버",
-        "'## 금지 사항' 앞에 '## 운영 사이클' 섹션 추가 (일간 validate / 주간 doc:check+QUALITY_SCORE / 격주 TECH_DEBT 승격 큐 / 월간 전면 검토+harness:check)",
-        "'## 금지 사항'에 회귀 우선 규칙 추가 (passes:true 기능 회귀 복구 우선)"
-      ],
-      "source": "migration"
-    },
-    "docs/TECH_DEBT.md": {
-      "action": "surgical",
-      "changes": [
-        "'## 자동 검사 승격 대기 큐' 섹션을 파일 끝에 추가 (기존 부채 항목 불변)"
-      ],
-      "source": "migration"
-    },
-    "docs/QUALITY_SCORE.md": {
-      "action": "surgical",
-      "changes": [
-        "헤더 블록에 '> 갱신 주기: 주간' 행 추가 (기존 점수 불변)"
-      ],
-      "source": "migration"
+      "action": "skip",
+      "reason": "템플릿/프로필 변경 없음",
+      "source": "auto-detect"
     },
     "feature_list.json": {
       "action": "skip",
@@ -359,6 +347,16 @@
       "reason": "data",
       "source": "category"
     },
+    "docs/QUALITY_SCORE.md": {
+      "action": "skip",
+      "reason": "data",
+      "source": "category"
+    },
+    "docs/TECH_DEBT.md": {
+      "action": "skip",
+      "reason": "data",
+      "source": "category"
+    },
     "docs/HARNESS_FRICTION.md": {
       "action": "skip",
       "reason": "data",
@@ -366,7 +364,7 @@
     },
     "ARCHITECTURE.md": {
       "action": "skip",
-      "reason": "custom, 마이그레이션 지시 없음",
+      "reason": "custom, 이번 구간 마이그레이션 지시 없음 (2026-06-11 하네스 정리 편집분 보존)",
       "source": "category"
     }
   }

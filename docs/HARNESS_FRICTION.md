@@ -33,6 +33,7 @@
 | 날짜 | 이벤트 | 심각도 | feature | 상세 |
 |------|--------|--------|---------|------|
 | 2026-06-10 | setup-mismatch | high | — | test 스크립트(vitest watch)로 validate가 비대화형에서 hang (CI=1 필요) |
+| 2026-06-12 | doc-stale | low | — | AGENTS/CLAUDE 명령 표기에 1.2.0 test:run 미반영 (watch 잔존) |
 
 ## 이슈 보고
 
