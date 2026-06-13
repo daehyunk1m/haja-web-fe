@@ -1,9 +1,9 @@
 {
   "harness": {
-    "version": "1.5.0",
-    "skillVersion": "1.5.0",
+    "version": "1.7.0",
+    "skillVersion": "1.7.0",
     "installedAt": "2026-04-09T12:00:00Z",
-    "upgradedAt": "2026-06-12T10:36:05Z",
+    "upgradedAt": "2026-06-13T11:39:01Z",
     "upgradeInProgress": false,
     "preset": "custom"
   },
@@ -141,6 +141,16 @@
           "systematic-debugging",
           "writing-plans"
         ]
+      },
+      "multiModelConsult": {
+        "enabled": true,
+        "source": "companion",
+        "detectedVersion": null,
+        "installPath": "/Users/daehyun/.claude/skills/multi-model-consult",
+        "advisors": [
+          "codex",
+          "gemini"
+        ]
       }
     }
   },
@@ -152,8 +162,8 @@
     },
     "AGENTS.md": {
       "category": "custom",
-      "templateHash": "sha256:2f8c41f94baf842c7ae6364e7790aa192235e9eaa885941cf40df78d14c4dc8b",
-      "generatedAt": "2026-06-12T10:36:05Z"
+      "templateHash": "sha256:275afc297c4150daa19f198c51a6f886c06d48e8e2d6e0c70d12ada474f48ee4",
+      "generatedAt": "2026-06-13T11:39:01Z"
     },
     "CLAUDE.md": {
       "category": "custom",
@@ -162,8 +172,8 @@
     },
     ".claude/rules/session-routine.md": {
       "category": "managed",
-      "templateHash": "sha256:23d699a653689a1d609ed41aa81ce718bdbcde5dd1df0bffa8cdf72b20d1f4c1",
-      "generatedAt": "2026-06-12T10:36:05Z"
+      "templateHash": "sha256:257f81347e71a8d55c8a1d60fcd424a7a1baff6e040100ff31d52e9c7bcf2b48",
+      "generatedAt": "2026-06-13T11:39:01Z"
     },
     ".claude/rules/coding-standards.md": {
       "category": "managed",

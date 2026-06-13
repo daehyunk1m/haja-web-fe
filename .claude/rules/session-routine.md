@@ -86,6 +86,7 @@ Plan 모드가 세션 시작 루틴(§ 세션 시작)을 대체하지는 않는�
 - **기능 완료 처리**(§ 기능 완료 처리)는 반드시 수행한다
 
 계획 문서의 작성 절차가 필요하면 superpowers의 writing-plans 스킬을 보조로 활용할 수 있다 (PRE-RED 정규 경로는 Architect/Plan 모드).
+복잡한 설계 결정·트레이드오프 분석이 필요하면 multi-model-consult로 교차 자문할 수 있다 (PRE-RED 정규 경로는 Architect/Plan 모드, 자문은 결정 보조).
 
 ---
 
