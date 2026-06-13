@@ -1,11 +1,13 @@
 {
   "harness": {
-    "version": "1.7.0",
-    "skillVersion": "1.7.0",
+    "version": "1.9.0",
+    "skillVersion": "1.9.0",
     "installedAt": "2026-04-09T12:00:00Z",
-    "upgradedAt": "2026-06-13T11:39:01Z",
+    "upgradedAt": "2026-06-13T18:11:02Z",
     "upgradeInProgress": false,
-    "preset": "custom"
+    "preset": "custom",
+    "structuralTestEnforcement": "enforced",
+    "semanticApprovalAt": null
   },
   "profile": {
     "architectureType": "layer-based",
@@ -152,6 +154,10 @@
           "gemini"
         ]
       }
+    },
+    "autoCommit": {
+      "mode": "auto",
+      "pushAfterCommit": false
     }
   },
   "files": {
@@ -172,8 +178,8 @@
     },
     ".claude/rules/session-routine.md": {
       "category": "managed",
-      "templateHash": "sha256:257f81347e71a8d55c8a1d60fcd424a7a1baff6e040100ff31d52e9c7bcf2b48",
-      "generatedAt": "2026-06-13T11:39:01Z"
+      "templateHash": "sha256:3a288f68c4658c72394cc22ba32498b9762f55c35e209d9c7d5199e9e7ebd1b8",
+      "generatedAt": "2026-06-13T18:11:02Z"
     },
     ".claude/rules/coding-standards.md": {
       "category": "managed",
@@ -182,8 +188,8 @@
     },
     ".claude/rules/git-workflow.md": {
       "category": "managed",
-      "templateHash": "sha256:a4181089728f477ed83125dfb568ce586af119a1fa9bca68779af5a737678020",
-      "generatedAt": "2026-06-10T08:45:00Z"
+      "templateHash": "sha256:ebe51184164f362c4bd400bb2e470ef33984df236681bf34a5114ee22776e478",
+      "generatedAt": "2026-06-13T18:11:02Z"
     },
     "agents/architect.md": {
       "category": "managed",
@@ -237,8 +243,8 @@
     },
     "scripts/structural-test.ts": {
       "category": "managed",
-      "templateHash": "sha256:61535c0eb19f94710aad58720a2e57b7692e8b05aa3606fae1a68f278a7d6f1e",
-      "generatedAt": "2026-04-11T09:30:00Z"
+      "templateHash": "sha256:809458b79e7fa4f9b96c0301ac11989780a5450eddeb7fecbb52c2ca20257d18",
+      "generatedAt": "2026-06-13T18:11:02Z"
     },
     "scripts/doc-freshness.ts": {
       "category": "managed",
@@ -262,8 +268,8 @@
     },
     "scripts/harness-check.sh": {
       "category": "managed",
-      "templateHash": "sha256:78e8e1b6dd23413dd1eb2b65a3158aa7e7313ef4c9b61f4c534b209aa174ea61",
-      "generatedAt": "2026-06-10T08:45:00Z"
+      "templateHash": "sha256:26c0c955cb442239630960ad8939aec2146d5dbad99959c812147c7b47cf6c4a",
+      "generatedAt": "2026-06-13T18:11:02Z"
     }
   }
 }

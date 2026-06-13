@@ -1,5 +1,5 @@
 {
-  "version": "1.7.0",
+  "version": "1.9.0",
   "preset": "custom",
   "projectName": "haja-web-fe",
   "description": "이벤트 히스토리 모델과 불렛저널 시스템을 결합한 하루 단위 태스크 관리 웹 앱",
@@ -254,25 +254,35 @@
   ],
   "skipFiles": [],
   "approved": true,
-  "approvedAt": "2026-06-13T11:39:19Z",
+  "approvedAt": "2026-06-13T18:11:12Z",
   "mode": "upgrade",
-  "fromVersion": "1.5.0",
-  "toVersion": "1.7.0",
-  "migrations": [
-    "M-1.6.4-to-1.7.0"
-  ],
+  "fromVersion": "1.7.0",
+  "toVersion": "1.9.0",
+  "migrations": [],
   "fileActions": {
-    "AGENTS.md": {
-      "action": "surgical",
-      "changes": [
-        "M-1.6.4-to-1.7.0: 보조 스킬 섹션 다중 통합 형식 정규화 (제목 → \"## 보조 스킬\", 항목별 출처 표기, 안내문 일반화) + multiModelConsult 항목 합산"
-      ],
-      "source": "migration"
+    ".claude/rules/git-workflow.md": {
+      "action": "overwrite",
+      "reason": "1.8.0 자동 커밋 정책 섹션 추가 (managed 자동 감지) — autoCommit.mode=auto 렌더",
+      "source": "auto-detect"
     },
     ".claude/rules/session-routine.md": {
       "action": "overwrite",
-      "reason": "profile.integrations에 multiModelConsult 추가 → {{INTEGRATION_NOTES}} 2줄로 재렌더 (템플릿 무변경, 프로필 구동)",
+      "reason": "1.8.0 커밋 정책 참조 반영 (managed 자동 감지), INTEGRATION_NOTES 2줄 보존",
+      "source": "auto-detect"
+    },
+    "scripts/harness-check.sh": {
+      "action": "overwrite",
+      "reason": "1.9.0 Q2 강제 검사 + 판정 정직화 (managed 자동 감지)",
+      "source": "auto-detect"
+    },
+    "scripts/structural-test.ts": {
+      "action": "overwrite",
+      "reason": "1.9.0 Q2_ENFORCEMENT=enforced 마커 추가 (managed 자동 감지, layer-based 실제 규칙 보유)",
       "source": "auto-detect"
     }
+  },
+  "autoCommit": {
+    "mode": "auto",
+    "pushAfterCommit": false
   }
 }
