@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import TaskItem from "./TaskItem";
 import { useBulletStore } from "@/shared/bulletStore";
@@ -134,5 +134,49 @@ describe("TaskItem 스와이프 단일 열림 조율", () => {
       useSwipeRevealStore.getState().actions.setOpenId(null);
     });
     expect(contentA).toHaveAttribute("data-swipe-open", "false");
+  });
+});
+
+// -------------------------------------------------------------------------
+describe("TaskItem 타이틀 편집", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  // 타이틀 단일 클릭 후 250ms 지나면 편집 모드(input) 진입
+  function openEditor() {
+    render(<TaskItem bulletTask={task} />);
+    fireEvent.click(screen.getByText("스와이프 태스크"));
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+    return screen.getByRole("textbox");
+  }
+
+  it("Enter를 누르면 수정이 저장된다", () => {
+    const input = openEditor();
+    fireEvent.change(input, { target: { value: "엔터 제목" } });
+    fireEvent.keyUp(input, { key: "Enter" });
+
+    expect(useBulletStore.getState().tasks.get(task.id)?.title).toBe("엔터 제목");
+  });
+
+  it("타이틀 영역 바깥을 클릭(blur)하면 수정이 저장된다", () => {
+    const input = openEditor();
+    fireEvent.change(input, { target: { value: "블러 제목" } });
+    fireEvent.blur(input);
+
+    expect(useBulletStore.getState().tasks.get(task.id)?.title).toBe("블러 제목");
+  });
+
+  it("Escape로 취소하면 수정이 저장되지 않는다", () => {
+    const input = openEditor();
+    fireEvent.change(input, { target: { value: "버려질 제목" } });
+    fireEvent.keyUp(input, { key: "Escape" });
+
+    expect(useBulletStore.getState().tasks.get(task.id)?.title).toBe("스와이프 태스크");
   });
 });

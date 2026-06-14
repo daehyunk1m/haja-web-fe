@@ -139,6 +139,8 @@ const EditTask = ({
   const editBullet = useBulletStore((state) => state.editBullet);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [content, setContent] = useState<Partial<Pick<TaskCore, "title" | "note">>>({});
+  // Enter·blur·Escape(언마운트 시 blur)로 인한 중복 저장/취소를 한 번으로 가드한다
+  const settledRef = useRef(false);
 
   useEffect(() => {
     setContent({ title: title ?? "" });
@@ -147,6 +149,21 @@ const EditTask = ({
     }
   }, []);
 
+  // 저장 후 닫기 (Enter / 타이틀 영역 바깥 클릭 = blur)
+  const save = () => {
+    if (settledRef.current) return;
+    settledRef.current = true;
+    editBullet(id, content);
+    closeEdit();
+  };
+
+  // 저장 없이 닫기 (Escape). 이후 언마운트로 발생하는 blur는 settledRef로 무시된다
+  const cancel = () => {
+    if (settledRef.current) return;
+    settledRef.current = true;
+    closeEdit();
+  };
+
   return (
     <input
       ref={inputRef}
@@ -154,14 +171,10 @@ const EditTask = ({
       type='text'
       value={content.title ?? ""}
       onChange={(e) => setContent({ title: e.target.value })}
+      onBlur={save}
       onKeyUp={(e) => {
-        if (e.key === "Enter") {
-          editBullet(id, content);
-          closeEdit();
-        }
-        if (e.key === "Escape") {
-          closeEdit();
-        }
+        if (e.key === "Enter") save();
+        if (e.key === "Escape") cancel();
       }}
     />
   );

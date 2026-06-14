@@ -120,4 +120,10 @@
 - 수정(B): 외부 판정을 modalRef.contains → closest('[data-popup-root]')로 변경해 다중 인스턴스에도 안전
 - PopupContainer.test 중복-인스턴스 방어 1개 추가, 전체 validate 통과 (186 passed / 1 skipped)
 
+[2026-06-14] 타이틀 편집 blur 저장 (TaskItem/EditTask)
+- 요구: 타이틀 수정 중 Enter를 누르지 않아도 타이틀 영역 바깥을 클릭(blur)하면 반영
+- EditTask에 onBlur=save 추가. Enter·blur는 저장, Escape는 취소(저장 안 함)
+- settledRef 가드로 Enter·blur·Escape 후 언마운트 시 발생하는 blur의 중복 저장/취소 가로채임 방지
+- TaskItem.test 편집 3개(Enter/blur/Escape) 추가, 전체 validate 통과 (189 passed / 1 skipped)
+
 === END ===
