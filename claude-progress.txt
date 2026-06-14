@@ -88,4 +88,11 @@
 - 테스트 12개 Green (useSwipeToReveal 7 + TaskItem 5), 전체 validate 통과 (176 passed / 1 skipped)
 - 참고: 데스크톱에서는 마우스로 좌측 드래그 = 스와이프. 터치 세로 순서변경은 touch-action:pan-y 영향(기존부터 제한적, 회귀 아님)
 
+[2026-06-14] F012 보강: 스와이프 단일 열림 조율
+- 요구: 다른 태스크를 스와이프/드래그하면 열려 있던 스와이프가 닫히게
+- src/shared/swipeRevealStore.ts 신규 — openId(활성 태스크 1개) 추적 스토어
+- TaskItem: 자기 행에서 스와이프/열림 시작 시 openId 소유권 claim, openId가 다른 id면 자동 close
+- SectionList: DndContext onDragStart에서 setOpenId(null) → 순서변경 드래그 시작 시 열린 행 닫힘
+- 테스트 2개 추가(TaskItem 단일 열림 조율), 전체 validate 통과 (178 passed / 1 skipped)
+
 === END ===

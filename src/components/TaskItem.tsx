@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import BulletIcon from "./BulletIcon";
 import { useBulletStore } from "../shared/bulletStore";
+import { useSwipeRevealStore } from "../shared/swipeRevealStore";
 import { TaskCore } from "../shared/TaskCore";
 import Ico from "./Ico";
 import { useSwipeToReveal } from "@/hooks/useSwipeToReveal";
@@ -20,6 +21,20 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
     revealWidth: REVEAL_WIDTH,
     threshold: REVEAL_WIDTH / 2,
   });
+
+  // 단일 열림 조율: 한 번에 한 행만 열린다
+  const openId = useSwipeRevealStore((s) => s.openId);
+  const { setOpenId } = useSwipeRevealStore((s) => s.actions);
+
+  // 이 행에서 스와이프/열림이 시작되면 소유권을 가져온다 (다른 행은 닫힘)
+  useEffect(() => {
+    if (isDragging || isOpen) setOpenId(id);
+  }, [isDragging, isOpen, id, setOpenId]);
+
+  // 다른 행이 활성화되면(또는 드래그로 해제되면) 이 행을 닫는다
+  useEffect(() => {
+    if (openId !== id && isOpen) close();
+  }, [openId, id, isOpen, close]);
 
   const handleClick = useCallback(() => {
     // 삭제 영역이 열려 있으면 편집 대신 먼저 닫는다

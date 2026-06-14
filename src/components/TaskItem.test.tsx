@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import TaskItem from "./TaskItem";
 import { useBulletStore } from "@/shared/bulletStore";
+import { useSwipeRevealStore } from "@/shared/swipeRevealStore";
 import { TaskCore } from "@/shared/TaskCore";
 
 // BulletIcon은 popupStore/dateStore 의존이 있어 모킹한다.
@@ -16,6 +17,7 @@ let task: TaskCore;
 beforeEach(() => {
   task = new TaskCore("스와이프 태스크");
   useBulletStore.setState({ tasks: new Map([[task.id, task]]), taskOrder: {} });
+  useSwipeRevealStore.setState({ openId: null });
 });
 
 // jsdom에는 PointerEvent가 없으므로 MouseEvent(pointer* 타입명)로 대체한다.
@@ -62,5 +64,55 @@ describe("TaskItem 스와이프 삭제", () => {
     fireEvent(window, new MouseEvent("pointerup", {}));
 
     expect(content).toHaveAttribute("data-swipe-open", "false");
+  });
+});
+
+// -------------------------------------------------------------------------
+describe("TaskItem 스와이프 단일 열림 조율", () => {
+  let taskA: TaskCore;
+  let taskB: TaskCore;
+
+  beforeEach(() => {
+    taskA = new TaskCore("태스크 A");
+    taskB = new TaskCore("태스크 B");
+    useBulletStore.setState({
+      tasks: new Map([
+        [taskA.id, taskA],
+        [taskB.id, taskB],
+      ]),
+      taskOrder: {},
+    });
+    useSwipeRevealStore.setState({ openId: null });
+  });
+
+  it("다른 태스크를 스와이프하면 열려 있던 태스크가 닫힌다", () => {
+    render(
+      <>
+        <TaskItem bulletTask={taskA} />
+        <TaskItem bulletTask={taskB} />
+      </>
+    );
+    const [contentA, contentB] = screen.getAllByTestId("swipe-content");
+
+    swipeLeft(contentA);
+    expect(contentA).toHaveAttribute("data-swipe-open", "true");
+
+    swipeLeft(contentB);
+    expect(contentB).toHaveAttribute("data-swipe-open", "true");
+    expect(contentA).toHaveAttribute("data-swipe-open", "false");
+  });
+
+  it("드래그 시작(openId=null)이 열려 있던 태스크를 닫는다", () => {
+    render(<TaskItem bulletTask={taskA} />);
+    const contentA = screen.getByTestId("swipe-content");
+
+    swipeLeft(contentA);
+    expect(contentA).toHaveAttribute("data-swipe-open", "true");
+
+    // SectionList의 onDragStart가 호출하는 것과 동일하게 활성 해제
+    act(() => {
+      useSwipeRevealStore.getState().actions.setOpenId(null);
+    });
+    expect(contentA).toHaveAttribute("data-swipe-open", "false");
   });
 });

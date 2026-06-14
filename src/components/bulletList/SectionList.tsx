@@ -1,6 +1,7 @@
 import { useBulletStore } from "@/shared/bulletStore";
 import { useDateStore } from "@/shared/dateStore";
 import { useProgressStore } from "@/shared/progressStore";
+import { useSwipeRevealStore } from "@/shared/swipeRevealStore";
 import { useCallback, useEffect, useMemo } from "react";
 import TodoContainer from "../TodoContainer";
 import AddBulletBtn from "./AddBulletBtn";
@@ -57,6 +58,10 @@ const SectionList = ({ type }: { type: "task" | "someday" }) => {
     useSensor(KeyboardSensor)
   );
 
+  const { setOpenId } = useSwipeRevealStore((s) => s.actions);
+  // 순서변경 드래그가 시작되면 열려 있던 스와이프를 닫는다
+  const handleDragStart = useCallback(() => setOpenId(null), [setOpenId]);
+
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
@@ -86,6 +91,7 @@ const SectionList = ({ type }: { type: "task" | "someday" }) => {
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
           <SortableContext
