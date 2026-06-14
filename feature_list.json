@@ -42,7 +42,7 @@
     ],
     "passes": true,
     "last_session": "2026-06-14",
-    "notes": "PopupContainer 테스트 Green + changeBulletState 버그 수정. BulletIcon 롱프레스 타이머화(누른 채 500ms 경과 시 팝업 오픈, 포인터 이벤트로 마우스·터치 지원) — 테스트 3개. PopupContainer 외부 클릭 닫기 버그 수정(죽은 코드였던 리스너를 단일 effect로 활성화, pointerdown 사용) — 테스트 2개"
+    "notes": "PopupContainer 테스트 Green + changeBulletState 버그 수정. BulletIcon 롱프레스 타이머화(누른 채 500ms 경과 시 팝업 오픈, 포인터 이벤트로 마우스·터치 지원) — 테스트 3개. PopupContainer 외부 클릭 닫기 버그 수정(죽은 코드였던 리스너를 단일 effect로 활성화, pointerdown 사용) — 테스트 2개. 상태 팝업 중복 렌더 버그 수정(Body에서 1회만 렌더 + closest 기반 외부 판정으로 다중 인스턴스 방어) — 테스트 1개"
   },
   {
     "id": "F004",

@@ -6,8 +6,6 @@ import { useCallback, useEffect, useMemo } from "react";
 import TodoContainer from "../TodoContainer";
 import AddBulletBtn from "./AddBulletBtn";
 import SortableTaskItem from "./SortableTaskItem";
-import PopupContainer from "../PopupContainer";
-import { usePopupStore } from "@/shared/popupStores";
 import { TaskCore } from "@/shared/TaskCore";
 import { useOrderedTasks } from "@/hooks/useOrderedTasks";
 import {
@@ -22,7 +20,6 @@ import type { DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 
 const SectionList = ({ type }: { type: "task" | "someday" }) => {
-  const isPopupOpen = usePopupStore((state) => state.isModalOpen);
   const dateString = useDateStore((state) => state.toBulletString());
 
   const postpone = useBulletStore((state) => state.postpone);
@@ -105,7 +102,6 @@ const SectionList = ({ type }: { type: "task" | "someday" }) => {
         </DndContext>
       </TodoContainer>
       <AddBulletBtn type={type} />
-      {isPopupOpen && <PopupContainer />}
     </>
   );
 };

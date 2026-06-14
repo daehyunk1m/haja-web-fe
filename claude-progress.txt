@@ -113,4 +113,11 @@
 - 수정: 단일 effect에서 keydown(Esc) + pointerdown(외부 클릭) 리스너를 함께 등록. 롱프레스(포인터)·터치와 일관되게 pointerdown 사용. 팝업을 연 pointerdown은 리스너 등록 이전에 끝나 자기-닫힘 없음
 - PopupContainer.test 2개 추가(외부/내부 클릭), 전체 validate 통과 (185 passed / 1 skipped)
 
+[2026-06-14] F003 버그수정: 상태 팝업 중복 렌더 → 상태 변경이 닫힘에 가로채임
+- 증상: 외부 클릭 닫기는 동작하나, 상태 옵션을 누르면 변경이 안 되고 닫힘
+- 원인: Body가 task/someday 섹션마다 SectionList를 렌더 → 각 SectionList가 PopupContainer를 렌더해 팝업이 2개 마운트. 한 팝업 내부 클릭 시 다른 인스턴스의 외부-클릭(pointerdown) 리스너가 자기 modalRef 기준 "바깥"으로 판단해 closePopup → onClick 상태변경 전에 언마운트 (외부-클릭 리스너를 활성화한 직전 커밋이 잠재 버그를 드러냄)
+- 수정(A): PopupContainer를 SectionList에서 제거하고 Body에서 1회만 렌더
+- 수정(B): 외부 판정을 modalRef.contains → closest('[data-popup-root]')로 변경해 다중 인스턴스에도 안전
+- PopupContainer.test 중복-인스턴스 방어 1개 추가, 전체 validate 통과 (186 passed / 1 skipped)
+
 === END ===

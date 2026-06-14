@@ -1,5 +1,5 @@
 import { useBulletStore } from "../shared/bulletStore";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { usePopupStore } from "../shared/popupStores";
 import { useDateStore } from "../shared/dateStore";
 import { Bullet } from "../shared/types/taskType";
@@ -16,7 +16,6 @@ export default function PopupContainer() {
   const { changeBulletState, editBullet } = useBulletStore((state) => state);
   const targetTask = useBulletStore((state) => state.tasks.get(targetId));
   const toBulletString = useDateStore((state) => state.toBulletString);
-  const modalRef = useRef<HTMLDivElement>(null);
 
   // 모달 외부 클릭 또는 Esc 시 닫기
   useEffect(() => {
@@ -30,10 +29,11 @@ export default function PopupContainer() {
 
     // 롱프레스(포인터 이벤트)·터치와 일관되게 pointerdown으로 바깥 클릭을 감지한다.
     // 팝업을 연 롱프레스의 pointerdown은 이 리스너 등록 이전에 끝났으므로 자기 자신을 닫지 않는다.
+    // closest로 판정해 팝업이 여러 인스턴스로 렌더돼도 어떤 팝업 내부 클릭이면 닫지 않는다.
     const handlePointerDownOutside = (e: PointerEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        closePopup();
-      }
+      const target = e.target;
+      if (target instanceof Element && target.closest("[data-popup-root]")) return;
+      closePopup();
     };
 
     document.addEventListener("keydown", handleEscape);
@@ -95,7 +95,8 @@ export default function PopupContainer() {
 
   return (
     <div
-      ref={modalRef}
+      data-popup-root
+      data-testid='popup-container'
       className='absolute z-50 w-fit min-w-[160px] border border-black bg-white py-5 shadow-sm animate-in zoom-in-95 duration-200'
       style={getPositionStyles()}
     >

@@ -134,4 +134,21 @@ describe("외부 클릭으로 닫기", () => {
 
     expect(usePopupStore.getState().isModalOpen).toBe(true);
   });
+
+  it("팝업이 중복 렌더돼도 내부 클릭으로 닫히지 않는다 (상태 변경 가로채임 방지)", () => {
+    // Body가 섹션마다 렌더해 PopupContainer가 2개 뜨던 상황 재현
+    render(
+      <>
+        <PopupContainer />
+        <PopupContainer />
+      </>
+    );
+    const dones = screen.getAllByText("Done");
+    expect(dones).toHaveLength(2);
+
+    // 한 팝업 내부를 눌렀을 때 다른 인스턴스의 외부-클릭 리스너가 닫으면 안 된다
+    fireEvent(dones[0], new MouseEvent("pointerdown", { bubbles: true }));
+
+    expect(usePopupStore.getState().isModalOpen).toBe(true);
+  });
 });
