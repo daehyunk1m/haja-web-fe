@@ -5,6 +5,7 @@ import { useSwipeRevealStore } from "../shared/swipeRevealStore";
 import { TaskCore } from "../shared/TaskCore";
 import Ico from "./Ico";
 import { useSwipeToReveal } from "@/hooks/useSwipeToReveal";
+import ConfirmDialog from "@/components/modal/ConfirmDialog";
 
 const REVEAL_WIDTH = 64;
 
@@ -14,6 +15,7 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   // console.log(state);
   const deleteBullet = useBulletStore((state) => state.deleteBullet);
   const [isEdit, setIsEdit] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const closeEdit = useCallback(() => setIsEdit(false), []);
   const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -57,7 +59,13 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
     console.log(bulletTask.toJSON());
   }, [bulletTask]);
 
-  const handleDelete = useCallback(() => deleteBullet(id), [deleteBullet, id]);
+  // 삭제는 확인 모달을 한 번 거친다
+  const requestDelete = useCallback(() => setConfirmOpen(true), []);
+  const cancelDelete = useCallback(() => setConfirmOpen(false), []);
+  const confirmDelete = useCallback(() => {
+    deleteBullet(id);
+    setConfirmOpen(false);
+  }, [deleteBullet, id]);
 
   return (
     <div className='relative w-full overflow-hidden'>
@@ -68,7 +76,7 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
         aria-label='삭제'
         aria-hidden={!isOpen}
         tabIndex={isOpen ? 0 : -1}
-        onClick={handleDelete}
+        onClick={requestDelete}
         className={`absolute inset-y-0 right-0 flex w-16 items-center justify-center bg-red-100 transition-colors hover:bg-red-200 ${
           isOpen ? "cursor-pointer" : "pointer-events-none"
         }`}
@@ -107,6 +115,14 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
           </span>
         </div>
       </div>
+
+      {confirmOpen && (
+        <ConfirmDialog
+          message='정말 삭제하시겠습니까?'
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
     </div>
   );
 }

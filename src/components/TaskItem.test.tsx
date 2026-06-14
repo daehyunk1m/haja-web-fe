@@ -48,12 +48,32 @@ describe("TaskItem 스와이프 삭제", () => {
     expect(screen.getByTestId("delete-action")).toHaveAttribute("aria-hidden", "false");
   });
 
-  it("드러난 삭제 버튼 클릭 시 태스크가 삭제된다", () => {
+  it("삭제 버튼 클릭 시 바로 삭제되지 않고 확인 모달이 뜬다", () => {
     render(<TaskItem bulletTask={task} />);
     swipeLeft(screen.getByTestId("swipe-content"));
     fireEvent.click(screen.getByTestId("delete-action"));
 
+    expect(screen.getByText("정말 삭제하시겠습니까?")).toBeInTheDocument();
+    expect(useBulletStore.getState().tasks.has(task.id)).toBe(true);
+  });
+
+  it("확인 모달에서 삭제를 누르면 태스크가 삭제된다", () => {
+    render(<TaskItem bulletTask={task} />);
+    swipeLeft(screen.getByTestId("swipe-content"));
+    fireEvent.click(screen.getByTestId("delete-action"));
+    fireEvent.click(screen.getByTestId("confirm-dialog-confirm"));
+
     expect(useBulletStore.getState().tasks.has(task.id)).toBe(false);
+  });
+
+  it("확인 모달에서 취소를 누르면 태스크가 유지되고 모달이 닫힌다", () => {
+    render(<TaskItem bulletTask={task} />);
+    swipeLeft(screen.getByTestId("swipe-content"));
+    fireEvent.click(screen.getByTestId("delete-action"));
+    fireEvent.click(screen.getByTestId("confirm-dialog-cancel"));
+
+    expect(useBulletStore.getState().tasks.has(task.id)).toBe(true);
+    expect(screen.queryByText("정말 삭제하시겠습니까?")).not.toBeInTheDocument();
   });
 
   it("세로로 움직이면 삭제 영역이 열리지 않는다", () => {

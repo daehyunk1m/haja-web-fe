@@ -95,4 +95,10 @@
 - SectionList: DndContext onDragStart에서 setOpenId(null) → 순서변경 드래그 시작 시 열린 행 닫힘
 - 테스트 2개 추가(TaskItem 단일 열림 조율), 전체 validate 통과 (178 passed / 1 skipped)
 
+[2026-06-14] F012 보강: 삭제 확인 모달
+- 요구: 태스크 삭제 시 "정말 삭제하시겠습니까?" 확인 알럿(모달)
+- src/components/modal/ConfirmDialog.tsx 신규 — 기존 ModalContainer(포털·배경/Esc 닫기) + shadcn Button(destructive/outline) 재사용
+- TaskItem: 삭제 버튼 클릭 시 즉시 삭제 대신 확인 모달 표시(confirmOpen). 확인 시 deleteBullet, 취소/배경/Esc 시 닫기
+- 테스트: 즉시삭제 1개 → 확인 플로우 3개로 교체(TaskItem 9개). 전체 validate 통과 (180 passed / 1 skipped)
+
 === END ===
