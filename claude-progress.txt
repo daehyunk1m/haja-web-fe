@@ -126,4 +126,11 @@
 - settledRef 가드로 Enter·blur·Escape 후 언마운트 시 발생하는 blur의 중복 저장/취소 가로채임 방지
 - TaskItem.test 편집 3개(Enter/blur/Escape) 추가, 전체 validate 통과 (189 passed / 1 skipped)
 
+[2026-06-14] 스와이프 바깥 클릭 해제 (TaskItem)
+- 요구: 스와이프된 상태에서 해당 태스크 외 다른 영역을 선택하면 스와이프가 풀리게
+- 기존 조율(swipeRevealStore)은 다른 행 스와이프/순서변경 드래그에만 닫힘 → 빈 영역·다른 UI 클릭엔 안 풀림
+- TaskItem 루트에 ref + isOpen일 때 document pointerdown 리스너: 루트 바깥 클릭이면 close()+setOpenId(null)
+- 내부(삭제 버튼 등) 클릭은 유지. 스와이프를 연 pointerdown은 isOpen=true 이전이라 자기-닫힘 없음
+- TaskItem.test 2개(바깥/내부 클릭) 추가, 전체 validate 통과 (191 passed / 1 skipped)
+
 === END ===

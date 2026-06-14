@@ -18,6 +18,7 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const closeEdit = useCallback(() => setIsEdit(false), []);
   const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const { offset, isOpen, isDragging, onPointerDown, close } = useSwipeToReveal({
     revealWidth: REVEAL_WIDTH,
@@ -37,6 +38,21 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   useEffect(() => {
     if (openId !== id && isOpen) close();
   }, [openId, id, isOpen, close]);
+
+  // 스와이프가 열린 상태에서 이 태스크 바깥을 누르면 스와이프를 닫는다.
+  // 스와이프를 연 pointerdown은 isOpen이 true가 되기 전이라 자기 자신을 닫지 않는다.
+  useEffect(() => {
+    if (!isOpen) return;
+    const handlePointerDownOutside = (e: PointerEvent) => {
+      const target = e.target;
+      if (target instanceof Node && rootRef.current && !rootRef.current.contains(target)) {
+        close();
+        setOpenId(null);
+      }
+    };
+    document.addEventListener("pointerdown", handlePointerDownOutside);
+    return () => document.removeEventListener("pointerdown", handlePointerDownOutside);
+  }, [isOpen, close, setOpenId]);
 
   const handleClick = useCallback(() => {
     // 삭제 영역이 열려 있으면 편집 대신 먼저 닫는다
@@ -68,7 +84,7 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   }, [deleteBullet, id]);
 
   return (
-    <div className='relative w-full overflow-hidden'>
+    <div ref={rootRef} className='relative w-full overflow-hidden'>
       {/* 슬라이드로 드러나는 삭제 영역 (오른쪽 고정, 본문 뒤) */}
       <button
         type='button'

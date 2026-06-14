@@ -135,6 +135,32 @@ describe("TaskItem 스와이프 단일 열림 조율", () => {
     });
     expect(contentA).toHaveAttribute("data-swipe-open", "false");
   });
+
+  it("스와이프된 상태에서 바깥 영역을 클릭하면 스와이프가 풀린다", () => {
+    render(<TaskItem bulletTask={taskA} />);
+    const content = screen.getByTestId("swipe-content");
+
+    swipeLeft(content);
+    expect(content).toHaveAttribute("data-swipe-open", "true");
+
+    fireEvent(document.body, new MouseEvent("pointerdown", { bubbles: true }));
+    expect(content).toHaveAttribute("data-swipe-open", "false");
+  });
+
+  it("스와이프된 태스크 내부를 클릭하면 스와이프가 유지된다", () => {
+    render(<TaskItem bulletTask={taskA} />);
+    const content = screen.getByTestId("swipe-content");
+
+    swipeLeft(content);
+    expect(content).toHaveAttribute("data-swipe-open", "true");
+
+    // 드러난 삭제 버튼 등 내부 요소 클릭은 스와이프를 풀지 않는다
+    fireEvent(
+      screen.getByTestId("delete-action"),
+      new MouseEvent("pointerdown", { bubbles: true })
+    );
+    expect(content).toHaveAttribute("data-swipe-open", "true");
+  });
 });
 
 // -------------------------------------------------------------------------
