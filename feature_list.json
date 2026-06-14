@@ -41,8 +41,8 @@
       "컨텍스트 메뉴로 상태 변경"
     ],
     "passes": true,
-    "last_session": "2026-04-09",
-    "notes": "PopupContainer 테스트 7개 Green + changeBulletState 버그 수정"
+    "last_session": "2026-06-14",
+    "notes": "PopupContainer 테스트 7개 Green + changeBulletState 버그 수정. BulletIcon 롱프레스 타이머화(누른 채 500ms 경과 시 팝업 오픈, 포인터 이벤트로 마우스·터치 지원) — 테스트 3개 추가"
   },
   {
     "id": "F004",

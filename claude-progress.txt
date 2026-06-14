@@ -101,4 +101,10 @@
 - TaskItem: 삭제 버튼 클릭 시 즉시 삭제 대신 확인 모달 표시(confirmOpen). 확인 시 deleteBullet, 취소/배경/Esc 시 닫기
 - 테스트: 즉시삭제 1개 → 확인 플로우 3개로 교체(TaskItem 9개). 전체 validate 통과 (180 passed / 1 skipped)
 
+[2026-06-14] F003 보강: 롱프레스 타이머화 (BulletIcon)
+- 요구: 롱프레스 시 손을 떼지 않아도 지정 시간(500ms) 경과하면 팝업이 뜨게
+- 기존: onMouseUp에서 누른 시간 계산 → 손을 떼야만 팝업 오픈
+- 변경: onPointerDown에서 setTimeout(500) 시작 → 발동 시 누른 채로 togglePopup. 떼는 순간 longPressFired면 무시, 아니면 짧은 클릭(toggleDone/상태변경). pointerleave·pointercancel 시 타이머 취소. 마우스·터치 모두 지원(포인터 이벤트)
+- BulletIcon.test.tsx 신규(롱프레스 3개), 전체 validate 통과 (183 passed / 1 skipped)
+
 === END ===
