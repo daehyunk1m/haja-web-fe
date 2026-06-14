@@ -107,4 +107,10 @@
 - 변경: onPointerDown에서 setTimeout(500) 시작 → 발동 시 누른 채로 togglePopup. 떼는 순간 longPressFired면 무시, 아니면 짧은 클릭(toggleDone/상태변경). pointerleave·pointercancel 시 타이머 취소. 마우스·터치 모두 지원(포인터 이벤트)
 - BulletIcon.test.tsx 신규(롱프레스 3개), 전체 validate 통과 (183 passed / 1 skipped)
 
+[2026-06-14] F003 보강: 팝업 외부 클릭 닫기
+- 요구: 롱프레스로 뜬 상태 팝업을 모달 바깥 클릭 시 닫기
+- 버그: PopupContainer useEffect의 첫 if(isModalOpen) early return 때문에 외부클릭(mousedown) 리스너가 죽은 코드였음 → 기존엔 Esc로만 닫힘
+- 수정: 단일 effect에서 keydown(Esc) + pointerdown(외부 클릭) 리스너를 함께 등록. 롱프레스(포인터)·터치와 일관되게 pointerdown 사용. 팝업을 연 pointerdown은 리스너 등록 이전에 끝나 자기-닫힘 없음
+- PopupContainer.test 2개 추가(외부/내부 클릭), 전체 validate 통과 (185 passed / 1 skipped)
+
 === END ===

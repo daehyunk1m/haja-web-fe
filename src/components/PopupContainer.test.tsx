@@ -113,3 +113,25 @@ describe("타입 변경", () => {
     expect(usePopupStore.getState().isModalOpen).toBe(false);
   });
 });
+
+// -------------------------------------------------------------------------
+describe("외부 클릭으로 닫기", () => {
+  it("모달 바깥을 누르면 팝업이 닫힌다", () => {
+    render(<PopupContainer />);
+    expect(screen.getByText("Done")).toBeInTheDocument();
+
+    // jsdom에는 PointerEvent가 없으므로 같은 타입명의 MouseEvent로 대체한다.
+    fireEvent(document.body, new MouseEvent("pointerdown", { bubbles: true }));
+
+    expect(usePopupStore.getState().isModalOpen).toBe(false);
+    expect(screen.queryByText("Done")).not.toBeInTheDocument();
+  });
+
+  it("모달 내부를 누르면 닫히지 않는다", () => {
+    render(<PopupContainer />);
+
+    fireEvent(screen.getByText("Done"), new MouseEvent("pointerdown", { bubbles: true }));
+
+    expect(usePopupStore.getState().isModalOpen).toBe(true);
+  });
+});

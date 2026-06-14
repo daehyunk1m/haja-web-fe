@@ -18,29 +18,30 @@ export default function PopupContainer() {
   const toBulletString = useDateStore((state) => state.toBulletString);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // 모달 외부 클릭 시 닫기
+  // 모달 외부 클릭 또는 Esc 시 닫기
   useEffect(() => {
+    if (!isModalOpen) return;
+
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         closePopup();
       }
     };
 
-    if (isModalOpen) {
-      document.addEventListener("keydown", handleEscape);
-      return () => document.removeEventListener("keydown", handleEscape);
-    }
-
-    const handleClickOutside = (e: MouseEvent) => {
+    // 롱프레스(포인터 이벤트)·터치와 일관되게 pointerdown으로 바깥 클릭을 감지한다.
+    // 팝업을 연 롱프레스의 pointerdown은 이 리스너 등록 이전에 끝났으므로 자기 자신을 닫지 않는다.
+    const handlePointerDownOutside = (e: PointerEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         closePopup();
       }
     };
 
-    if (isModalOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }
+    document.addEventListener("keydown", handleEscape);
+    document.addEventListener("pointerdown", handlePointerDownOutside);
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("pointerdown", handlePointerDownOutside);
+    };
   }, [isModalOpen, closePopup]);
 
   if (!isModalOpen) return null;
