@@ -307,3 +307,24 @@ describe("TaskItem 편집 단일 조율", () => {
     expect(useBulletStore.getState().tasks.get(taskA.id)?.title).toBe("수정된 A");
   });
 });
+
+// -------------------------------------------------------------------------
+describe("TaskItem 긴 제목 줄바꿈", () => {
+  it("긴 제목은 한 줄 고정(whitespace-nowrap) 없이 줄바꿈된다", () => {
+    const longTitle =
+      "엄청나게엄청나게엄청나게긴태스크이름 plus-a-very-long-unbreakable-word-aaaaaaaaaaaaaaaaaaaa";
+    const longTask = new TaskCore(longTitle);
+    useBulletStore.setState({
+      tasks: new Map([[longTask.id, longTask]]),
+      taskOrder: {},
+    });
+
+    render(<TaskItem bulletTask={longTask} />);
+    const titleEl = screen.getByText(longTitle);
+
+    // whitespace-nowrap이 있으면 컨테이너 밖으로 넘쳐 잘린다 → 없어야 한다
+    expect(titleEl.className).not.toContain("whitespace-nowrap");
+    // 공백 없는 긴 단어도 강제로 줄바꿈되도록 break-* 유틸이 있어야 한다
+    expect(titleEl.className).toMatch(/break-/);
+  });
+});

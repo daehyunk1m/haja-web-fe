@@ -133,4 +133,11 @@
 - 내부(삭제 버튼 등) 클릭은 유지. 스와이프를 연 pointerdown은 isOpen=true 이전이라 자기-닫힘 없음
 - TaskItem.test 2개(바깥/내부 클릭) 추가, 전체 validate 통과 (191 passed / 1 skipped)
 
+[2026-06-16] 긴 태스크 제목 줄바꿈 (TaskItem)
+- 요구: 태스크 이름이 매우 길어 컨테이너 오른쪽 끝에 닿거나 넘칠 때 줄바꿈 처리
+- 원인: 제목 span의 whitespace-nowrap + 컨테이너 고정 높이 h-[38px]로 넘침/잘림
+- 수정: whitespace-nowrap 제거 + break-words 추가(공백 없는 긴 단어 강제 줄바꿈),
+  h-[38px] → min-h-[38px](여러 줄 시 행이 늘어나도록). flex-1 min-w-0는 유지
+- TaskItem.test 회귀 1개(긴 제목: nowrap 없음 + break-* 존재) 추가, 전체 validate 통과 (196 passed / 1 skipped)
+
 === END ===
