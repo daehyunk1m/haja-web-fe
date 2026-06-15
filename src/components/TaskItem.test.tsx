@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { StrictMode } from "react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import TaskItem from "./TaskItem";
 import { useBulletStore } from "@/shared/bulletStore";
@@ -229,6 +230,21 @@ describe("TaskItem 타이틀 편집", () => {
     expect(onParentPointerDown).not.toHaveBeenCalled();
   });
 
+  // 회귀 방지: StrictMode는 mount 시 effect를 setup→cleanup→setup으로 재실행한다.
+  // 이 가짜 cleanup에서 편집이 즉시 닫히면 안 된다.
+  it("StrictMode에서도 편집 모드에 진입하고 유지된다", () => {
+    render(
+      <StrictMode>
+        <TaskItem bulletTask={task} />
+      </StrictMode>
+    );
+    fireEvent.click(screen.getByText("스와이프 태스크"));
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+
+    expect(screen.getByRole("textbox")).toBeInTheDocument();
+  });
 });
 
 // -------------------------------------------------------------------------

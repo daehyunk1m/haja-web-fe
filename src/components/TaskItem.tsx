@@ -64,8 +64,10 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
       close();
       return;
     }
-    // 다른 태스크가 편집 중이면, 그 편집만 종료하고 이번 클릭은 편집에 진입하지 않는다
+    // 다른 태스크가 편집 중이면, 그 input을 blur해 저장(onBlur)·종료시키고
+    // 이번 클릭은 편집에 진입하지 않는다 (한 번에 하나만 편집)
     if (editingId !== null && editingId !== id) {
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
       setEditingId(null);
       return;
     }
@@ -181,12 +183,6 @@ const EditTask = ({
     editBullet(id, content);
     closeEdit();
   };
-  // 최신 save를 ref로 유지 — 다른 태스크 편집 진입 등으로 input이 언마운트될 때
-  // (blur가 발생하지 않으므로) cleanup에서 최신 내용으로 저장을 보장한다.
-  // 이미 Enter/blur/Escape로 처리됐으면 settledRef로 중복을 막는다.
-  const saveRef = useRef(save);
-  saveRef.current = save;
-  useEffect(() => () => saveRef.current(), []);
 
   // 저장 없이 닫기 (Escape). 이후 언마운트로 발생하는 blur는 settledRef로 무시된다
   const cancel = () => {
