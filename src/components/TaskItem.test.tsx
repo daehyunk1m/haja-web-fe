@@ -327,4 +327,14 @@ describe("TaskItem 긴 제목 줄바꿈", () => {
     // 공백 없는 긴 단어도 강제로 줄바꿈되도록 break-* 유틸이 있어야 한다
     expect(titleEl.className).toMatch(/break-/);
   });
+
+  it("아이콘은 줄바꿈 시 첫 줄에 맞춰 상단 정렬(items-start)된다", () => {
+    render(<TaskItem bulletTask={task} />);
+    // swipe-content의 직계 자식이 아이콘+제목을 담는 행 컨테이너다
+    const row = screen.getByTestId("swipe-content").firstElementChild as HTMLElement;
+
+    // 여러 줄일 때 아이콘이 세로 중앙에 뜨지 않고 첫 줄 옆에 오도록 상단 정렬
+    expect(row.className).toContain("items-start");
+    expect(row.className).not.toContain("items-center");
+  });
 });

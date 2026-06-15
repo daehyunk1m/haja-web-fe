@@ -125,7 +125,7 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
         }}
         className='relative z-10 flex w-full flex-row items-center bg-white hover:bg-[#f0f0f0]'
       >
-        <div className='min-h-[38px] flex flex-row items-center px-5 py-1 gap-2 w-full'>
+        <div className='min-h-[38px] flex flex-row items-start px-5 py-1 gap-2 w-full'>
           <BulletIcon id={id} bulletState={state} />
           <span className='font-medium text-[16px] text-black flex-1 min-w-0'>
             {isEdit ? (

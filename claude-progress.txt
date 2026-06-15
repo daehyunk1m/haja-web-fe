@@ -139,5 +139,7 @@
 - 수정: whitespace-nowrap 제거 + break-words 추가(공백 없는 긴 단어 강제 줄바꿈),
   h-[38px] → min-h-[38px](여러 줄 시 행이 늘어나도록). flex-1 min-w-0는 유지
 - TaskItem.test 회귀 1개(긴 제목: nowrap 없음 + break-* 존재) 추가, 전체 validate 통과 (196 passed / 1 skipped)
+- 후속: 줄바꿈 시 아이콘이 세로 중앙에 뜨지 않도록 행 컨테이너 items-center → items-start
+  (아이콘 24px == 첫 줄 높이 24px이라 한 줄일 때도 정렬 동일). 정렬 회귀 테스트 1개 추가 (197 passed / 1 skipped)
 
 === END ===
