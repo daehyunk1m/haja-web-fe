@@ -1,9 +1,9 @@
 {
   "harness": {
-    "version": "1.12.0",
-    "skillVersion": "1.12.0",
+    "version": "1.13.1",
+    "skillVersion": "1.13.1",
     "installedAt": "2026-04-09T12:00:00Z",
-    "upgradedAt": "2026-06-16T00:00:00Z",
+    "upgradedAt": "2026-06-15T19:29:22Z",
     "upgradeInProgress": false,
     "preset": "custom",
     "structuralTestEnforcement": "enforced",
@@ -183,8 +183,8 @@
     },
     ".claude/rules/session-routine.md": {
       "category": "managed",
-      "templateHash": "sha256:16ba7f72dba6cb9e40a99f49730fe6b9aaf6da0e3be8b40baec7d34f5c07aa4d",
-      "generatedAt": "2026-06-16T00:00:00Z"
+      "templateHash": "sha256:c70465931a83a2dd335f7479bf38c102381c8077459e3d2974b1b388641fd926",
+      "generatedAt": "2026-06-15T19:29:22Z"
     },
     ".claude/rules/coding-standards.md": {
       "category": "managed",
@@ -203,8 +203,8 @@
     },
     "agents/test-engineer.md": {
       "category": "managed",
-      "templateHash": "sha256:4d3fe6f485a9567d1ace5d3b9c3a8b6ef3468bd166f769ac197a0d86efc4ae9b",
-      "generatedAt": "2026-06-16T00:00:00Z"
+      "templateHash": "sha256:a9bcd5d72a86da3f8fbfce308165367262349e9378e4f259cf614a0c72835c68",
+      "generatedAt": "2026-06-15T19:29:22Z"
     },
     "agents/implementer.md": {
       "category": "managed",
@@ -273,8 +273,8 @@
     },
     "scripts/harness-check.sh": {
       "category": "managed",
-      "templateHash": "sha256:12ba44be811efaa70ddb75cd0befbbda191fa995f7fdbc67e4e23480ff986807",
-      "generatedAt": "2026-06-16T00:00:00Z"
+      "templateHash": "sha256:747bfa8f06bbedf8afb24e0187a8d48e79f3a4053a6dd57781549e41e0bb8e8e",
+      "generatedAt": "2026-06-15T19:29:22Z"
     },
     "playwright.config.ts": {
       "category": "managed",
