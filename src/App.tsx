@@ -22,7 +22,7 @@ function App() {
   return (
     <>
       <Container>
-        <div>안녕하세요{user?.email}님</div>
+        {/* <div>안녕하세요{user?.email}님</div> */}
         <img src={user?.user_metadata?.avatar_url} alt='' />
         <Header />
         <Body />
