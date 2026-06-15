@@ -3,6 +3,7 @@ import { render, screen, fireEvent, act } from "@testing-library/react";
 import TaskItem from "./TaskItem";
 import { useBulletStore } from "@/shared/bulletStore";
 import { useSwipeRevealStore } from "@/shared/swipeRevealStore";
+import { useEditingStore } from "@/shared/editingStore";
 import { TaskCore } from "@/shared/TaskCore";
 
 // BulletIcon은 popupStore/dateStore 의존이 있어 모킹한다.
@@ -18,6 +19,7 @@ beforeEach(() => {
   task = new TaskCore("스와이프 태스크");
   useBulletStore.setState({ tasks: new Map([[task.id, task]]), taskOrder: {} });
   useSwipeRevealStore.setState({ openId: null });
+  useEditingStore.setState({ editingId: null });
 });
 
 // jsdom에는 PointerEvent가 없으므로 MouseEvent(pointer* 타입명)로 대체한다.
@@ -227,15 +229,65 @@ describe("TaskItem 타이틀 편집", () => {
     expect(onParentPointerDown).not.toHaveBeenCalled();
   });
 
-  // 편집 중에는 정렬 드래그를 비활성화하도록 부모(SortableTaskItem)에 편집 상태를 알린다
-  it("편집에 진입하면 onEditingChange(true)를 호출한다", () => {
-    const onEditingChange = vi.fn();
-    render(<TaskItem bulletTask={task} onEditingChange={onEditingChange} />);
-    fireEvent.click(screen.getByText("스와이프 태스크"));
+});
+
+// -------------------------------------------------------------------------
+describe("TaskItem 편집 단일 조율", () => {
+  let taskA: TaskCore;
+  let taskB: TaskCore;
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    taskA = new TaskCore("태스크 A");
+    taskB = new TaskCore("태스크 B");
+    useBulletStore.setState({
+      tasks: new Map([
+        [taskA.id, taskA],
+        [taskB.id, taskB],
+      ]),
+      taskOrder: {},
+    });
+    useEditingStore.setState({ editingId: null });
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  // 타이틀 클릭 후 250ms 지나면 편집 진입(단일 클릭 판정)
+  function clickTitle(label: string) {
+    fireEvent.click(screen.getByText(label));
     act(() => {
       vi.advanceTimersByTime(250);
     });
+  }
 
-    expect(onEditingChange).toHaveBeenCalledWith(true);
+  it("편집 중 다른 태스크의 타이틀을 클릭하면 기존 편집만 종료되고 클릭한 태스크는 편집되지 않는다", () => {
+    render(
+      <>
+        <TaskItem bulletTask={taskA} />
+        <TaskItem bulletTask={taskB} />
+      </>
+    );
+    clickTitle("태스크 A");
+    expect(screen.getAllByRole("textbox")).toHaveLength(1);
+
+    // 편집 중 다른 타이틀 클릭 → 기존 편집만 종료, 클릭한 태스크는 편집되지 않음
+    clickTitle("태스크 B");
+    expect(screen.queryAllByRole("textbox")).toHaveLength(0);
+  });
+
+  it("편집 중 다른 태스크를 클릭하면 편집 중이던 내용이 저장된다", () => {
+    render(
+      <>
+        <TaskItem bulletTask={taskA} />
+        <TaskItem bulletTask={taskB} />
+      </>
+    );
+    clickTitle("태스크 A");
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "수정된 A" } });
+
+    clickTitle("태스크 B");
+
+    expect(useBulletStore.getState().tasks.get(taskA.id)?.title).toBe("수정된 A");
   });
 });

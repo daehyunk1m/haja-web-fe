@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import BulletIcon from "./BulletIcon";
 import { useBulletStore } from "../shared/bulletStore";
 import { useSwipeRevealStore } from "../shared/swipeRevealStore";
+import { useEditingStore } from "../shared/editingStore";
 import { TaskCore } from "../shared/TaskCore";
 import Ico from "./Ico";
 import { useSwipeToReveal } from "@/hooks/useSwipeToReveal";
@@ -9,21 +10,17 @@ import ConfirmDialog from "@/components/modal/ConfirmDialog";
 
 const REVEAL_WIDTH = 64;
 
-export default function TaskItem({
-  bulletTask,
-  onEditingChange,
-}: {
-  bulletTask: TaskCore;
-  /** 편집 진입/종료를 부모에 통지 (편집 중 정렬 드래그 비활성화용) */
-  onEditingChange?: (editing: boolean) => void;
-}) {
+export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   // 태스크 네임, 아이콘, 받아야하고 수정할 수 있어야함
   const { id, title, state } = bulletTask;
   // console.log(state);
   const deleteBullet = useBulletStore((state) => state.deleteBullet);
-  const [isEdit, setIsEdit] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const closeEdit = useCallback(() => setIsEdit(false), []);
+  // 편집 단일 조율: 한 번에 한 태스크만 편집된다 (editingId === id)
+  const editingId = useEditingStore((s) => s.editingId);
+  const { setEditingId } = useEditingStore((s) => s.actions);
+  const isEdit = editingId === id;
+  const closeEdit = useCallback(() => setEditingId(null), [setEditingId]);
   const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -35,11 +32,6 @@ export default function TaskItem({
   // 단일 열림 조율: 한 번에 한 행만 열린다
   const openId = useSwipeRevealStore((s) => s.openId);
   const { setOpenId } = useSwipeRevealStore((s) => s.actions);
-
-  // 편집 진입/종료를 부모에 알린다 — 편집 중에는 정렬 드래그를 막아 행이 흐려지지 않게 한다
-  useEffect(() => {
-    onEditingChange?.(isEdit);
-  }, [isEdit, onEditingChange]);
 
   // 이 행에서 스와이프/열림이 시작되면 소유권을 가져온다 (다른 행은 닫힘)
   useEffect(() => {
@@ -72,12 +64,17 @@ export default function TaskItem({
       close();
       return;
     }
+    // 다른 태스크가 편집 중이면, 그 편집만 종료하고 이번 클릭은 편집에 진입하지 않는다
+    if (editingId !== null && editingId !== id) {
+      setEditingId(null);
+      return;
+    }
     if (clickTimer.current) return;
     clickTimer.current = setTimeout(() => {
       clickTimer.current = null;
-      setIsEdit(true);
+      setEditingId(id);
     }, 250);
-  }, [isOpen, close]);
+  }, [isOpen, close, editingId, id, setEditingId]);
 
   const handleDoubleClick = useCallback(() => {
     if (clickTimer.current) {
@@ -184,6 +181,12 @@ const EditTask = ({
     editBullet(id, content);
     closeEdit();
   };
+  // 최신 save를 ref로 유지 — 다른 태스크 편집 진입 등으로 input이 언마운트될 때
+  // (blur가 발생하지 않으므로) cleanup에서 최신 내용으로 저장을 보장한다.
+  // 이미 Enter/blur/Escape로 처리됐으면 settledRef로 중복을 막는다.
+  const saveRef = useRef(save);
+  saveRef.current = save;
+  useEffect(() => () => saveRef.current(), []);
 
   // 저장 없이 닫기 (Escape). 이후 언마운트로 발생하는 blur는 settledRef로 무시된다
   const cancel = () => {
