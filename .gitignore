@@ -46,3 +46,9 @@ build/
 
 # Claude Code 멀티모델 자문 아티팩트 (감사용 로컬 보관, 공유 불필요)
 .claude/artifacts/
+
+# Playwright E2E 산출물
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
