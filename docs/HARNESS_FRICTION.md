@@ -34,6 +34,7 @@
 |------|--------|--------|---------|------|
 | 2026-06-10 | setup-mismatch | high | — | test 스크립트(vitest watch)로 validate가 비대화형에서 hang (CI=1 필요) |
 | 2026-06-12 | doc-stale | low | — | AGENTS/CLAUDE 명령 표기에 1.2.0 test:run 미반영 (watch 잔존) |
+| 2026-06-16 | rule-conflict | high | — | E2E 스캐폴드 seed.ts의 `_payload`가 프로젝트 eslint no-unused-vars 위반 → validate RED. disable 주석으로 수정. 스킬 템플릿(templates/e2e/fixtures/seed.ts) 수정 권장 |
 
 ## 이슈 보고
 

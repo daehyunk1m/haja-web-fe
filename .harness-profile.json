@@ -1,5 +1,5 @@
 {
-  "version": "1.9.0",
+  "version": "1.12.0",
   "preset": "custom",
   "projectName": "haja-web-fe",
   "description": "이벤트 히스토리 모델과 불렛저널 시스템을 결합한 하루 단위 태스크 관리 웹 앱",
@@ -194,6 +194,11 @@
     "mainBranch": "main"
   },
   "docFreshnessDays": 14,
+  "e2e": {
+    "enabled": true,
+    "framework": "playwright",
+    "playwrightVersion": "1.61.0"
+  },
   "integrations": {
     "superpowers": {
       "enabled": true,
@@ -254,30 +259,40 @@
   ],
   "skipFiles": [],
   "approved": true,
-  "approvedAt": "2026-06-13T18:11:12Z",
+  "approvedAt": "2026-06-16T00:00:00Z",
   "mode": "upgrade",
-  "fromVersion": "1.7.0",
-  "toVersion": "1.9.0",
+  "fromVersion": "1.9.0",
+  "toVersion": "1.12.0",
   "migrations": [],
   "fileActions": {
-    ".claude/rules/git-workflow.md": {
-      "action": "overwrite",
-      "reason": "1.8.0 자동 커밋 정책 섹션 추가 (managed 자동 감지) — autoCommit.mode=auto 렌더",
-      "source": "auto-detect"
-    },
     ".claude/rules/session-routine.md": {
       "action": "overwrite",
-      "reason": "1.8.0 커밋 정책 참조 반영 (managed 자동 감지), INTEGRATION_NOTES 2줄 보존",
+      "reason": "1.12.0 VERIFY(E2E) Phase 4.7 + Agent Dispatch 행 + TDD STATE e2e_status/e2e_spec_paths + e2e-fail 마찰 이벤트 (managed 자동 감지, 사용자 미수정·해시 일치). INTEGRATION_NOTES 2줄은 profile.integrations 재렌더로 보존",
+      "source": "auto-detect"
+    },
+    ".claude/rules/coding-standards.md": {
+      "action": "overwrite",
+      "reason": "1.12.0 @critical 태그 정의 + 남용 거버넌스(reviewer 승격 큐) (managed 자동 감지, 사용자 미수정·해시 일치)",
+      "source": "auto-detect"
+    },
+    "agents/architect.md": {
+      "action": "overwrite",
+      "reason": "1.12.0 E2E 슬롯 완성 — step→시나리오 매핑 + @critical 후보 표시 (managed 자동 감지, 사용자 미수정·해시 일치)",
+      "source": "auto-detect"
+    },
+    "agents/test-engineer.md": {
+      "action": "overwrite",
+      "reason": "1.12.0 E2E 작성 심화(e2e/specs/{ID}-*.e2e.ts + @feature:{ID} 태그 + fixtures/test.ts) + E2E 판정 Output(created/skipped/not_applicable, 침묵=BLOCK) (managed 자동 감지, 사용자 미수정·해시 일치)",
+      "source": "auto-detect"
+    },
+    "agents/debugger.md": {
+      "action": "overwrite",
+      "reason": "1.12.0 E2E 브라우저 재현 모드(trace/--headed) + 플레이키니스 환각 수정 금지 (managed 자동 감지, 사용자 미수정·해시 일치)",
       "source": "auto-detect"
     },
     "scripts/harness-check.sh": {
       "action": "overwrite",
-      "reason": "1.9.0 Q2 강제 검사 + 판정 정직화 (managed 자동 감지)",
-      "source": "auto-detect"
-    },
-    "scripts/structural-test.ts": {
-      "action": "overwrite",
-      "reason": "1.9.0 Q2_ENFORCEMENT=enforced 마커 추가 (managed 자동 감지, layer-based 실제 규칙 보유)",
+      "reason": "1.11.0 ⑧ E2E 구조 검사(경고 전용, 자기 게이트 — e2e 옵트인 프로젝트에서만 발동) (managed 자동 감지, 사용자 미수정·해시 일치)",
       "source": "auto-detect"
     }
   },

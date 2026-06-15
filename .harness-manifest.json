@@ -1,9 +1,9 @@
 {
   "harness": {
-    "version": "1.9.0",
-    "skillVersion": "1.9.0",
+    "version": "1.12.0",
+    "skillVersion": "1.12.0",
     "installedAt": "2026-04-09T12:00:00Z",
-    "upgradedAt": "2026-06-13T18:11:02Z",
+    "upgradedAt": "2026-06-16T00:00:00Z",
     "upgradeInProgress": false,
     "preset": "custom",
     "structuralTestEnforcement": "enforced",
@@ -132,6 +132,11 @@
       "mainBranch": "main"
     },
     "docFreshnessDays": 14,
+    "e2e": {
+      "enabled": true,
+      "framework": "playwright",
+      "playwrightVersion": "1.61.0"
+    },
     "integrations": {
       "superpowers": {
         "enabled": true,
@@ -178,13 +183,13 @@
     },
     ".claude/rules/session-routine.md": {
       "category": "managed",
-      "templateHash": "sha256:3a288f68c4658c72394cc22ba32498b9762f55c35e209d9c7d5199e9e7ebd1b8",
-      "generatedAt": "2026-06-13T18:11:02Z"
+      "templateHash": "sha256:16ba7f72dba6cb9e40a99f49730fe6b9aaf6da0e3be8b40baec7d34f5c07aa4d",
+      "generatedAt": "2026-06-16T00:00:00Z"
     },
     ".claude/rules/coding-standards.md": {
       "category": "managed",
-      "templateHash": "sha256:6f0842b0ff15013038da618045b7469b69ad7a65e7f092a0ce61504c726c8ef2",
-      "generatedAt": "2026-06-10T05:54:07Z"
+      "templateHash": "sha256:5b1d2901f0b3f85c81e3d42b80b888514fdc8185493e9c1b7136aaf211e13815",
+      "generatedAt": "2026-06-16T00:00:00Z"
     },
     ".claude/rules/git-workflow.md": {
       "category": "managed",
@@ -193,13 +198,13 @@
     },
     "agents/architect.md": {
       "category": "managed",
-      "templateHash": "sha256:3121ffeff97584553c135abcf0a4e4df211ae8223164410cb4a074076f41e3f6",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "templateHash": "sha256:024a0e30f641fed96dfed46fc13a7c046413a140c34425bc2075deba4fa1a61c",
+      "generatedAt": "2026-06-16T00:00:00Z"
     },
     "agents/test-engineer.md": {
       "category": "managed",
-      "templateHash": "sha256:f7211144d992b562c604ccf0461ec0991a87e20183f5eacc2bfac280acff432f",
-      "generatedAt": "2026-06-10T08:45:00Z"
+      "templateHash": "sha256:4d3fe6f485a9567d1ace5d3b9c3a8b6ef3468bd166f769ac197a0d86efc4ae9b",
+      "generatedAt": "2026-06-16T00:00:00Z"
     },
     "agents/implementer.md": {
       "category": "managed",
@@ -218,8 +223,8 @@
     },
     "agents/debugger.md": {
       "category": "managed",
-      "templateHash": "sha256:4f91006cdb3f5542dba947a774654f675814722b8e8898b68b04022e955aac38",
-      "generatedAt": "2026-06-10T08:45:00Z"
+      "templateHash": "sha256:28ed9f53ccae9fe16390fb55d9c535a57f30be81ccd02d590dea73bbeee03638",
+      "generatedAt": "2026-06-16T00:00:00Z"
     },
     "agents/security-reviewer.md": {
       "category": "managed",
@@ -268,8 +273,33 @@
     },
     "scripts/harness-check.sh": {
       "category": "managed",
-      "templateHash": "sha256:26c0c955cb442239630960ad8939aec2146d5dbad99959c812147c7b47cf6c4a",
-      "generatedAt": "2026-06-13T18:11:02Z"
+      "templateHash": "sha256:12ba44be811efaa70ddb75cd0befbbda191fa995f7fdbc67e4e23480ff986807",
+      "generatedAt": "2026-06-16T00:00:00Z"
+    },
+    "playwright.config.ts": {
+      "category": "managed",
+      "templateHash": "sha256:71f669c937e953fbb4c52a7bd3deb8c9d9187d167d1f2cad1db7a48052719c8a",
+      "generatedAt": "2026-06-16T00:00:00Z"
+    },
+    "e2e/tsconfig.json": {
+      "category": "managed",
+      "templateHash": "sha256:49ceb430896a135c31d793ae87628de3c9184e4887435d5085de1ef526dc0d3a",
+      "generatedAt": "2026-06-16T00:00:00Z"
+    },
+    "e2e/fixtures/test.ts": {
+      "category": "custom",
+      "templateHash": "sha256:8c80fff9454c7608042f63043393989cb00f209cdb726316954743e816d77b61",
+      "generatedAt": "2026-06-16T00:00:00Z"
+    },
+    "e2e/fixtures/seed.ts": {
+      "category": "custom",
+      "templateHash": "sha256:2769ee87b6539b1c5d3e6cc5e39c558cac031b89be66636d23083c07302762ab",
+      "generatedAt": "2026-06-16T00:00:00Z"
+    },
+    "e2e/specs/smoke.e2e.ts": {
+      "category": "custom",
+      "templateHash": "sha256:0faa0e28ce5b5bbe00dfd12458a08531f7acdee202a76da97f0ba72d07f41c47",
+      "generatedAt": "2026-06-16T00:00:00Z"
     }
   }
 }

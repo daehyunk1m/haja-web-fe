@@ -17,6 +17,7 @@ Architect의 구현 계획을 기반으로 **실패하는 테스트를 먼저 �
 ### 1. 테스트 설계
 - Architect의 테스트 전략을 구체적인 테스트 케이스로 변환한다
 - feature.steps의 각 단계를 검증하는 테스트를 포함한다 — steps는 E2E 시나리오와 1:1 매핑되도록 작성되어 있으므로, E2E 프레임워크가 있으면 step당 E2E 케이스 1개를 작성하고, 없으면 가장 가까운 레벨의 테스트로 검증한다 (검증 레벨: .claude/rules/coding-standards.md 참조)
+  - **E2E 작성 규칙** (E2E 프레임워크 존재 + feature가 UI 상호작용일 때): 스펙은 `e2e/specs/{featureID}-{slug}.e2e.ts`로 작성하고 테스트 제목에 `@feature:{featureID}` 태그를 넣는다 — VERIFY(E2E)가 `--grep @feature:{featureID}`로 이 feature 스펙만 선택 실행한다. `e2e/fixtures/test.ts`의 base test(per-test fresh context)를 사용하고 `data-testid` 셀렉터를 우선한다. Architect가 표시한 @critical 후보 중 진짜 핵심 흐름에만 `@critical` 태그를 부여한다(남용 금지 — coding-standards.md 참조).
 - 성공 경로와 실패 경로를 모두 커버한다
 
 ### 2. 테스트 작성 규칙
@@ -30,6 +31,9 @@ Architect의 구현 계획을 기반으로 **실패하는 테스트를 먼저 �
 테스트 작성 후 `yarn test:run`를 실행하여 **테스트가 실패하는지 확인**한다.
 - 모든 새 테스트가 FAIL해야 정상 (아직 구현이 없으므로)
 - 기존 테스트가 깨지면 안 된다
+
+### 3.5 E2E 판정 (침묵 금지)
+RED 종료 시 Output의 "E2E 판정" 블록을 **반드시** 채운다. E2E가 적절한데 이번에 작성하지 않았다면 `status: created`가 아니라 `skipped`로 명시하고 reason을 적는다 — 판정을 비우거나 생략하면 VERIFY(E2E)가 BLOCK한다(침묵 = PASS 아님).
 
 ### 4. 테스트가 이미 통과하는 경우
 새 테스트가 작성 즉시 통과하면:
@@ -51,6 +55,12 @@ Architect의 구현 계획을 기반으로 **실패하는 테스트를 먼저 �
 
 ### 테스트 커버리지 의도
 - {어떤 시나리오를 커버하는지 요약}
+
+### E2E 판정 (필수)
+- status: created | skipped | not_applicable
+- spec_paths: {작성한 .e2e.ts 경로 목록, 없으면 "없음"}
+- critical: {@critical 부여한 경로/제목, 없으면 "없음"}
+- reason: {판정 근거 — skipped/not_applicable일 때 필수}
 ```
 
 ## Constraints
