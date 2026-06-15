@@ -128,7 +128,7 @@ export default function TaskItem({
       >
         <div className='h-[38px] flex flex-row items-center px-5 py-1 gap-2 w-full'>
           <BulletIcon id={id} bulletState={state} />
-          <span className='font-medium text-[16px] text-black whitespace-nowrap'>
+          <span className='font-medium text-[16px] text-black whitespace-nowrap flex-1 min-w-0'>
             {isEdit ? (
               <EditTask id={id} title={title} closeEdit={closeEdit} />
             ) : (
@@ -195,7 +195,7 @@ const EditTask = ({
   return (
     <input
       ref={inputRef}
-      className='border-black border-b-[1px]'
+      className='border-black border-b-[1px] w-full'
       type='text'
       value={content.title ?? ""}
       onChange={(e) => setContent({ title: e.target.value })}
