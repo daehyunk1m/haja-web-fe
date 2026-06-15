@@ -205,4 +205,37 @@ describe("TaskItem 타이틀 편집", () => {
 
     expect(useBulletStore.getState().tasks.get(task.id)?.title).toBe("스와이프 태스크");
   });
+
+  // 회귀 방지: 편집 input에서 시작된 pointerdown이 상위 정렬 드래그(@dnd-kit)로
+  // 전파되면 isDragging이 켜져 행 전체가 opacity:0.5로 흐려진다. 전파를 끊어야 한다.
+  it("편집 input의 pointerdown은 상위(정렬 드래그)로 전파되지 않는다", () => {
+    const onParentPointerDown = vi.fn();
+    render(
+      <div onPointerDown={onParentPointerDown}>
+        <TaskItem bulletTask={task} />
+      </div>
+    );
+    fireEvent.click(screen.getByText("스와이프 태스크"));
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+    fireEvent(
+      screen.getByRole("textbox"),
+      new MouseEvent("pointerdown", { bubbles: true })
+    );
+
+    expect(onParentPointerDown).not.toHaveBeenCalled();
+  });
+
+  // 편집 중에는 정렬 드래그를 비활성화하도록 부모(SortableTaskItem)에 편집 상태를 알린다
+  it("편집에 진입하면 onEditingChange(true)를 호출한다", () => {
+    const onEditingChange = vi.fn();
+    render(<TaskItem bulletTask={task} onEditingChange={onEditingChange} />);
+    fireEvent.click(screen.getByText("스와이프 태스크"));
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+
+    expect(onEditingChange).toHaveBeenCalledWith(true);
+  });
 });

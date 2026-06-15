@@ -9,7 +9,14 @@ import ConfirmDialog from "@/components/modal/ConfirmDialog";
 
 const REVEAL_WIDTH = 64;
 
-export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
+export default function TaskItem({
+  bulletTask,
+  onEditingChange,
+}: {
+  bulletTask: TaskCore;
+  /** 편집 진입/종료를 부모에 통지 (편집 중 정렬 드래그 비활성화용) */
+  onEditingChange?: (editing: boolean) => void;
+}) {
   // 태스크 네임, 아이콘, 받아야하고 수정할 수 있어야함
   const { id, title, state } = bulletTask;
   // console.log(state);
@@ -28,6 +35,11 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   // 단일 열림 조율: 한 번에 한 행만 열린다
   const openId = useSwipeRevealStore((s) => s.openId);
   const { setOpenId } = useSwipeRevealStore((s) => s.actions);
+
+  // 편집 진입/종료를 부모에 알린다 — 편집 중에는 정렬 드래그를 막아 행이 흐려지지 않게 한다
+  useEffect(() => {
+    onEditingChange?.(isEdit);
+  }, [isEdit, onEditingChange]);
 
   // 이 행에서 스와이프/열림이 시작되면 소유권을 가져온다 (다른 행은 닫힘)
   useEffect(() => {
@@ -188,6 +200,9 @@ const EditTask = ({
       value={content.title ?? ""}
       onChange={(e) => setContent({ title: e.target.value })}
       onBlur={save}
+      // 편집 중 텍스트 선택/포인터 조작이 상위 정렬 드래그(@dnd-kit)를 깨워
+      // 행이 흐려지는(opacity:0.5) 것을 막는다
+      onPointerDown={(e) => e.stopPropagation()}
       onKeyUp={(e) => {
         if (e.key === "Enter") save();
         if (e.key === "Escape") cancel();
