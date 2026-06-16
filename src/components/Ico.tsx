@@ -94,16 +94,18 @@ Ico.Send = () => {
 };
 
 Ico.Arrow = ({ direction }: { direction: "up" | "down" | "left" | "right" }) => {
-  switch (direction) {
-    case "up":
-      return "";
-    case "down":
-      return "";
-    case "left":
-      return "";
-    case "right":
-      return "";
-    default:
-      return null;
-  }
+  const rotate = { down: 0, up: 180, left: 90, right: 270 }[direction];
+  return (
+    <Ico size={16}>
+      <path
+        d='M4 6L8 10L12 6'
+        stroke='currentColor'
+        strokeWidth={1.75}
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        fill='none'
+        transform={`rotate(${rotate} 8 8)`}
+      />
+    </Ico>
+  );
 };

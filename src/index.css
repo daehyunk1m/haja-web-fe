@@ -41,6 +41,15 @@
 
 /* Utility Classes for Test.tsx */
 @layer utilities {
+  /* 컨테이너 내부 스크롤 시 스크롤바 숨김 (스크롤 기능은 유지) */
+  .scrollbar-hide {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/legacy Edge */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
   .line-clamp-1 {
     display: -webkit-box;
     -webkit-box-orient: vertical;

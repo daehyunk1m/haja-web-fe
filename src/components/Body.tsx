@@ -7,7 +7,7 @@ export default function Body() {
   const isPopupOpen = usePopupStore((state) => state.isModalOpen);
 
   return (
-    <div className='w-full flex flex-col flex-1 items-center pt-0.5 pr-3.5 pb-0.5 pl-0.5'>
+    <div className='w-full flex flex-col flex-1 min-h-0 items-center pt-0.5 pr-3.5 pb-0.5 pl-0.5'>
       <Section>
         <Section.Container position='right'>
           <Section.Tab />

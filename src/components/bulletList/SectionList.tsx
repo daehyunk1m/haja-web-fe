@@ -2,12 +2,14 @@ import { useBulletStore } from "@/shared/bulletStore";
 import { useDateStore } from "@/shared/dateStore";
 import { useProgressStore } from "@/shared/progressStore";
 import { useSwipeRevealStore } from "@/shared/swipeRevealStore";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import TodoContainer from "../TodoContainer";
 import AddBulletBtn from "./AddBulletBtn";
 import SortableTaskItem from "./SortableTaskItem";
 import { TaskCore } from "@/shared/TaskCore";
 import { useOrderedTasks } from "@/hooks/useOrderedTasks";
+import { useBulletSectionContext } from "@/hooks/useBulletSectionContext";
+import { shouldAutoExpand } from "@/utils/sectionFold";
 import {
   DndContext,
   closestCenter,
@@ -43,6 +45,16 @@ const SectionList = ({ type }: { type: "task" | "someday" }) => {
   const visibleTasks = useMemo(() => {
     return tasks.filter(filters[type]);
   }, [tasks, type]);
+
+  // 마운트 후 1회: 태스크 수가 peek 용량을 초과하면 자동 확장 (세션 한정 — 이후엔 수동 토글만 제어).
+  // 스토어 hydration이 비동기여도 tasksMap이 채워진 뒤 한 번만 적용한다.
+  const { setIsFold } = useBulletSectionContext();
+  const didInitFold = useRef(false);
+  useEffect(() => {
+    if (didInitFold.current || tasksMap.size === 0) return;
+    didInitFold.current = true;
+    setIsFold(shouldAutoExpand(visibleTasks.length));
+  }, [tasksMap, visibleTasks, setIsFold]);
 
   const { orderedTasks, handleReorder } = useOrderedTasks(visibleTasks, dateString, type);
 

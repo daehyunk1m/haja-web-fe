@@ -15,7 +15,9 @@ const Tab = ({
         onClick?.();
       }}
     >
-      <span className='font-bold text-[16px] tracking-[-0.03em]'>{children}</span>
+      <span className='inline-flex items-center justify-center gap-1 whitespace-nowrap font-bold text-[16px] tracking-[-0.03em]'>
+        {children}
+      </span>
     </button>
   );
 };

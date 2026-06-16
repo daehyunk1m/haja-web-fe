@@ -7,7 +7,7 @@ const SectionContainer = ({
 }: PropsWithChildren<{
   position: "left" | "right";
 }>) => {
-  const { isFold, tabPosition, setTabPosition } = useBulletSectionContext();
+  const { isFold, setTabPosition } = useBulletSectionContext();
 
   useEffect(() => {
     setTabPosition(position);
@@ -15,8 +15,8 @@ const SectionContainer = ({
 
   return (
     <div
-      className={`w-full flex flex-col 
-        ${tabPosition === "right" ? "flex-1" : isFold ? "min-h-[500px]" : "max-h-[176px]"}
+      className={`w-full flex flex-col
+        ${isFold ? "flex-1 min-h-0" : "flex-none"}
       ${position === "left" ? "items-start" : "items-end"}`}
     >
       {children}

@@ -18,12 +18,13 @@ const DateTab = () => {
   const isCalendarOpen = useDateStore((state) => state.isCalendarOpen);
   const dateString = useDateStore((state) => state.toBulletString());
   const { toggleCalendar } = useDateStore((state) => state.actions);
+  const { isFold, setIsFold } = useBulletSectionContext();
 
   return (
     <>
       <Tab onClick={() => toggleCalendar()}>{dateString}</Tab>
-      <Tab selected className='-ml-px'>
-        TODAY
+      <Tab selected className='-ml-px' onClick={() => setIsFold((fold) => !fold)}>
+        TODAY <Ico.Arrow direction={isFold ? "down" : "up"} />
       </Tab>
       {isCalendarOpen && (
         <ModalContainer close={() => toggleCalendar(false)}>
