@@ -1,9 +1,9 @@
 {
   "harness": {
-    "version": "1.13.1",
-    "skillVersion": "1.13.1",
+    "version": "1.20.0",
+    "skillVersion": "1.20.0",
     "installedAt": "2026-04-09T12:00:00Z",
-    "upgradedAt": "2026-06-15T19:29:22Z",
+    "upgradedAt": "2026-06-16T16:26:50Z",
     "upgradeInProgress": false,
     "preset": "custom",
     "structuralTestEnforcement": "enforced",
@@ -135,7 +135,12 @@
     "e2e": {
       "enabled": true,
       "framework": "playwright",
-      "playwrightVersion": "1.61.0"
+      "playwrightVersion": "1.61.0",
+      "prePush": true,
+      "mcp": {
+        "enabled": true,
+        "version": "0.0.76"
+      }
     },
     "integrations": {
       "superpowers": {
@@ -183,13 +188,13 @@
     },
     ".claude/rules/session-routine.md": {
       "category": "managed",
-      "templateHash": "sha256:c70465931a83a2dd335f7479bf38c102381c8077459e3d2974b1b388641fd926",
-      "generatedAt": "2026-06-15T19:29:22Z"
+      "templateHash": "sha256:458516805e2e6e3afa0c16acfcab846107f201f2184a9e28026f3a627ab28cf8",
+      "generatedAt": "2026-06-16T16:26:50Z"
     },
     ".claude/rules/coding-standards.md": {
       "category": "managed",
-      "templateHash": "sha256:5b1d2901f0b3f85c81e3d42b80b888514fdc8185493e9c1b7136aaf211e13815",
-      "generatedAt": "2026-06-16T00:00:00Z"
+      "templateHash": "sha256:463fbe5d76420ad0908cdd0891c5392dfabb1c5d3b993ced3594f4861621bf19",
+      "generatedAt": "2026-06-16T16:26:50Z"
     },
     ".claude/rules/git-workflow.md": {
       "category": "managed",
@@ -203,8 +208,8 @@
     },
     "agents/test-engineer.md": {
       "category": "managed",
-      "templateHash": "sha256:a9bcd5d72a86da3f8fbfce308165367262349e9378e4f259cf614a0c72835c68",
-      "generatedAt": "2026-06-15T19:29:22Z"
+      "templateHash": "sha256:4e90719e87725156c974ea8c9501066593aeb8a7e9706a75b783c44da154c413",
+      "generatedAt": "2026-06-16T16:26:50Z"
     },
     "agents/implementer.md": {
       "category": "managed",
@@ -223,8 +228,8 @@
     },
     "agents/debugger.md": {
       "category": "managed",
-      "templateHash": "sha256:28ed9f53ccae9fe16390fb55d9c535a57f30be81ccd02d590dea73bbeee03638",
-      "generatedAt": "2026-06-16T00:00:00Z"
+      "templateHash": "sha256:d4c07cdb7abfa1fde4c3ad459f15f7d7f30d41bf0ca4829c447ff45346146dcf",
+      "generatedAt": "2026-06-16T16:26:50Z"
     },
     "agents/security-reviewer.md": {
       "category": "managed",
@@ -267,14 +272,14 @@
       "generatedAt": "2026-06-10T05:54:07Z"
     },
     "docs/HARNESS_FRICTION.md": {
-      "category": "data",
-      "templateHash": "sha256:fed758d3a093cef54ba2f9bc96df3ce60bcd757a647cb2cc9ab63bbb15097887",
-      "generatedAt": "2026-04-09T12:00:00Z"
+      "category": "managed",
+      "templateHash": "sha256:5980ae6fce0e07e3e1428e91cd70ddfa5ba891b91cb2497b4096a65853d5b236",
+      "generatedAt": "2026-06-16T16:26:50Z"
     },
     "scripts/harness-check.sh": {
       "category": "managed",
-      "templateHash": "sha256:747bfa8f06bbedf8afb24e0187a8d48e79f3a4053a6dd57781549e41e0bb8e8e",
-      "generatedAt": "2026-06-15T19:29:22Z"
+      "templateHash": "sha256:99dd3e96bfad43739735c063b409fbaffe8ab6fa1b90367dec5f985437785ccd",
+      "generatedAt": "2026-06-16T16:26:50Z"
     },
     "playwright.config.ts": {
       "category": "managed",
@@ -300,6 +305,16 @@
       "category": "custom",
       "templateHash": "sha256:0faa0e28ce5b5bbe00dfd12458a08531f7acdee202a76da97f0ba72d07f41c47",
       "generatedAt": "2026-06-16T00:00:00Z"
+    },
+    ".harness-friction.jsonl": {
+      "category": "data",
+      "templateHash": "sha256:6d8d305c3935010b35731b9c5b079a5f524bc4a316e9b319dd1649c98b842f7b",
+      "generatedAt": "2026-06-16T16:26:50Z"
+    },
+    ".githooks/pre-push": {
+      "category": "managed",
+      "templateHash": "sha256:61d2173ecff5f3374979bc0d622871c41eb910ce79e4e428193aca9db2a70c9e",
+      "generatedAt": "2026-06-16T16:26:50Z"
     }
   }
 }
