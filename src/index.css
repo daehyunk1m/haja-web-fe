@@ -90,6 +90,20 @@
     }
   }
 
+  /* 바텀시트 모달(ModalContainer·CalendarModal)이 화면 아래에서 위로 올라온다 */
+  .animate-slide-up {
+    animation: slideUp 0.2s ease-in-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
   /* Essential color utilities */
   .bg-zinc-100 {
     background-color: rgb(var(--color-zinc-100));
