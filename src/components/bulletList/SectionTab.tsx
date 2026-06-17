@@ -18,15 +18,15 @@ const SectionTab = () => {
 const DateTab = () => {
   const isCalendarOpen = useDateStore((state) => state.isCalendarOpen);
   const dateString = useDateStore((state) => state.toBulletString());
-  const { toggleCalendar } = useDateStore((state) => state.actions);
-  const isExpanded = useSectionExpandStore((s) => s.expanded === "task");
-  const { toggle } = useSectionExpandStore((s) => s.actions);
+  const { toggleCalendar, setDate } = useDateStore((state) => state.actions);
 
+  // TODAY 탭은 컨테이너 토글이 아니라 선택 날짜를 오늘로 되돌린다.
+  // 날짜가 바뀌면 useSyncExpandWithDate가 확장을 다시 판단한다(섹션 토글은 SOMEDAY 탭 담당).
   return (
     <>
       <Tab onClick={() => toggleCalendar()}>{dateString}</Tab>
-      <Tab selected className='-ml-px' onClick={() => toggle()}>
-        TODAY <Ico.Arrow direction={isExpanded ? "down" : "up"} />
+      <Tab selected className='-ml-px' onClick={() => setDate()}>
+        TODAY
       </Tab>
       {isCalendarOpen && (
         <ModalContainer close={() => toggleCalendar(false)}>

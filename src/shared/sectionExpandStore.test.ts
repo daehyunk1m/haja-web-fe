@@ -55,4 +55,30 @@ describe("sectionExpandStore", () => {
     reportCount("someday", 1);
     expect(store().expanded).toBe("someday");
   });
+
+  describe("reevaluate (날짜 변경 시 재판단)", () => {
+    it("확정을 해제하고 카운트를 초기화하되 현재 확장은 유지한다", () => {
+      const { reportCount, reevaluate } = store().actions;
+      reportCount("task", 2);
+      reportCount("someday", 5); // someday 확정
+      expect(store().expanded).toBe("someday");
+      expect(store().initialized).toBe(true);
+
+      reevaluate();
+      expect(store().initialized).toBe(false);
+      expect(store().counts).toEqual({ task: null, someday: null });
+      expect(store().expanded).toBe("someday"); // 재판단 전까지 현재 확장 유지 (깜빡임 방지)
+    });
+
+    it("reevaluate 후 새 카운트가 보고되면 다시 결정한다", () => {
+      const { reportCount, reevaluate } = store().actions;
+      reportCount("task", 2);
+      reportCount("someday", 5); // someday
+      reevaluate();
+      reportCount("task", 9); // 새 날짜: task가 더 많음
+      reportCount("someday", 1);
+      expect(store().expanded).toBe("task");
+      expect(store().initialized).toBe(true);
+    });
+  });
 });

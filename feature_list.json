@@ -174,6 +174,21 @@
     ],
     "passes": true,
     "last_session": "2026-06-17",
-    "notes": "확장 상태를 공유 store(sectionExpandStore)로 분리 — 두 섹션 중 항상 하나만 확장(아코디언). pickInitialExpanded로 진입 시 태스크 많은 쪽 자동 확장(동률 task). 애니메이션은 SectionContainer의 flex-grow(0↔1) 전환 — 두 grow의 합이 항상 1이라 높이가 선형으로 변해 부드럽고, TodoContainer는 basis-[138px] peek를 유지한 채 grow로 부모를 채워 별도 transition 불필요. ease-in-out 0.3s, motion-reduce 대응. 추가 버튼 40→48px(Ico box 스케일). 유닛 10개(pickInitialExpanded 4 + store 6) + E2E 5개(@feature:F013) Green, 브라우저 실측 검증. [2026-06-17 폴리시] 섬데이 추가 버튼(AddBulletBtn 좌측)도 확장과 동기화 — 언마운트(즉시 깜빡임) 대신 항상 DOM에 유지하고 grid-rows(0fr↔1fr) 높이 + opacity를 동일 0.3s ease-in-out로 전환(motion-reduce 대응, 접힘 시 aria-hidden/tabIndex=-1/pointer-events-none). 유닛 4개(AddBulletBtn.test) + E2E 1개 추가 → 유닛 14·E2E 6 Green, 브라우저 실측(확장 h48·opacity1, 접힘 h0·opacity0·DOM 유지)."
+    "notes": "확장 상태를 공유 store(sectionExpandStore)로 분리 — 두 섹션 중 항상 하나만 확장(아코디언). pickInitialExpanded로 진입 시 태스크 많은 쪽 자동 확장(동률 task). 애니메이션은 SectionContainer의 flex-grow(0↔1) 전환 — 두 grow의 합이 항상 1이라 높이가 선형으로 변해 부드럽고, TodoContainer는 basis-[138px] peek를 유지한 채 grow로 부모를 채워 별도 transition 불필요. ease-in-out 0.3s, motion-reduce 대응. 추가 버튼 40→48px(Ico box 스케일). 유닛 10개(pickInitialExpanded 4 + store 6) + E2E 5개(@feature:F013) Green, 브라우저 실측 검증. [2026-06-17 폴리시] 섬데이 추가 버튼(AddBulletBtn 좌측)도 확장과 동기화 — 언마운트(즉시 깜빡임) 대신 항상 DOM에 유지하고 grid-rows(0fr↔1fr) 높이 + opacity를 동일 0.3s ease-in-out로 전환(motion-reduce 대응, 접힘 시 aria-hidden/tabIndex=-1/pointer-events-none). 유닛 4개(AddBulletBtn.test) + E2E 1개 추가 → 유닛 14·E2E 6 Green, 브라우저 실측(확장 h48·opacity1, 접힘 h0·opacity0·DOM 유지). [2026-06-17] TODAY 탭의 토글 역할은 F014로 이관 — 이제 TODAY는 '오늘로 이동'이고, 아코디언 토글은 SOMEDAY 탭이 담당(E2E '탭 전환' 테스트도 SOMEDAY 양방향 토글로 갱신). step '탭을 누르면 전환'은 SOMEDAY 탭으로 유효."
+  },
+  {
+    "id": "F014",
+    "category": "ui",
+    "priority": 4,
+    "description": "TODAY 탭으로 오늘 날짜 이동 + 날짜 변경 시 섹션 확장 재판단 — TODAY 탭은 컨테이너 토글이 아니라 선택 날짜를 오늘로 되돌리고, 날짜(일)가 바뀌면 태스크 수 기준으로 확장 컨테이너를 다시 결정한다.",
+    "steps": [
+      "TODAY 탭을 누르면 선택 날짜가 오늘로 바뀐다",
+      "다른 날짜로 이동하면 그 날짜의 태스크 수 기준으로 확장 컨테이너가 재결정된다",
+      "TODAY로 돌아오면 오늘 기준으로 확장이 재결정된다",
+      "TODAY 탭은 더 이상 확장을 토글하지 않는다 (토글은 SOMEDAY 탭이 담당)"
+    ],
+    "passes": true,
+    "last_session": "2026-06-17",
+    "notes": "DateTab의 TODAY onClick을 sectionExpand toggle()→dateStore setDate()(인자 없이 호출 시 오늘)로 교체하고, 토글을 의미하던 ↑↓ 화살표 제거(SOMEDAY 탭은 토글 유지). 날짜 변경 시 재판단: sectionExpandStore에 reevaluate() 추가(initialized·counts만 해제, 현재 expanded는 유지해 깜빡임 방지) + useSyncExpandWithDate 훅(dateStore subscribeWithSelector로 toBulletString(일) 변경만 구독→reevaluate, Body에서 1회 마운트). 일 단위 변경에만 반응(같은 날 시각 변경 무시), 마운트 시 미발화로 진입 자동확장과 무충돌. 유닛 7개(store reevaluate 2 + 훅 3 + SectionTab 2) + E2E 1개(@feature:F014: 지난달 15일 선택→SOMEDAY 확장, TODAY→오늘 복귀+TASK 확장). validate 219 passed/1 skipped, E2E 8 passed, 브라우저 실측 검증."
   }
 ]

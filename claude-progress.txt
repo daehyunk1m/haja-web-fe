@@ -170,4 +170,15 @@ SESSION_ID: 2026-06-17T02-52-00Z-b7k2
   유닛 +1(닫힘 delay 없음) → AddBulletBtn.test 5개. E2E에 computed transitionDelay=0.15s·Duration=0.15s 실측 추가. validate(212 passed/1 skipped) + E2E 6 passed.
   (stagger 폭은 delay-100→150으로 한 차례 상향 조정; 끝나는 시점 0.3s 불변.)
 
+[2026-06-17] F014: TODAY 탭 오늘 이동 + 날짜 변경 시 확장 재판단
+- 요구: TODAY 버튼이 컨테이너 확장/축소 토글이었는데, 누르면 '오늘 날짜로 이동'하게. 날짜가 바뀌면 확장 판단도 다시.
+- 변경(RED→GREEN):
+  · DateTab(SectionTab.tsx): TODAY onClick toggle()→setDate()(오늘). 토글 의미의 ↑↓ 화살표 제거(SOMEDAY 탭은 토글+화살표 유지). isExpanded/toggle 의존 제거.
+  · sectionExpandStore: reevaluate() 추가 — initialized·counts만 해제, 현재 expanded는 유지(재판단 전 깜빡임 방지). reset과 구분.
+  · useSyncExpandWithDate 훅(신규): dateStore.subscribe(subscribeWithSelector, s=>s.toBulletString()) → 일 문자열 변경 시 reevaluate(). Body에서 1회 마운트. 마운트 시 미발화(구독은 변경에만)라 진입 자동확장과 무충돌, 같은 날 시각 변경엔 무반응.
+- 동작: 다른 날짜로 가면 그 날짜의 task 수 기준 재판단(과거일은 task 0→SOMEDAY 확장), TODAY로 오면 오늘 기준 재판단(보통 TASK). 토글은 SOMEDAY 탭이 담당.
+- 테스트: 유닛 7개(store reevaluate 2 + 훅 3 + SectionTab 2) + E2E 1개(@feature:F014). F013 E2E '탭 전환'은 TODAY→SOMEDAY 양방향 토글로 갱신.
+- 검증: validate 219 passed/1 skipped, E2E 8 passed. 브라우저 실측: 진입 TASK확장 → 2026-06-01 선택 시 SOMEDAY확장 → TODAY 클릭 시 오늘복귀+TASK확장.
+- 결정/되돌리기 쉬움: TODAY 화살표 제거(원하면 1줄 복구), '이미 오늘'이면 무동작(날짜 변경 없음 → 재판단 없음).
+
 === END ===

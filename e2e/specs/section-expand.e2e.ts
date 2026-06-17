@@ -32,8 +32,9 @@ test.describe("@feature:F013 섹션 단일 확장 (아코디언)", () => {
     await expect(somedaySection).toHaveAttribute("data-expanded", "true");
     await expect(taskSection).toHaveAttribute("data-expanded", "false");
 
-    // TODAY 탭 클릭 → 다시 task 확장, someday 접힘
-    await page.getByRole("button", { name: /TODAY/ }).click();
+    // SOMEDAY 탭 재클릭 → 아코디언이 다시 전환(task 확장, someday 접힘)
+    // (TODAY 탭은 토글이 아니라 '오늘로 이동' 전용이므로 토글은 SOMEDAY가 담당 — F014)
+    await page.getByRole("button", { name: /SOMEDAY/ }).click();
     await expect(taskSection).toHaveAttribute("data-expanded", "true");
     await expect(somedaySection).toHaveAttribute("data-expanded", "false");
   });

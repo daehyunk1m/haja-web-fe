@@ -38,6 +38,12 @@ export const useSectionExpandStore = create(
         /** 초기 상태로 되돌린다(테스트/재진입용). */
         reset: () =>
           set({ expanded: "task", initialized: false, counts: { task: null, someday: null } }),
+        /**
+         * 자동판단을 다시 하도록 확정(initialized)과 카운트만 해제한다.
+         * reset과 달리 현재 `expanded`는 유지해 재판단 전까지 화면 깜빡임이 없다.
+         * 날짜(일)가 바뀌면 호출한다 — 두 섹션이 새 날짜 기준으로 재보고하면 다시 확장이 결정된다.
+         */
+        reevaluate: () => set({ initialized: false, counts: { task: null, someday: null } }),
       },
     }))
   )
