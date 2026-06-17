@@ -212,4 +212,11 @@ SESSION_ID: 2026-06-17T02-52-00Z-b7k2
 - 데이터 품질 메모(사용자 몫): 타이포 이름/웨이트 불일치(Title 1/Bold=300=Light, Title 2/Regular=600=SemiBold). 색 의미명 부재(색 스타일 만들면 해소).
 - shadow-* 금지 가드: 현 시점 오버스펙으로 보류(사용자 결정) — 토큰 추출만으로 충분. 커밋은 feature/F015-figma-tokens 브랜치(2커밋: 코드 / 산출물).
 
+[2026-06-17] 태스크 생성/제목 인터랙션 폴리시 (F004 보강 + TaskItem)
+- 요구: ① 빈 제목으로도 태스크가 생성되던 것 차단 ② Enter 키로도 생성 ③ 모바일 웹에서 제목 더블클릭 시 텍스트가 선택영역으로 잡힘 방지.
+- AddTaskInput.tsx(F004): handleSubmit 추출 — input.trim()이 비면 생성·모달닫힘 모두 스킵(계속 입력 가능), 저장은 trim된 값. input에 onKeyDown 추가해 Enter 제출. 한글 IME 조합 확정 Enter는 e.nativeEvent.isComposing 가드로 제외(첫 Enter에 조합 중 글자 오등록 방지). 전송 버튼 onClick도 handleSubmit 공유.
+- TaskItem.tsx: 제목 표시 span에 select-none(user-select:none) 추가 — 더블탭/더블클릭 텍스트 선택 차단. 편집 input엔 미영향. handleDoubleClick의 디버그 console.log(toJSON) 제거(deps [bulletTask]→[]).
+- RED→GREEN: AddTaskInput.test +6(빈제목 3·Enter 2·IME 1), TaskItem.test +1(select-none 클래스 존재). yarn validate 통과(242 passed/1 skipped).
+- 검증 한계: select-none 실제 브라우저 선택 차단은 jsdom 미검증(클래스 존재로 회귀 가드 — break-words 선례와 동일). 필요 시 E2E(getSelection 빈 문자열) 추가 가능.
+
 === END ===

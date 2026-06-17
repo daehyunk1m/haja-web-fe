@@ -338,3 +338,12 @@ describe("TaskItem 긴 제목 줄바꿈", () => {
     expect(row.className).not.toContain("items-center");
   });
 });
+
+describe("TaskItem 제목 텍스트 선택 방지", () => {
+  it("제목 텍스트는 더블클릭 선택을 막기 위해 select-none을 가진다", () => {
+    render(<TaskItem bulletTask={task} />);
+    const titleEl = screen.getByText("스와이프 태스크");
+    // 모바일에서 제목 더블탭 시 텍스트가 선택 영역으로 잡히지 않도록 user-select:none
+    expect(titleEl.className).toContain("select-none");
+  });
+});

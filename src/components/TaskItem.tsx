@@ -79,12 +79,12 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
   }, [isOpen, close, editingId, id, setEditingId]);
 
   const handleDoubleClick = useCallback(() => {
+    // 더블클릭은 단일클릭(편집 진입) 타이머를 취소만 한다
     if (clickTimer.current) {
       clearTimeout(clickTimer.current);
       clickTimer.current = null;
     }
-    console.log(bulletTask.toJSON());
-  }, [bulletTask]);
+  }, []);
 
   // 삭제는 확인 모달을 한 번 거친다
   const requestDelete = useCallback(() => setConfirmOpen(true), []);
@@ -137,7 +137,7 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
               <EditTask id={id} title={title} closeEdit={closeEdit} />
             ) : (
               <span
-                className='font-medium text-[16px] text-black break-words cursor-default'
+                className='font-medium text-[16px] text-black break-words cursor-default select-none'
                 onClick={handleClick}
                 onDoubleClick={handleDoubleClick}
               >
