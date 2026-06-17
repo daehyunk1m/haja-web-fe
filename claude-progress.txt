@@ -181,4 +181,13 @@ SESSION_ID: 2026-06-17T02-52-00Z-b7k2
 - 검증: validate 219 passed/1 skipped, E2E 8 passed. 브라우저 실측: 진입 TASK확장 → 2026-06-01 선택 시 SOMEDAY확장 → TODAY 클릭 시 오늘복귀+TASK확장.
 - 결정/되돌리기 쉬움: TODAY 화살표 제거(원하면 1줄 복구), '이미 오늘'이면 무동작(날짜 변경 없음 → 재판단 없음).
 
+[2026-06-17] F007 버그수정: 진행률 파이차트에 someday 태스크가 섞이는 문제
+- 요구: progress 파이차트 계산에 someday 태스크가 들어감 → 각 날의 태스크만 집계되도록.
+- 원인(SectionList.tsx): setSelectedTasks(tasks)로 보고했는데 tasks의 날짜 필터가 someday는 날짜 무관 전부 포함(task 타입만 해당 날짜로 스코핑). 그래서 someday 백로그가 분모/분자에 유입.
+  구조 함정: SectionList는 type=task(우)·someday(좌) 두 인스턴스가 Body에서 항상 함께 마운트되고 둘 다 동일 tasks를 보고 중 → 단순히 visibleTasks로 바꾸면 두 섹션이 서로 다른 값으로 store를 덮어쓰는 경쟁(race) 발생.
+- 수정: dailyTasks = tasks.filter(t=>t.type==="task") 메모 추가. 진행률 보고는 type==="task" 인스턴스 1곳만(단일 보고자) → someday 제외 + 경쟁 제거.
+- RED→GREEN: SectionList.test.tsx 신규 2개 — (someday 섞여도 각 날 태스크만 50%) / (someday만 있으면 0%). 두 섹션 모두 마운트해 실제 store로 회귀 재현(현재코드 40%·50% → 수정후 50%·0%).
+- 검증: yarn validate 통과(build+lint+lint:arch, 221 passed/1 skipped). PieChart/Progress/progressStore는 무변경(계산 입력만 교정).
+- 되돌리기 쉬움: SectionList 진행률 보고부 1블록 한정 변경. F007 passes 유지(더 정확해짐).
+
 === END ===

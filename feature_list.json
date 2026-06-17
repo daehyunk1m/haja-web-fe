@@ -97,8 +97,8 @@
       "진행률 UI 표시"
     ],
     "passes": true,
-    "last_session": "2026-04-09",
-    "notes": "progressStore 9개 테스트 Green — 초기값/빈배열 NaN 버그 수정/완료율 계산/CANCEL 처리 검증"
+    "last_session": "2026-06-17",
+    "notes": "progressStore 9개 테스트 Green — 초기값/빈배열 NaN 버그 수정/완료율 계산/CANCEL 처리 검증. 집계 범위를 각 날의 태스크(type=task)로 한정 — someday(백로그) 제외, SectionList를 단일 보고자(task 섹션)로 고정해 두 섹션 경쟁 제거. SectionList.test 2개 추가"
   },
   {
     "id": "F008",

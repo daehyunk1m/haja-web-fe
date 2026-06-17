@@ -89,9 +89,16 @@ const SectionList = ({ type }: { type: "task" | "someday" }) => {
 
   const { setSelectedTasks } = useProgressStore(({ actions }) => actions);
 
+  // 진행률 파이차트는 '각 날의 태스크'(type === "task")만 집계한다 — someday(백로그)는 제외.
+  // tasks의 날짜 필터가 task 타입을 이미 해당 날짜로 스코핑하므로 someday만 걸러내면 된다.
+  const dailyTasks = useMemo(() => tasks.filter((t) => t.type === "task"), [tasks]);
+
+  // task 섹션만 보고한다. 두 섹션(task·someday)이 동시에 마운트되므로,
+  // 양쪽이 같은 store를 덮어쓰면 경쟁(race)이 생긴다 — task 섹션을 단일 보고자로 둔다.
   useEffect(() => {
-    setSelectedTasks(tasks);
-  }, [setSelectedTasks, tasks]);
+    if (type !== "task") return;
+    setSelectedTasks(dailyTasks);
+  }, [type, setSelectedTasks, dailyTasks]);
 
   return (
     <>
