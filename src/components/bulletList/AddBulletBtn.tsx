@@ -20,7 +20,10 @@ const AddBulletBtn = ({ type }: { type: "task" | "someday" }) => {
             toggleAddModal();
           }}
         >
-          <Ico.Add size={48} />
+          {/* 아이콘만 태스크 호버(z-10) 위로 올린다 — 버튼 흰 배경은 올리지 않는다 */}
+          <span className='relative z-20 flex items-center justify-center'>
+            <Ico.Add size={48} />
+          </span>
         </button>
       </div>
     );
