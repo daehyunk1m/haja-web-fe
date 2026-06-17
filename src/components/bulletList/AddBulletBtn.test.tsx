@@ -56,8 +56,8 @@ describe("AddBulletBtn — 섬데이(좌측) 확장 애니메이션", () => {
     renderSomeday();
     const region = screen.getByTestId("add-bullet-someday-region");
     expect(region.className).toContain("transition-[grid-template-rows]");
-    expect(region.className).toContain("duration-200");
-    expect(region.className).toContain("delay-100"); // 컨테이너(0.3s)가 먼저 오른 뒤 시작 → 0.1+0.2=0.3s에 함께 끝
+    expect(region.className).toContain("duration-150");
+    expect(region.className).toContain("delay-150"); // 컨테이너(0.3s)가 먼저 오른 뒤 시작 → 0.15+0.15=0.3s에 함께 끝
     expect(region.className).toContain("motion-reduce:transition-none");
   });
 
@@ -65,7 +65,7 @@ describe("AddBulletBtn — 섬데이(좌측) 확장 애니메이션", () => {
     setExpanded("task"); // 섬데이 접힘
     renderSomeday();
     const region = screen.getByTestId("add-bullet-someday-region");
-    expect(region.className).not.toContain("delay-100");
+    expect(region.className).not.toContain("delay-");
     expect(region.className).toContain("duration-200");
   });
 });
