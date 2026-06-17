@@ -90,3 +90,65 @@ describe("전송", () => {
     expect(tasks[0].createdAt).toBe("2024-01-15");
   });
 });
+
+// -------------------------------------------------------------------------
+describe("빈 제목 검증", () => {
+  it("빈 입력으로 전송하면 태스크가 추가되지 않는다", () => {
+    render(<AddTaskInput />);
+    fireEvent.click(screen.getByRole("button"));
+
+    expect(useBulletStore.getState().tasks.size).toBe(0);
+  });
+
+  it("공백만 입력하면 태스크가 추가되지 않는다", () => {
+    render(<AddTaskInput />);
+    fireEvent.change(screen.getByPlaceholderText("할 일을 입력해주세요."), {
+      target: { value: "   " },
+    });
+    fireEvent.click(screen.getByRole("button"));
+
+    expect(useBulletStore.getState().tasks.size).toBe(0);
+  });
+
+  it("빈 입력으로 전송해도 모달이 닫히지 않는다", () => {
+    render(<AddTaskInput />);
+    fireEvent.click(screen.getByRole("button"));
+
+    expect(useAddModalStore.getState().isAddModalOpen).toBe(true);
+  });
+});
+
+// -------------------------------------------------------------------------
+describe("Enter 키 전송", () => {
+  it("Enter 키를 누르면 입력한 텍스트로 태스크가 추가된다", () => {
+    render(<AddTaskInput />);
+    const input = screen.getByPlaceholderText("할 일을 입력해주세요.");
+
+    fireEvent.change(input, { target: { value: "엔터 태스크" } });
+    fireEvent.keyDown(input, { key: "Enter" });
+
+    const tasks = Array.from(useBulletStore.getState().tasks.values());
+    expect(tasks).toHaveLength(1);
+    expect(tasks[0].title).toBe("엔터 태스크");
+  });
+
+  it("Enter 키로 추가하면 모달이 닫힌다", () => {
+    render(<AddTaskInput />);
+    const input = screen.getByPlaceholderText("할 일을 입력해주세요.");
+
+    fireEvent.change(input, { target: { value: "엔터 태스크" } });
+    fireEvent.keyDown(input, { key: "Enter" });
+
+    expect(useAddModalStore.getState().isAddModalOpen).toBe(false);
+  });
+
+  it("IME 조합 중 Enter(isComposing)는 태스크를 추가하지 않는다", () => {
+    render(<AddTaskInput />);
+    const input = screen.getByPlaceholderText("할 일을 입력해주세요.");
+
+    fireEvent.change(input, { target: { value: "한글" } });
+    fireEvent.keyDown(input, { key: "Enter", isComposing: true });
+
+    expect(useBulletStore.getState().tasks.size).toBe(0);
+  });
+});

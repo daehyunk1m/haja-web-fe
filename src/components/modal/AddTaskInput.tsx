@@ -19,6 +19,14 @@ export default function AddTaskInput() {
     ref.current?.focus();
   }, []);
 
+  const handleSubmit = () => {
+    const title = input.trim();
+    // 제목이 비어 있으면(공백만 포함) 생성하지 않고 모달도 유지한다
+    if (!title) return;
+    addBullet(title, { createdAt: dateString, type });
+    closeModal();
+  };
+
   return (
     <div className='w-full flex flex-row gap-[18px] h-16 items-center justify-start pl-[18px] pr-1.5 '>
       <BulletIcon id={"null"} bulletState={Bullet.TODO} />
@@ -32,14 +40,15 @@ export default function AddTaskInput() {
           onChange={(e) => {
             setInput(e.target.value);
           }}
+          onKeyDown={(e) => {
+            // 한글 등 IME 조합 확정용 Enter는 제출로 처리하지 않는다
+            if (e.key === "Enter" && !e.nativeEvent.isComposing) handleSubmit();
+          }}
         />
       </div>
       <button
         className='flex items-center justify-center size-12 p-0'
-        onClick={() => {
-          addBullet(input, { createdAt: dateString, type });
-          closeModal();
-        }}
+        onClick={handleSubmit}
       >
         <Ico.Send />
       </button>
