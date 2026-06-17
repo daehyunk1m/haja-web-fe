@@ -126,8 +126,13 @@ export default function TaskItem({ bulletTask }: { bulletTask: TaskCore }) {
         className='relative z-10 flex w-full flex-row items-center bg-white hover:bg-[#f0f0f0]'
       >
         <div className='min-h-[38px] flex flex-row items-start px-5 py-1 gap-2 w-full'>
-          <BulletIcon id={id} bulletState={state} />
-          <span className='font-medium text-[16px] text-black flex-1 min-w-0'>
+          {/* 불렛은 한 줄 높이(30px) 박스에서 중앙 정렬 → 한 줄이면 행 중앙, 여러 줄이면 첫 줄에 맞음 */}
+          <span className='flex min-h-[30px] items-center'>
+            <BulletIcon id={id} bulletState={state} />
+          </span>
+          {/* 한 줄: 박스(30px) 안에서 중앙(pt 3px + 줄 24px + 여백 3px). 두 줄 이상:
+              첫 줄이 pt-[3px]만큼 내려와 불렛 중심(15px)에 맞는다. */}
+          <span className='font-medium text-[16px] text-black flex-1 min-w-0 min-h-[30px] pt-[3px]'>
             {isEdit ? (
               <EditTask id={id} title={title} closeEdit={closeEdit} />
             ) : (
