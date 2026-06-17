@@ -159,5 +159,21 @@
     "passes": true,
     "last_session": "2026-06-14",
     "notes": "useSwipeToReveal 훅 신규(window 포인터 추적·축 잠금·임계값 스냅) + TaskItem 재구성(오른쪽 고정 삭제 버튼/본문 슬라이드/aria-hidden). dnd-kit 센서 축 분리(distance.y:10, tolerance.x:12)로 F010 회귀 없음. 단일 열림 조율(swipeRevealStore): 다른 행 스와이프/순서변경 드래그 시 열린 행 자동 닫힘. 삭제 시 ConfirmDialog('정말 삭제하시겠습니까?') 확인 단계 추가(ModalContainer 재사용). 테스트 16개 Green(훅 7 + TaskItem 9)"
+  },
+  {
+    "id": "F013",
+    "category": "ui",
+    "priority": 4,
+    "description": "섹션 단일 확장(아코디언) — 투데이/섬데이 중 태스크가 더 많은 컨테이너 하나만 확장하고, 나머지는 접힘(peek) 상태로 둔다. 탭 토글 시 부드러운(ease) 확장/접힘 애니메이션. 투데이 우하단 추가 버튼 확대.",
+    "steps": [
+      "화면 진입 시 태스크가 더 많은 컨테이너만 확장된다 (동률은 투데이)",
+      "다른 컨테이너는 접힘(peek) 상태로 내부 스크롤된다",
+      "탭을 누르면 확장 컨테이너가 전환된다 (항상 둘 중 하나만 확장)",
+      "확장/접힘이 부드럽게 애니메이션된다 (ease)",
+      "투데이 우하단 추가 버튼이 48px로 확대된다"
+    ],
+    "passes": true,
+    "last_session": "2026-06-17",
+    "notes": "확장 상태를 공유 store(sectionExpandStore)로 분리 — 두 섹션 중 항상 하나만 확장(아코디언). pickInitialExpanded로 진입 시 태스크 많은 쪽 자동 확장(동률 task). 애니메이션은 SectionContainer의 flex-grow(0↔1) 전환 — 두 grow의 합이 항상 1이라 높이가 선형으로 변해 부드럽고, TodoContainer는 basis-[138px] peek를 유지한 채 grow로 부모를 채워 별도 transition 불필요. ease-in-out 0.3s, motion-reduce 대응. 추가 버튼 40→48px(Ico box 스케일). 유닛 10개(pickInitialExpanded 4 + store 6) + E2E 5개(@feature:F013) Green, 브라우저 실측 검증."
   }
 ]

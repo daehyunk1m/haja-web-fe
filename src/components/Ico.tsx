@@ -1,11 +1,17 @@
 import { PropsWithChildren } from "react";
 
-export default function Ico({ children, size = 24 }: PropsWithChildren<{ size?: number }>) {
+export default function Ico({
+  children,
+  size = 24,
+  box,
+}: PropsWithChildren<{ size?: number; box?: number }>) {
+  // box(viewBox 단위)가 size와 다르면 패스가 size에 맞게 스케일된다.
+  const viewBoxSize = box ?? size;
   return (
     <svg
       width={size}
       height={size}
-      viewBox={`0 0 ${size} ${size}`}
+      viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
     >
@@ -60,9 +66,9 @@ Ico.Cancel = () => {
   );
 };
 
-Ico.Add = ({ fill = "black" }: { fill?: string }) => {
+Ico.Add = ({ fill = "black", size = 40 }: { fill?: string; size?: number }) => {
   return (
-    <Ico size={40}>
+    <Ico size={size} box={40}>
       <path
         d='M33 30.3333L26 37.3333H7V3.33331H33V30.3333ZM8 36.3333H25V29.3333H32V4.33331H8V36.3333ZM26 35.9193L31.5859 30.3333H26V35.9193ZM20.5 17.3333H27V18.3333H20.5V25.3333H19.5V18.3333H13V17.3333H19.5V11.3333H20.5V17.3333Z'
         fill={fill}

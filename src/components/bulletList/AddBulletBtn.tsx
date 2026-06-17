@@ -1,28 +1,32 @@
 import { useAddModalStore } from "@/shared/addModalStore";
 import Ico from "../Ico";
 import { useBulletSectionContext } from "@/hooks/useBulletSectionContext";
+import { useSectionExpandStore } from "@/shared/sectionExpandStore";
 
 const AddBulletBtn = ({ type }: { type: "task" | "someday" }) => {
-  const { isFold, tabPosition } = useBulletSectionContext();
+  const { tabPosition } = useBulletSectionContext();
+  const isExpanded = useSectionExpandStore((s) => s.expanded === type);
   const { toggleAddModal, setType } = useAddModalStore((state) => state.actions);
 
   if (tabPosition === "right") {
+    // 투데이 컨테이너 우하단 추가 버튼 — 48px (이전 40px) 터치 타깃.
     return (
-      <div className='relative h-5 w-10'>
+      <div className='relative h-6 w-12'>
         <button
-          className='absolute left-5 -top-5 bg-white w-10 h-10 flex items-center justify-center cursor-pointer'
+          data-testid='add-bullet-task'
+          className='absolute left-6 -top-6 bg-white w-12 h-12 flex items-center justify-center cursor-pointer'
           onClick={() => {
             setType(type);
             toggleAddModal();
           }}
         >
-          <Ico.Add />
+          <Ico.Add size={48} />
         </button>
       </div>
     );
   }
 
-  if (isFold && tabPosition === "left") {
+  if (isExpanded && tabPosition === "left") {
     return (
       <button
         className='bg-black cursor-pointer relative w-full h-12 flex items-center px-5 py-1.5'

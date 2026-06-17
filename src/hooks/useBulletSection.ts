@@ -4,15 +4,12 @@ export type TBulletSection = ReturnType<typeof useBulletSection>;
 
 export const useBulletSection = () => {
   const [isAddTaskIcon, setIsAddTaskIcon] = useState(false);
-  const [isFold, setIsFold] = useState(false);
   const [tabPosition, setTabPosition] = useState<"left" | "right">("left");
-  // const [isCalenderOpen, setIsCalenderOpen] = useState(false);
+  // 확장(fold) 상태는 두 섹션이 공유해야 하므로 useSectionExpandStore로 분리했다.
 
   return {
     isAddTaskIcon,
     setIsAddTaskIcon,
-    isFold,
-    setIsFold,
     tabPosition,
     setTabPosition,
   };

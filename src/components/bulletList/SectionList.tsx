@@ -2,14 +2,13 @@ import { useBulletStore } from "@/shared/bulletStore";
 import { useDateStore } from "@/shared/dateStore";
 import { useProgressStore } from "@/shared/progressStore";
 import { useSwipeRevealStore } from "@/shared/swipeRevealStore";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import TodoContainer from "../TodoContainer";
 import AddBulletBtn from "./AddBulletBtn";
 import SortableTaskItem from "./SortableTaskItem";
 import { TaskCore } from "@/shared/TaskCore";
 import { useOrderedTasks } from "@/hooks/useOrderedTasks";
-import { useBulletSectionContext } from "@/hooks/useBulletSectionContext";
-import { shouldAutoExpand } from "@/utils/sectionFold";
+import { useSectionExpandStore } from "@/shared/sectionExpandStore";
 import {
   DndContext,
   closestCenter,
@@ -46,15 +45,15 @@ const SectionList = ({ type }: { type: "task" | "someday" }) => {
     return tasks.filter(filters[type]);
   }, [tasks, type]);
 
-  // 마운트 후 1회: 태스크 수가 peek 용량을 초과하면 자동 확장 (세션 한정 — 이후엔 수동 토글만 제어).
-  // 스토어 hydration이 비동기여도 tasksMap이 채워진 뒤 한 번만 적용한다.
-  const { setIsFold } = useBulletSectionContext();
-  const didInitFold = useRef(false);
+  // 마운트 후: 두 섹션이 각자 태스크 수를 보고하면, store가 더 많은 쪽을 1회 자동 확장한다.
+  // (둘 중 하나만 확장 — 아코디언. 확정/사용자 토글 이후엔 store가 보고를 무시한다.)
+  // 스토어 hydration이 비동기여도 tasksMap이 채워진 뒤에 보고한다.
+  const initialized = useSectionExpandStore((s) => s.initialized);
+  const reportCount = useSectionExpandStore((s) => s.actions.reportCount);
   useEffect(() => {
-    if (didInitFold.current || tasksMap.size === 0) return;
-    didInitFold.current = true;
-    setIsFold(shouldAutoExpand(visibleTasks.length));
-  }, [tasksMap, visibleTasks, setIsFold]);
+    if (initialized || tasksMap.size === 0) return;
+    reportCount(type, visibleTasks.length);
+  }, [initialized, tasksMap, visibleTasks, reportCount, type]);
 
   const { orderedTasks, handleReorder } = useOrderedTasks(visibleTasks, dateString, type);
 

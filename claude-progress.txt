@@ -142,4 +142,16 @@
 - 후속: 줄바꿈 시 아이콘이 세로 중앙에 뜨지 않도록 행 컨테이너 items-center → items-start
   (아이콘 24px == 첫 줄 높이 24px이라 한 줄일 때도 정렬 동일). 정렬 회귀 테스트 1개 추가 (197 passed / 1 skipped)
 
+[2026-06-17] F013 완료: 섹션 단일 확장(아코디언) + 부드러운 전환 + 추가 버튼 확대
+- 요구: 진입 시 투데이/섬데이 둘 다 확장되던 것을 태스크가 더 많은 한쪽만 확장. ease 애니메이션. 투데이 우하단 + 버튼 확대.
+- 확장 상태를 per-section context(useBulletSection.isFold)에서 공유 store로 분리: src/shared/sectionExpandStore.ts 신규
+  - 두 섹션 중 항상 하나만 확장(아코디언). reportCount(섹션별 태스크 수 보고)로 진입 시 1회 자동 확장(pickInitialExpanded: 많은 쪽, 동률 task). toggle은 어느 탭을 눌러도 확장 전환.
+- 애니메이션: SectionContainer를 flex-grow(0↔1) 전환으로 변경(basis-auto 고정, transition-[flex-grow] ease-in-out 0.3s, motion-reduce:transition-none).
+  두 grow의 합이 항상 1이라 높이가 선형으로 변해 부드럽고 글리치 없음(브라우저 실측: mid flex-grow 0.39/0.61 → 0.03/0.97, 합=1.0).
+  TodoContainer는 basis-[138px] peek 유지 + grow로 부모를 채움 → 부모 전환을 따라가므로 별도 transition 불필요(접힘 컨테이너 내부 스크롤 유지: scrollH 222 > clientH 136).
+- 추가 버튼 40→48px: AddBulletBtn 우측 분기 w-12 h-12, Ico에 box(viewBox) 분리로 40-unit 패스를 48px로 스케일. data-testid=add-bullet-task.
+- SectionContainer에 data-section/data-expanded 부여(E2E 견고성). useBulletSection에서 isFold/setIsFold 제거, sectionFold.shouldAutoExpand→pickInitialExpanded.
+- 테스트: 유닛 10개(pickInitialExpanded 4 + sectionExpandStore 6) + E2E 5개(@feature:F013). validate(207 passed/1 skipped) + E2E 6 passed.
+- 브라우저 검증 케이스: 6:5→투데이 확장, 토글→섬데이 확장(애니메이션), 3:6→섬데이 확장, 빈 상태→투데이 기본 확장.
+
 === END ===

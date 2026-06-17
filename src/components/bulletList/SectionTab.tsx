@@ -1,5 +1,6 @@
 import { useDateStore } from "@/shared/dateStore";
 import { useBulletSectionContext } from "@/hooks/useBulletSectionContext";
+import { useSectionExpandStore } from "@/shared/sectionExpandStore";
 import CalendarContainer from "../CalendarContainer";
 import Tab from "../Tab";
 import Ico from "../Ico";
@@ -18,13 +19,14 @@ const DateTab = () => {
   const isCalendarOpen = useDateStore((state) => state.isCalendarOpen);
   const dateString = useDateStore((state) => state.toBulletString());
   const { toggleCalendar } = useDateStore((state) => state.actions);
-  const { isFold, setIsFold } = useBulletSectionContext();
+  const isExpanded = useSectionExpandStore((s) => s.expanded === "task");
+  const { toggle } = useSectionExpandStore((s) => s.actions);
 
   return (
     <>
       <Tab onClick={() => toggleCalendar()}>{dateString}</Tab>
-      <Tab selected className='-ml-px' onClick={() => setIsFold((fold) => !fold)}>
-        TODAY <Ico.Arrow direction={isFold ? "down" : "up"} />
+      <Tab selected className='-ml-px' onClick={() => toggle()}>
+        TODAY <Ico.Arrow direction={isExpanded ? "down" : "up"} />
       </Tab>
       {isCalendarOpen && (
         <ModalContainer close={() => toggleCalendar(false)}>
@@ -36,10 +38,11 @@ const DateTab = () => {
 };
 
 const SomedayTab = () => {
-  const { isFold, setIsFold } = useBulletSectionContext();
+  const isExpanded = useSectionExpandStore((s) => s.expanded === "someday");
+  const { toggle } = useSectionExpandStore((s) => s.actions);
   return (
-    <Tab selected onClick={() => setIsFold((fold) => !fold)}>
-      SOMEDAY <Ico.Arrow direction={isFold ? "down" : "up"} />
+    <Tab selected onClick={() => toggle()}>
+      SOMEDAY <Ico.Arrow direction={isExpanded ? "down" : "up"} />
     </Tab>
   );
 };
