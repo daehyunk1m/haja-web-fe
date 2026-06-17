@@ -51,11 +51,21 @@ describe("AddBulletBtn — 섬데이(좌측) 확장 애니메이션", () => {
     expect(screen.getByTestId("add-bullet-someday-region")).toHaveAttribute("aria-hidden", "false");
   });
 
-  it("추가 버튼 영역에 부드러운 전환(transition)이 적용돼 있다 (motion-reduce 대응)", () => {
+  it("확장(열림) 시 컨테이너보다 늦게 출발하도록 stagger(delay)와 전환이 적용된다", () => {
     setExpanded("someday");
     renderSomeday();
     const region = screen.getByTestId("add-bullet-someday-region");
-    expect(region.className).toContain("duration-300");
+    expect(region.className).toContain("transition-[grid-template-rows]");
+    expect(region.className).toContain("duration-200");
+    expect(region.className).toContain("delay-100"); // 컨테이너(0.3s)가 먼저 오른 뒤 시작 → 0.1+0.2=0.3s에 함께 끝
     expect(region.className).toContain("motion-reduce:transition-none");
+  });
+
+  it("접힘(닫힘) 시에는 delay 없이 빠르게 접힌다 (컨테이너 밖 오버플로 방지)", () => {
+    setExpanded("task"); // 섬데이 접힘
+    renderSomeday();
+    const region = screen.getByTestId("add-bullet-someday-region");
+    expect(region.className).not.toContain("delay-100");
+    expect(region.className).toContain("duration-200");
   });
 });

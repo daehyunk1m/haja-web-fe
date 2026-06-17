@@ -165,5 +165,8 @@ SESSION_ID: 2026-06-17T02-52-00Z-b7k2
   부수효과: 투데이 섹션 첫 렌더(tabPosition 기본 left) 시 기존엔 섬데이 버튼이 한 프레임 보였으나, 이제 접힘 래퍼(높이0)라 미노출 — 개선.
 - RED→GREEN: 유닛 4개(AddBulletBtn.test.tsx — 접힘에도 DOM 잔존/opacity·aria 토글/transition 클래스) 신규. E2E 1개(section-expand.e2e.ts @feature:F013 — 접힘 attached+height<4·transition≠none, 확장 visible+height>40) 신규.
 - 검증: yarn validate(211 passed/1 skipped) + E2E @feature:F013 6 passed. 브라우저 실측: 확장 h48/opacity1/aria-hidden false, 접힘 h0/opacity0/aria-hidden true·DOM 유지·transitionProperty=grid-template-rows.
+- 후속(타이밍 stagger): 컨테이너·버튼이 동시(0→0.3s) 시작·종료라 어색하다는 피드백 → 버튼을 늦게 출발시키되 끝은 같게.
+  열림 상태 클래스에만 delay-100 + duration-200 부여(컨테이너 0.3s, 버튼 0.1s 지연 후 0.2s → 둘 다 0.3s에 종료). CSS timing은 "도착 상태"에서 읽히므로 닫힘(도착=접힘)엔 delay 없이 duration-200로 빠르게 접혀 오버플로 방지.
+  유닛 +1(닫힘 delay 없음) → AddBulletBtn.test 5개. E2E에 computed transitionDelay=0.1s·Duration=0.2s 실측 추가. validate(212 passed/1 skipped) + E2E 6 passed.
 
 === END ===

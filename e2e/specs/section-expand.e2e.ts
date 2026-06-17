@@ -69,6 +69,14 @@ test.describe("@feature:F013 섹션 단일 확장 (아코디언)", () => {
     await page.getByRole("button", { name: /SOMEDAY/ }).click();
     await expect(addBtn).toBeVisible();
     await expect.poll(async () => (await region.boundingBox())?.height ?? 0).toBeGreaterThan(40);
+
+    // 열림은 컨테이너(0.3s)보다 늦게 출발하도록 delay가 걸려 있다(0.1+0.2=0.3s에 함께 끝남)
+    const timing = await region.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { delay: s.transitionDelay, duration: s.transitionDuration };
+    });
+    expect(timing.delay).toBe("0.1s");
+    expect(timing.duration).toBe("0.2s");
   });
 
   test("투데이 우하단 추가 버튼이 48px로 확대돼 있다", async ({ page }) => {
