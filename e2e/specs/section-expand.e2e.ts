@@ -48,6 +48,29 @@ test.describe("@feature:F013 섹션 단일 확장 (아코디언)", () => {
     expect(transition).toContain("flex-grow");
   });
 
+  test("섬데이 추가 버튼이 확장과 함께 부드럽게 나타난다 (즉시 깜빡이지 않음)", async ({ page }) => {
+    // task 5 > someday 3 → 진입 시 TODAY 확장, SOMEDAY 접힘
+    await page.addInitScript(seedBulletsByCount, { task: 5, someday: 3 });
+    await page.goto("/");
+
+    const addBtn = page.getByTestId("add-bullet-someday");
+    const region = page.getByTestId("add-bullet-someday-region");
+
+    // 접힘 상태: 버튼은 DOM에 남아 있으나(언마운트 아님) 높이 0으로 보이지 않는다
+    await expect(addBtn).toBeAttached();
+    const collapsedHeight = (await region.boundingBox())?.height ?? -1;
+    expect(collapsedHeight).toBeLessThan(4);
+
+    // 즉시 mount가 아니라 전환 애니메이션이 걸려 있어야 한다
+    const transition = await region.evaluate((el) => getComputedStyle(el).transitionProperty);
+    expect(transition).not.toBe("none");
+
+    // SOMEDAY 확장 → 버튼이 높이를 갖고 보이게 된다
+    await page.getByRole("button", { name: /SOMEDAY/ }).click();
+    await expect(addBtn).toBeVisible();
+    await expect.poll(async () => (await region.boundingBox())?.height ?? 0).toBeGreaterThan(40);
+  });
+
   test("투데이 우하단 추가 버튼이 48px로 확대돼 있다", async ({ page }) => {
     await page.addInitScript(seedBulletsByCount, { task: 5, someday: 3 });
     await page.goto("/");

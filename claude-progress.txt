@@ -154,4 +154,16 @@
 - 테스트: 유닛 10개(pickInitialExpanded 4 + sectionExpandStore 6) + E2E 5개(@feature:F013). validate(207 passed/1 skipped) + E2E 6 passed.
 - 브라우저 검증 케이스: 6:5→투데이 확장, 토글→섬데이 확장(애니메이션), 3:6→섬데이 확장, 빈 상태→투데이 기본 확장.
 
+SESSION_ID: 2026-06-17T02-52-00Z-b7k2
+
+[2026-06-17] F013 폴리시: 섬데이 추가 버튼 확장 동기화 애니메이션
+- 요구: 섬데이 컨테이너 확장 시 AddBulletBtn이 너무 깜빡거리며 생김 → 확장과 함께 부드럽게 올라오도록.
+- 원인: 좌측(섬데이) AddBulletBtn이 접힘 시 null 반환 → 확장 순간 풀사이즈로 즉시 mount(깜빡임). SectionContainer는 0.3s로 부드럽게 여는데 버튼만 동기화 안 됨.
+- 수정(src/components/bulletList/AddBulletBtn.tsx): 언마운트 대신 항상 DOM 유지.
+  바깥 div를 grid + grid-rows 0fr↔1fr(transition-[grid-template-rows] 0.3s ease-in-out, motion-reduce 대응)로 높이를 0↔콘텐츠(48px) 전환(고정 px 불필요). 버튼은 opacity 0↔1 동일 전환.
+  접힘 시 aria-hidden=true / tabIndex=-1 / pointer-events-none(a11y). testid: add-bullet-someday-region(바깥), add-bullet-someday(버튼).
+  부수효과: 투데이 섹션 첫 렌더(tabPosition 기본 left) 시 기존엔 섬데이 버튼이 한 프레임 보였으나, 이제 접힘 래퍼(높이0)라 미노출 — 개선.
+- RED→GREEN: 유닛 4개(AddBulletBtn.test.tsx — 접힘에도 DOM 잔존/opacity·aria 토글/transition 클래스) 신규. E2E 1개(section-expand.e2e.ts @feature:F013 — 접힘 attached+height<4·transition≠none, 확장 visible+height>40) 신규.
+- 검증: yarn validate(211 passed/1 skipped) + E2E @feature:F013 6 passed. 브라우저 실측: 확장 h48/opacity1/aria-hidden false, 접힘 h0/opacity0/aria-hidden true·DOM 유지·transitionProperty=grid-template-rows.
+
 === END ===
