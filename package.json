@@ -14,6 +14,7 @@
     "lint:arch": "npx tsx scripts/structural-test.ts",
     "validate": "yarn build && yarn lint && yarn lint:arch && yarn test:run",
     "doc:check": "npx tsx scripts/doc-freshness.ts",
+    "figma:extract": "npx tsx scripts/extract-figma-tokens.ts",
     "harness:check": "bash scripts/harness-check.sh",
     "test:e2e": "playwright test"
   },

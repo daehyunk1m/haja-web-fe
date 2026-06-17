@@ -190,4 +190,26 @@ SESSION_ID: 2026-06-17T02-52-00Z-b7k2
 - 검증: yarn validate 통과(build+lint+lint:arch, 221 passed/1 skipped). PieChart/Progress/progressStore는 무변경(계산 입력만 교정).
 - 되돌리기 쉬움: SectionList 진행률 보고부 1블록 한정 변경. F007 passes 유지(더 정확해짐).
 
+[2026-06-17] F015(infra) 착수: Figma → 디자인 토큰 추출 파이프라인 (PAT 대기)
+- 계기: 사용자가 Figma 파일 링크 공유(gEWbtX9XnpzkHc9eVpv4j5). exec-plan(figma-design-extraction.md, Option A=REST+PAT)의 실행 트리거.
+- 진실 소스=Figma, design.md/tokens.json=추출 산출물(수작업 금지). 재추출→git diff로 드리프트 감지.
+- 구현(하이브리드 — 인프라 게이트의 '부정 테스트' 규칙 적용):
+  · 변환은 테스트 가능한 로직 → TDD. scripts/figma/tokens.ts(순수 모듈: 색 hex/rgba, effect→box-shadow, FILL/TEXT/EFFECT→토큰, design.md 생성) + tokens.test.ts 12개 GREEN.
+  · fetch+파일 I/O만 인프라 → scripts/extract-figma-tokens.ts(CLI). .env의 FIGMA_TOKEN 또는 env로 인증, 파일키/URL 모두 수용, styles+nodes 호출(청크), 산출물 2개 기록.
+  · package.json에 figma:extract 스크립트 추가.
+- 검증: 신규 유닛 12개 + 전체 233 passed/1 skipped, yarn lint 0 errors. (build 무영향 — scripts/는 tsc 빌드 그래프 밖.)
+- 블로커(사용자 액션): 읽기전용 Figma PAT 필요. .env에 FIGMA_TOKEN=figd_... 추가 후 yarn figma:extract 실행하면 tokens.json+design.md 생성 → 실값 검토 후 passes 판정. PAT는 채팅에 붙여넣지 말고 .env에 직접(.env는 gitignore).
+- 후속(별도 작업): effect 0개 확인 시 shadow-* 금지 ESLint/structural 가드(TECH_DEBT 승격 큐). FigmaTest.tsx/mcp 라우트 정리는 TECH_DEBT 별건.
+
+[2026-06-17] F015(infra) 완료: 추출 성공 + 접근 피벗(퍼블리시 스타일 → full-file/로컬 스타일)
+- PAT 확보 후 실행: 인증 정상이나 /files/:key/styles(퍼블리시 스타일)는 0개. 진단 결과 이 파일은 스타일을 라이브러리로 퍼블리시하지 않고 로컬 스타일로만 둠.
+- 사용자 결정(질문): "로컬 스타일로 피벗". 추출기를 full-file API(/files/:key) 기반으로 재작성:
+  · 타이포: file.styles 맵의 TEXT 스타일을 참조 노드(node.styles.text)의 style 값으로 해석 → 8개.
+  · 색: FILL 스타일 없음 → designSystem 페이지 raw SOLID fill에서 팔레트 도출(이름=hex, 불투명도는 이름에 %) → 7개(#000 @45/50/70/100% + #d9d9d9 + #f0f0f0 + #fff).
+  · effect: 문서 전체 노드 그림자 스캔 → 0개. ★원래 드리프트 가설(shadcn shadow=HAJA 언어와 충돌) 실증 확인.
+- 변환 모듈/테스트 재작성: tokens.ts(buildTokensFromFile 등) + tokens.test.ts 14개. CLI는 full-file fetch로 단순화.
+- 검증: yarn validate 통과(build+lint+lint:arch, 236 passed/1 skipped). 산출물 tokens.json + docs/design-docs/design.md 생성.
+- 데이터 품질 메모(사용자 몫): 타이포 이름/웨이트 불일치(Title 1/Bold=300=Light, Title 2/Regular=600=SemiBold). 색 의미명 부재(색 스타일 만들면 해소).
+- shadow-* 금지 가드: 현 시점 오버스펙으로 보류(사용자 결정) — 토큰 추출만으로 충분. 커밋은 feature/F015-figma-tokens 브랜치(2커밋: 코드 / 산출물).
+
 === END ===

@@ -190,5 +190,20 @@
     "passes": true,
     "last_session": "2026-06-17",
     "notes": "DateTab의 TODAY onClick을 sectionExpand toggle()→dateStore setDate()(인자 없이 호출 시 오늘)로 교체하고, 토글을 의미하던 ↑↓ 화살표 제거(SOMEDAY 탭은 토글 유지). 날짜 변경 시 재판단: sectionExpandStore에 reevaluate() 추가(initialized·counts만 해제, 현재 expanded는 유지해 깜빡임 방지) + useSyncExpandWithDate 훅(dateStore subscribeWithSelector로 toBulletString(일) 변경만 구독→reevaluate, Body에서 1회 마운트). 일 단위 변경에만 반응(같은 날 시각 변경 무시), 마운트 시 미발화로 진입 자동확장과 무충돌. 유닛 7개(store reevaluate 2 + 훅 3 + SectionTab 2) + E2E 1개(@feature:F014: 지난달 15일 선택→SOMEDAY 확장, TODAY→오늘 복귀+TASK 확장). validate 219 passed/1 skipped, E2E 8 passed, 브라우저 실측 검증."
+  },
+  {
+    "id": "F015",
+    "category": "infra",
+    "priority": 5,
+    "description": "Figma 디자인 토큰 추출 파이프라인 — Figma Styles API에서 색·타이포·effect를 tokens.json + design.md로 재생성한다. 진실 소스=Figma, 재추출→git diff로 디자인 드리프트 감지.",
+    "steps": [
+      "yarn figma:extract가 FIGMA_TOKEN으로 Figma full-file API(/files/:key)를 호출한다",
+      "로컬 스타일·designSystem 팔레트·문서 전체 그림자 스캔을 tokens.json으로 변환한다 (정렬, 결정적)",
+      "tokens.json에서 docs/design-docs/design.md를 재생성한다",
+      "effect 스타일이 0개이면 design.md가 무그림자 디자인 언어를 명시한다 (shadow 드리프트 가드 근거)"
+    ],
+    "passes": true,
+    "last_session": "2026-06-17",
+    "notes": "full-file API(/files/:key)로 추출 — 이 파일은 퍼블리시 스타일 0개라 로컬 스타일(file.styles 맵)을 참조 노드에서 해석. 결과: 타이포 8(로컬 TEXT 스타일), 색 7(designSystem 페이지 raw 팔레트 — #000 4단계 불투명도+#fff+#f0f0f0+#d9d9d9, 색 스타일 없어 이름=hex), effect 0(문서 전체 스캔 — 무그림자 실증). 변환 모듈 scripts/figma/tokens.ts(순수) + 유닛테스트 14개, CLI scripts/extract-figma-tokens.ts(fetch/IO). yarn validate 통과(236/1skip). 산출물 tokens.json + docs/design-docs/design.md. 계획: docs/exec-plans/figma-design-extraction.md. shadow-* 금지 가드는 현 시점 오버스펙으로 보류(사용자 결정) — 토큰 추출이 deliverable. Figma 데이터품질(Title 1/Bold=weight300 등 이름·웨이트 불일치)·색 스타일화는 사용자 몫."
   }
 ]
