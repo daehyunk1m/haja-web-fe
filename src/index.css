@@ -14,6 +14,9 @@
   --radius-lg: 0.625rem;
   --radius-xl: 1rem;
 
+  /* Layout - 앱 콘텐츠 최대 폭. 데스크탑에서 이 폭으로 가운데 고정된다 (max-w-app) */
+  --container-app: 480px;
+
   /* Colors - Optimized for Test.tsx usage */
   --color-background: 255 255 255;
   --color-foreground: 0 0 0;

@@ -21,7 +21,7 @@ const ModalContainer = ({ children, close }: PropsWithChildren<Partial<{ close: 
       onClick={close}
     >
       <div
-        className='relative w-full flex justify-center bg-white animate-slide-up'
+        className='relative w-full max-w-app flex justify-center bg-white animate-slide-up'
         onClick={(e) => e.stopPropagation()}
       >
         {children}
