@@ -1,0 +1,4 @@
+{"ts":"2026-06-10T00:00:00Z","session":"migrated-pre-1.18","event":"setup-mismatch","severity":"high","feature":"","detail":"vitest watch로 validate 비대화형 hang (CI=1 필요)"}
+{"ts":"2026-06-12T00:00:00Z","session":"migrated-pre-1.18","event":"doc-stale","severity":"low","feature":"","detail":"AGENTS/CLAUDE 명령에 1.2.0 test:run 미반영"}
+{"ts":"2026-06-16T00:00:00Z","session":"migrated-pre-1.18","event":"rule-conflict","severity":"high","feature":"","detail":"E2E seed.ts _payload eslint no-unused-vars 위반"}
+{"ts":"2026-06-16T00:00:00Z","session":"migrated-pre-1.18","event":"rule-conflict","severity":"low","feature":"","detail":".gitignore test-results/report 미추가 untracked"}

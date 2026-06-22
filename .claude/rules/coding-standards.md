@@ -1,0 +1,57 @@
+# 코드 규칙
+
+## 아키텍처
+
+- 유형: layer-based
+- 의존성 방향: types → utils → lib → shared → hooks → contexts → components → pages → app
+- 이 방향을 역행하는 import는 금지
+
+상세: ARCHITECTURE.md 참조
+
+## 네이밍 규칙
+
+- 컴포넌트: PascalCase (예: TaskItem.tsx)
+- 훅: camelCase + use 접두사 (예: useAuth.ts)
+- 스토어: camelCase + Store 접미사 (예: bulletStore.ts)
+- 타입: PascalCase + Type/Props 접미사
+- 테스트: 원본명.test.ts(x)
+
+## 코드 작성 원칙
+
+- 한 파일 300줄 이내
+- `any` 타입 사용 금지 — 구체적 타입 또는 `unknown` + 타입 가드
+- 한 함수는 한 가지 책임만
+- path alias `@/`를 사용하여 import (상대 경로는 같은 폴더 내에서만)
+- 기존 코드의 패턴과 스타일을 따른다
+- 리뷰에서 2회 이상 반복된 지적은 자동 검사로 승격한다 (승격 대기 큐: docs/TECH_DEBT.md)
+
+## 검증 레벨
+
+| 레벨 | 검증 대상 | 도구 | 속도 |
+|------|----------|------|------|
+| L1 정적 | 타입 + 린트 + 아키텍처 | typecheck, lint, lint:arch | 즉시 |
+| L2 유닛 | 컴포넌트/훅/서비스 단위 | 유닛 테스트 | 수초 |
+| L3 통합 | API mock + 페이지 단위 | 통합 테스트 | 수십초 |
+| L4 E2E | 실제 시나리오 재현 | E2E 테스트 (브라우저 자동화) | 수분 |
+
+- feature_list.json의 steps는 **L4 E2E 테스트와 1:1 매핑** 가능해야 한다 (한 step = 검증 가능한 한 동작)
+- 명령 값은 AGENTS.md의 "명령어" 섹션이 source of truth이다
+- **jsdom 한계**: L2 유닛(jsdom)은 레이아웃 엔진이 없어 오버플로·정렬·스크롤·텍스트 넘침·반응형 같은 **시각/레이아웃 회귀**를 검증하지 못한다(클래스/속성 존재만 확인). 이 회귀 클래스는 L4 E2E(실 브라우저)로만 잡을 수 있으므로, feature가 시각/레이아웃 회귀 위험을 가지면 **상호작용 여부와 무관하게** E2E 작성 대상이다(test-engineer.md "E2E 작성 규칙").
+
+## E2E @critical 태그
+
+`@critical`은 E2E 스펙에 부여하는 태그로, **절대 깨지면 안 되는 핵심 사용자 흐름**(로그인, 결제, 데이터 손실 위험 동작 등)을 표시한다.
+
+- Playwright 테스트 제목/어노테이션에 `@critical`을 넣고 `--grep @critical`로 필터한다.
+- **pre-push 게이트 대상**이다 (pre-push 훅이 활성화된 하네스에서는 push 시 강제된다).
+- **남용 금지**: pre-push 속도·신뢰를 보존하기 위해 진짜 핵심 흐름에만 부여한다. 모든 테스트에 붙이면 게이트가 무의미해진다.
+- Reviewer가 `@critical` 과다 부여를 발견하면 자동 검사 승격 대기 큐(docs/TECH_DEBT.md)에 기록한다.
+
+## 금지 사항
+
+- feature_list.json의 기능 설명을 수정/삭제하지 않는다
+- 한 번에 여러 기능을 구현하지 않는다
+- 기존에 동작하는 코드를 이유 없이 리팩터링하지 않는다
+- 테스트 없이 기능을 완료 처리하지 않는다 — **예외**: `category: infra`/`config` 작업이 session-routine.md § 인프라/설정 트랙 게이트를 통과하면, 유닛 RED→GREEN 대신 통합 검증(빌드+실동작)으로 완료할 수 있다. 그 외에는 예외 없음.
+- Plan 모드(/plan) 승인 후에도 TDD 사이클(최소 RED → GREEN)을 거치지 않고 기능을 완료하지 않는다 (인프라/설정 트랙 예외는 위와 동일)
+- **인프라 오분류 금지**: 변경이 추가하는 동작에 대해 의미 있는 실패 테스트(유닛/E2E)를 작성할 수 있으면 인프라가 아니다 — TDD를 적용한다. 모호하면 TDD. 진행 중인 기능을 실패 테스트 회피용으로 인프라로 강등하지 않는다

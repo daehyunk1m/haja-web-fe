@@ -1,0 +1,209 @@
+[
+  {
+    "id": "F001",
+    "category": "core",
+    "priority": 1,
+    "description": "TaskCore 도메인 모델 — 불변 복제 패턴, 이벤트 소싱, 상태 전이 (TODO/ONGOING/DELAY/CANCEL/DONE)",
+    "steps": [
+      "TaskCore 인스턴스 생성",
+      "changeState()로 상태 전이",
+      "with()로 불변 복제 확인",
+      "toJSON()/TaskCore.from(dto) 직렬화/역직렬화",
+      "_events 이력 추적 확인"
+    ],
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "48개 테스트 통과 — 생성/changeState/with/isClosed/events 방어적 복사/toJSON+from 검증 완료"
+  },
+  {
+    "id": "F002",
+    "category": "core",
+    "priority": 1,
+    "description": "Zustand 기반 태스크 상태 관리 — useBulletStore (Map<string, TaskCore>), localStorage 영속화",
+    "steps": [
+      "useBulletStore에 태스크 추가",
+      "태스크 상태 변경",
+      "localStorage(localBullets) 영속화 확인",
+      "페이지 새로고침 후 데이터 복원"
+    ],
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "bulletStore 22개 테스트 Green — addBullet/changeBulletState/editBullet/deleteBullet/toggleDone/postpone/persist 검증"
+  },
+  {
+    "id": "F003",
+    "category": "ui",
+    "priority": 2,
+    "description": "불렛 리스트 UI — 날짜별 태스크 목록 표시, 상태 아이콘, 컨텍스트 메뉴",
+    "steps": [
+      "날짜 선택 시 해당 날짜의 태스크 목록 노출",
+      "태스크 상태에 따른 아이콘 표시",
+      "컨텍스트 메뉴로 상태 변경"
+    ],
+    "passes": true,
+    "last_session": "2026-06-14",
+    "notes": "PopupContainer 테스트 Green + changeBulletState 버그 수정. BulletIcon 롱프레스 타이머화(누른 채 500ms 경과 시 팝업 오픈, 포인터 이벤트로 마우스·터치 지원) — 테스트 3개. PopupContainer 외부 클릭 닫기 버그 수정(죽은 코드였던 리스너를 단일 effect로 활성화, pointerdown 사용) — 테스트 2개. 상태 팝업 중복 렌더 버그 수정(Body에서 1회만 렌더 + closest 기반 외부 판정으로 다중 인스턴스 방어) — 테스트 1개"
+  },
+  {
+    "id": "F004",
+    "category": "ui",
+    "priority": 2,
+    "description": "태스크 추가 모달 — 새 태스크 입력 및 저장",
+    "steps": [
+      "모달 열기",
+      "태스크 내용 입력",
+      "저장 후 리스트에 반영"
+    ],
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "AddTaskInput 7개 테스트 Green — 렌더링/입력/전송(addBullet 호출, closeModal, createdAt) 검증"
+  },
+  {
+    "id": "F005",
+    "category": "ui",
+    "priority": 2,
+    "description": "캘린더 컴포넌트 — 날짜 선택 및 useDateStore 연동",
+    "steps": [
+      "캘린더에서 날짜 선택",
+      "useDateStore 상태 변경 확인",
+      "선택 날짜에 따른 불렛 리스트 갱신"
+    ],
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "CalendarContainer 테스트 5개 Green — 렌더링/날짜 선택(dateStore 업데이트)/캘린더 닫기 검증"
+  },
+  {
+    "id": "F006",
+    "category": "auth",
+    "priority": 3,
+    "description": "Google OAuth 인증 — Supabase Auth 기반 로그인/로그아웃",
+    "steps": [
+      "Google OAuth 로그인 플로우",
+      "인증 상태 유지 (AuthContext)",
+      "ProtectedRoute 미인증 시 리다이렉트",
+      "로그아웃"
+    ],
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "AuthContext 테스트 9개 Green — AuthProvider/signInWithGoogle/signOut/useAuthContext 에러 검증"
+  },
+  {
+    "id": "F007",
+    "category": "core",
+    "priority": 3,
+    "description": "진행률 추적 — useProgressStore 기반 태스크 완료율 계산",
+    "steps": [
+      "전체 태스크 대비 완료 태스크 비율 계산",
+      "진행률 UI 표시"
+    ],
+    "passes": true,
+    "last_session": "2026-06-17",
+    "notes": "progressStore 9개 테스트 Green — 초기값/빈배열 NaN 버그 수정/완료율 계산/CANCEL 처리 검증. 집계 범위를 각 날의 태스크(type=task)로 한정 — someday(백로그) 제외, SectionList를 단일 보고자(task 섹션)로 고정해 두 섹션 경쟁 제거. SectionList.test 2개 추가"
+  },
+  {
+    "id": "F008",
+    "category": "core",
+    "priority": 2,
+    "description": "자동 이관 — 완료/취소되지 않은 태스크를 다음날로 자동 이관 (shouldCarryForward, carryForward)",
+    "steps": [
+      "shouldCarryForward 조건 확인 (미완료 + 과거 날짜)",
+      "carryForward로 새 날짜의 태스크 생성",
+      "원본 태스크 상태 유지 확인"
+    ],
+    "passes": true,
+    "last_session": "2026-04-09",
+    "notes": "shouldCarryForward + carryForward 검증 테스트 13개 — 모두 Green"
+  },
+  {
+    "id": "F010",
+    "category": "ui",
+    "priority": 4,
+    "description": "드래그 순서 변경 — 태스크 목록 내 드래그로 순서 재배치",
+    "steps": [
+      "태스크 드래그 시작",
+      "드래그 위치에 따른 순서 변경",
+      "변경된 순서 영속화"
+    ],
+    "passes": true,
+    "last_session": "2026-04-10",
+    "notes": "구현 완료 — @dnd-kit 기반 드래그 순서 변경, taskOrder를 bulletStore에 별도 관리, 15개 테스트 Green"
+  },
+  {
+    "id": "F011",
+    "category": "ui",
+    "priority": 4,
+    "description": "Someday 컨테이너 — 날짜 무관 태스크(someday)와 일반 태스크(task)를 분리된 컨테이너로 표시, 타입 선택 UI",
+    "steps": [
+      "태스크 추가 시 타입 선택 (task / someday)",
+      "일반 태스크는 날짜별 컨테이너에 표시",
+      "someday 태스크는 별도 컨테이너에 표시 (날짜 무관)",
+      "someday 태스크는 자동 이관 대상에서 제외",
+      "someday ↔ task 타입 변경 가능"
+    ],
+    "passes": true,
+    "last_session": "2026-04-11",
+    "notes": "구현 완료 — shouldCarryForward someday 제외, SectionList 날짜 필터 바이패스, PopupContainer 타입 전환 UI 추가. 9개 테스트 Green"
+  },
+  {
+    "id": "F012",
+    "category": "ui",
+    "priority": 4,
+    "description": "스와이프 삭제 — 태스크를 왼쪽으로 슬라이드하면 삭제 버튼이 드러나고 평소에는 숨겨진다. 세로 드래그(순서변경)와 축으로 분리해 공존",
+    "steps": [
+      "평소에는 삭제 버튼이 숨겨져 있다",
+      "태스크를 왼쪽으로 슬라이드하면 삭제 버튼이 드러난다",
+      "임계값 미만 슬라이드는 다시 닫힌다",
+      "드러난 삭제 버튼 클릭 시 태스크가 삭제된다",
+      "세로 드래그(순서변경)와 충돌하지 않는다"
+    ],
+    "passes": true,
+    "last_session": "2026-06-14",
+    "notes": "useSwipeToReveal 훅 신규(window 포인터 추적·축 잠금·임계값 스냅) + TaskItem 재구성(오른쪽 고정 삭제 버튼/본문 슬라이드/aria-hidden). dnd-kit 센서 축 분리(distance.y:10, tolerance.x:12)로 F010 회귀 없음. 단일 열림 조율(swipeRevealStore): 다른 행 스와이프/순서변경 드래그 시 열린 행 자동 닫힘. 삭제 시 ConfirmDialog('정말 삭제하시겠습니까?') 확인 단계 추가(ModalContainer 재사용). 테스트 16개 Green(훅 7 + TaskItem 9)"
+  },
+  {
+    "id": "F013",
+    "category": "ui",
+    "priority": 4,
+    "description": "섹션 단일 확장(아코디언) — 투데이/섬데이 중 태스크가 더 많은 컨테이너 하나만 확장하고, 나머지는 접힘(peek) 상태로 둔다. 탭 토글 시 부드러운(ease) 확장/접힘 애니메이션. 투데이 우하단 추가 버튼 확대.",
+    "steps": [
+      "화면 진입 시 태스크가 더 많은 컨테이너만 확장된다 (동률은 투데이)",
+      "다른 컨테이너는 접힘(peek) 상태로 내부 스크롤된다",
+      "탭을 누르면 확장 컨테이너가 전환된다 (항상 둘 중 하나만 확장)",
+      "확장/접힘이 부드럽게 애니메이션된다 (ease)",
+      "투데이 우하단 추가 버튼이 48px로 확대된다"
+    ],
+    "passes": true,
+    "last_session": "2026-06-17",
+    "notes": "확장 상태를 공유 store(sectionExpandStore)로 분리 — 두 섹션 중 항상 하나만 확장(아코디언). pickInitialExpanded로 진입 시 태스크 많은 쪽 자동 확장(동률 task). 애니메이션은 SectionContainer의 flex-grow(0↔1) 전환 — 두 grow의 합이 항상 1이라 높이가 선형으로 변해 부드럽고, TodoContainer는 basis-[138px] peek를 유지한 채 grow로 부모를 채워 별도 transition 불필요. ease-in-out 0.3s, motion-reduce 대응. 추가 버튼 40→48px(Ico box 스케일). 유닛 10개(pickInitialExpanded 4 + store 6) + E2E 5개(@feature:F013) Green, 브라우저 실측 검증. [2026-06-17 폴리시] 섬데이 추가 버튼(AddBulletBtn 좌측)도 확장과 동기화 — 언마운트(즉시 깜빡임) 대신 항상 DOM에 유지하고 grid-rows(0fr↔1fr) 높이 + opacity를 동일 0.3s ease-in-out로 전환(motion-reduce 대응, 접힘 시 aria-hidden/tabIndex=-1/pointer-events-none). 유닛 4개(AddBulletBtn.test) + E2E 1개 추가 → 유닛 14·E2E 6 Green, 브라우저 실측(확장 h48·opacity1, 접힘 h0·opacity0·DOM 유지). [2026-06-17] TODAY 탭의 토글 역할은 F014로 이관 — 이제 TODAY는 '오늘로 이동'이고, 아코디언 토글은 SOMEDAY 탭이 담당(E2E '탭 전환' 테스트도 SOMEDAY 양방향 토글로 갱신). step '탭을 누르면 전환'은 SOMEDAY 탭으로 유효."
+  },
+  {
+    "id": "F014",
+    "category": "ui",
+    "priority": 4,
+    "description": "TODAY 탭으로 오늘 날짜 이동 + 날짜 변경 시 섹션 확장 재판단 — TODAY 탭은 컨테이너 토글이 아니라 선택 날짜를 오늘로 되돌리고, 날짜(일)가 바뀌면 태스크 수 기준으로 확장 컨테이너를 다시 결정한다.",
+    "steps": [
+      "TODAY 탭을 누르면 선택 날짜가 오늘로 바뀐다",
+      "다른 날짜로 이동하면 그 날짜의 태스크 수 기준으로 확장 컨테이너가 재결정된다",
+      "TODAY로 돌아오면 오늘 기준으로 확장이 재결정된다",
+      "TODAY 탭은 더 이상 확장을 토글하지 않는다 (토글은 SOMEDAY 탭이 담당)"
+    ],
+    "passes": true,
+    "last_session": "2026-06-17",
+    "notes": "DateTab의 TODAY onClick을 sectionExpand toggle()→dateStore setDate()(인자 없이 호출 시 오늘)로 교체하고, 토글을 의미하던 ↑↓ 화살표 제거(SOMEDAY 탭은 토글 유지). 날짜 변경 시 재판단: sectionExpandStore에 reevaluate() 추가(initialized·counts만 해제, 현재 expanded는 유지해 깜빡임 방지) + useSyncExpandWithDate 훅(dateStore subscribeWithSelector로 toBulletString(일) 변경만 구독→reevaluate, Body에서 1회 마운트). 일 단위 변경에만 반응(같은 날 시각 변경 무시), 마운트 시 미발화로 진입 자동확장과 무충돌. 유닛 7개(store reevaluate 2 + 훅 3 + SectionTab 2) + E2E 1개(@feature:F014: 지난달 15일 선택→SOMEDAY 확장, TODAY→오늘 복귀+TASK 확장). validate 219 passed/1 skipped, E2E 8 passed, 브라우저 실측 검증."
+  },
+  {
+    "id": "F015",
+    "category": "infra",
+    "priority": 5,
+    "description": "Figma 디자인 토큰 추출 파이프라인 — Figma Styles API에서 색·타이포·effect를 tokens.json + design.md로 재생성한다. 진실 소스=Figma, 재추출→git diff로 디자인 드리프트 감지.",
+    "steps": [
+      "yarn figma:extract가 FIGMA_TOKEN으로 Figma full-file API(/files/:key)를 호출한다",
+      "로컬 스타일·designSystem 팔레트·문서 전체 그림자 스캔을 tokens.json으로 변환한다 (정렬, 결정적)",
+      "tokens.json에서 docs/design-docs/design.md를 재생성한다",
+      "effect 스타일이 0개이면 design.md가 무그림자 디자인 언어를 명시한다 (shadow 드리프트 가드 근거)"
+    ],
+    "passes": true,
+    "last_session": "2026-06-17",
+    "notes": "full-file API(/files/:key)로 추출 — 이 파일은 퍼블리시 스타일 0개라 로컬 스타일(file.styles 맵)을 참조 노드에서 해석. 결과: 타이포 8(로컬 TEXT 스타일), 색 7(designSystem 페이지 raw 팔레트 — #000 4단계 불투명도+#fff+#f0f0f0+#d9d9d9, 색 스타일 없어 이름=hex), effect 0(문서 전체 스캔 — 무그림자 실증). 변환 모듈 scripts/figma/tokens.ts(순수) + 유닛테스트 14개, CLI scripts/extract-figma-tokens.ts(fetch/IO). yarn validate 통과(236/1skip). 산출물 tokens.json + docs/design-docs/design.md. 계획: docs/exec-plans/figma-design-extraction.md. shadow-* 금지 가드는 현 시점 오버스펙으로 보류(사용자 결정) — 토큰 추출이 deliverable. Figma 데이터품질(Title 1/Bold=weight300 등 이름·웨이트 불일치)·색 스타일화는 사용자 몫."
+  }
+]

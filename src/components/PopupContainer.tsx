@@ -1,0 +1,138 @@
+import { useBulletStore } from "../shared/bulletStore";
+import { useEffect } from "react";
+import { usePopupStore } from "../shared/popupStores";
+import { useDateStore } from "../shared/dateStore";
+import { Bullet } from "../shared/types/taskType";
+import BulletIcon from "./BulletIcon";
+
+const states = [Bullet.TODO, Bullet.ONGOING, Bullet.DELAY, Bullet.DONE, Bullet.CANCEL];
+
+export default function PopupContainer() {
+  const targetId = usePopupStore((state) => state.targetId);
+  const position = usePopupStore((state) => state.position);
+  const isModalOpen = usePopupStore((state) => state.isModalOpen);
+
+  const { closePopup } = usePopupStore((state) => state.actions);
+  const { changeBulletState, editBullet } = useBulletStore((state) => state);
+  const targetTask = useBulletStore((state) => state.tasks.get(targetId));
+  const toBulletString = useDateStore((state) => state.toBulletString);
+
+  // 모달 외부 클릭 또는 Esc 시 닫기
+  useEffect(() => {
+    if (!isModalOpen) return;
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        closePopup();
+      }
+    };
+
+    // 롱프레스(포인터 이벤트)·터치와 일관되게 pointerdown으로 바깥 클릭을 감지한다.
+    // 팝업을 연 롱프레스의 pointerdown은 이 리스너 등록 이전에 끝났으므로 자기 자신을 닫지 않는다.
+    // closest로 판정해 팝업이 여러 인스턴스로 렌더돼도 어떤 팝업 내부 클릭이면 닫지 않는다.
+    const handlePointerDownOutside = (e: PointerEvent) => {
+      const target = e.target;
+      if (target instanceof Element && target.closest("[data-popup-root]")) return;
+      closePopup();
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    document.addEventListener("pointerdown", handlePointerDownOutside);
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("pointerdown", handlePointerDownOutside);
+    };
+  }, [isModalOpen, closePopup]);
+
+  if (!isModalOpen) return null;
+
+  // 화면 경계를 고려한 위치 계산
+  const getPositionStyles = () => {
+    if (position.x === 0 && position.y === 0) {
+      // 기본 위치 (화면 중앙)
+      return {
+        left: "50%",
+        top: "50%",
+        transform: "translate(-50%, -50%)",
+      };
+    }
+
+    // 화면 크기 고려
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const modalWidth = 200; // 예상 모달 너비
+    const modalHeight = 250; // 예상 모달 높이
+
+    let left = position.x;
+    let top = position.y;
+
+    // 오른쪽 경계 체크
+    if (left + modalWidth > viewportWidth) {
+      left = viewportWidth - modalWidth - 20;
+    }
+
+    // 아래쪽 경계 체크
+    if (top + modalHeight > viewportHeight) {
+      top = position.y - modalHeight - 40; // 위쪽에 표시
+    }
+
+    // 왼쪽 경계 체크
+    if (left < 20) {
+      left = 20;
+    }
+
+    // 위쪽 경계 체크
+    if (top < 20) {
+      top = 20;
+    }
+
+    return {
+      left: `${left}px`,
+      top: `${top}px`,
+      transform: "none",
+    };
+  };
+
+  return (
+    <div
+      data-popup-root
+      data-testid='popup-container'
+      className='absolute z-50 w-fit min-w-[160px] border border-black bg-white py-5 shadow-sm animate-in zoom-in-95 duration-200'
+      style={getPositionStyles()}
+    >
+      <div className='flex flex-col'>
+        {states.map((state, i) => {
+          const label =
+            state === Bullet.TODO ? "to do" : state === Bullet.ONGOING ? "on going" : state;
+          const capital = [...label].map((el, i) => (i === 0 ? el.toUpperCase() : el)).join("");
+          return (
+            <div
+              key={i}
+              className='flex cursor-pointer items-center gap-2 px-5 py-2 hover:bg-gray-100 transition-colors duration- 150'
+              onClick={() => {
+                changeBulletState(targetId, state, toBulletString(), true);
+                closePopup();
+              }}
+            >
+              <BulletIcon id={targetId} bulletState={state} />
+              <span className='text-sm font-medium text-black'>{capital}</span>
+            </div>
+          );
+        })}
+        <div className='border-t border-gray-200 my-2' />
+        <div
+          className='flex cursor-pointer items-center gap-2 px-5 py-2 hover:bg-gray-100 transition-colors duration-150'
+          onClick={() => {
+            const newType = targetTask?.type === "someday" ? "task" : "someday";
+            editBullet(targetId, { type: newType });
+            closePopup();
+          }}
+        >
+          <span className='text-sm font-medium text-black'>
+            {targetTask?.type === "someday" ? "Task로 이동" : "Someday로 이동"}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}

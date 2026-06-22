@@ -1,40 +1,35 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { useEffect } from "react";
+import Container from "./components/Container";
+import { useAddModalStore } from "./shared/addModalStore";
+import { enableMapSet } from "immer";
+import { useDateStore } from "./shared/dateStore";
+import Header from "./components/Header";
+import Body from "./components/Body";
+import { AddModal } from "./components/modal/AddModal";
+import { useAuthContext } from "./contexts/AuthContext";
+// immer Map/Set 불변 처리 활성화
+enableMapSet();
 
 function App() {
-  const [count, setCount] = useState(0);
+  const isAddModalOpen = useAddModalStore((state) => state.isAddModalOpen);
+  const { setDate } = useDateStore((state) => state.actions);
+  const { user } = useAuthContext();
+
+  useEffect(() => {
+    setDate(new Date());
+  }, []);
 
   return (
     <>
-      <div>
-        <a href='https://vite.dev' target='_blank'>
-          <img src={viteLogo} className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://react.dev' target='_blank'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
-      <Test />
+      <Container>
+        {/* <div>안녕하세요{user?.email}님</div> */}
+        <img src={user?.user_metadata?.avatar_url} alt='' />
+        <Header />
+        <Body />
+      </Container>
+      {isAddModalOpen && <AddModal />}
     </>
   );
 }
 
 export default App;
-
-function Test() {
-  return (
-    <div>
-      <h1 className='text-3xl font-bold underline'>hello world</h1>
-    </div>
-  );
-}

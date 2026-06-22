@@ -1,68 +1,158 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* Fonts */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* Tailwind CSS */
+@import "tailwindcss";
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+/* Tailwind Theme Configuration */
+@theme {
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius: 0.625rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 1rem;
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+  /* Layout - 앱 콘텐츠 최대 폭. 데스크탑에서 이 폭으로 가운데 고정된다 (max-w-app) */
+  --container-app: 480px;
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  /* Colors - Optimized for Test.tsx usage */
+  --color-background: 255 255 255;
+  --color-foreground: 0 0 0;
+  --color-border: 0 0 0;
+  --color-ring: 59 130 246;
+
+  /* Zinc colors for bg-zinc-100 */
+  --color-zinc-100: 244 244 245;
+  --color-zinc-900: 24 24 27;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Base Styles */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "DM Sans", "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+      system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR",
+      "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  }
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+/* Utility Classes for Test.tsx */
+@layer utilities {
+  /* 컨테이너 내부 스크롤 시 스크롤바 숨김 (스크롤 기능은 유지) */
+  .scrollbar-hide {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/legacy Edge */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
+
+  /* Animation utilities */
+  .animate-in {
+    animation-fill-mode: both;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .zoom-in-95 {
+    animation: zoomIn95 0.2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes zoomIn95 {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* 바텀시트 모달(ModalContainer·CalendarModal)이 화면 아래에서 위로 올라온다 */
+  .animate-slide-up {
+    animation: slideUp 0.2s ease-in-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  /* Essential color utilities */
+  .bg-zinc-100 {
+    background-color: rgb(var(--color-zinc-100));
+  }
+
+  .bg-black {
+    background-color: rgb(0 0 0);
+  }
+
+  .bg-white {
+    background-color: rgb(255 255 255);
+  }
+
+  .text-black {
+    color: rgb(0 0 0);
+  }
+
+  .text-white {
+    color: rgb(255 255 255);
+  }
+
+  .border-black {
+    border-color: rgb(0 0 0);
+  }
+
+  .outline-black {
+    outline-color: rgb(0 0 0);
+  }
+
+  /* Border width utilities */
+  .border-1 {
+    border-width: 1px;
+  }
+
+  .outline-1 {
+    outline-width: 1px;
+  }
 }
 
-@media (prefers-color-scheme: light) {
+/* Future Dark Mode Support - Currently Disabled */
+/*
+@media (prefers-color-scheme: dark) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+    --color-background: 24 24 27;
+    --color-foreground: 255 255 255;
+    --color-border: 255 255 255;
   }
 }
+*/

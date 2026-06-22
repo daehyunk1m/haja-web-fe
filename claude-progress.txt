@@ -1,0 +1,222 @@
+=== 세션 기록 ===
+
+[2026-04-09] 하네스 초기 셋업
+- 프로젝트 프로필 분석 완료 (레이어 기반 아키텍처)
+- 하네스 파일 생성: AGENTS.md, CLAUDE.md, ARCHITECTURE.md, agents/*.md, .claude/rules/*.md, scripts/*.ts
+- feature_list.json 초기 항목 7개 등록 (모두 passes: false — 검증 필요)
+
+[2026-04-09] PRD vs 구현 상태 감사 + 테스트 구축 플랜 수립
+- PRD 전수 조사 완료: 10개 요구사항 중 6개 완전 구현, 2개 부분 구현, 2개 미구현
+- 버그 2건 발견: PopupContainer changeBulletState 미호출, progressStore NaN
+- PRD "시작(START)" 상태 → 5상태 체계 유지로 결정 (PRD 수정 예정)
+- 드래그 순서 변경 → F010으로 등록 예정 (추후 구현)
+- 자동 이관 → F008로 등록 예정 (이미 구현됨, 테스트만 필요)
+- 플랜 파일: .claude/plans/snug-dancing-kay.md
+
+[2026-04-09] Step 0 완료: PRD 수정 + feature 등록
+- PRD.md에서 "시작" 상태 제거 (5상태 유지)
+- feature_list.json에 F008(자동 이관), F010(드래그 순서 변경) 추가
+- 커밋: c38519e
+
+[2026-04-09] Step 1 완료: F001 TaskCore 테스트
+- src/shared/TaskCore.test.ts 생성 — 48개 테스트 전부 통과
+- 범위: 생성/changeState/with/isClosed/events 방어적 복사/toJSON+from
+- F001 passes: true 업데이트
+
+[2026-04-09] Step 2 완료: F008 자동 이관 테스트
+- src/shared/TaskCore.test.ts에 shouldCarryForward(6개) + carryForward(7개) describe 추가
+- 총 13개 테스트 모두 Green
+- F008 passes: true 업데이트
+
+[2026-04-09] Step 3 완료: F002 bulletStore 테스트 + 기존 빌드/린트 오류 수정
+- src/shared/bulletStore.test.ts 생성 — 22개 테스트 Green
+- src/test/setup.ts에 enableMapSet() 추가 (Immer MapSet 플러그인)
+- 기존 TS/ESLint 오류 수정: App.tsx, BulletIcon.tsx, CalendarModal.tsx, Test.tsx, useTaskStoreHydrated.ts, storesZustand.ts, useAuth.ts, AuthCallback.tsx, Title.tsx, AuthContext.tsx
+- eslint.config.js: .react-router 자동생성 폴더 ignore 추가
+- F002 passes: true 업데이트
+
+[2026-04-09] Step 4 완료: F007 progressStore 테스트 + NaN 버그 수정
+- src/shared/progressStore.test.ts 생성 — 9개 테스트 Green
+- 버그 수정: progressStore.ts L37 — tasks.length === 0 시 0 반환 (NaN 방지)
+- F007 passes: true 업데이트
+
+[2026-04-09] Step 5 완료: F004 AddTaskInput 테스트
+- src/components/modal/AddTaskInput.test.tsx 생성 — 7개 테스트 Green
+- vite.config.ts: 테스트 환경에서 react() 플러그인 사용 (reactRouter() 대신)
+- @testing-library/dom peer dependency 설치
+- F004 passes: true 업데이트
+
+[2026-04-09] Step 6 완료: F003 PopupContainer 테스트 + changeBulletState 버그 수정
+- src/components/PopupContainer.test.tsx 생성 — 7개 테스트 Green
+- 버그 수정: PopupContainer.tsx — useBulletStore import 복구 + useDateStore 추가 + onClick에서 changeBulletState 호출
+- F003 passes: true 업데이트
+
+[2026-04-09] Step 7 완료: F005 캘린더 테스트
+- src/components/CalendarContainer.test.tsx 생성 — 5개 테스트 Green
+- CalendarModal 모킹으로 react-day-picker 의존성 분리
+- 렌더링/날짜 선택(dateStore 업데이트)/캘린더 닫기(toggleCalendar) 검증
+- F005 passes: true 업데이트
+
+[2026-04-09] Step 8 완료: F006 AuthContext 테스트
+- src/contexts/AuthContext.test.tsx 생성 — 9개 테스트 Green
+- vi.mock('@/lib/supabase'), vi.mock('react-router') 활용
+- AuthProvider 렌더링/loading 상태/user 업데이트/subscription cleanup/signInWithGoogle/signOut/navigate/useAuthContext 에러 검증
+- F006 passes: true 업데이트
+
+[2026-04-10] F010 완료: 드래그 순서 변경
+- @dnd-kit/core + @dnd-kit/sortable + @dnd-kit/utilities 패키지 추가
+- bulletStore에 taskOrder: Record<string, string[]> 추가 (날짜+타입별 독립 순서)
+- buildOrderKey 유틸, useOrderedTasks 훅, SortableTaskItem 컴포넌트 신규 생성
+- SectionList에 DndContext + SortableContext 통합
+- TaskCore 도메인 모델 미변경, localStorage 키 변경 없음
+- 테스트 15개 Green (orderKey 2 + bulletStore 8 + useOrderedTasks 5)
+- Architect 검증 PASS, Reviewer 판정 PASS
+
+[2026-04-11] F011 완료: Someday 컨테이너
+- shouldCarryForward에 someday 타입 제외 조건 추가 (TaskCore.ts)
+- SectionList 날짜 필터에 someday 바이패스 추가 (SectionList.tsx)
+- editBullet 타입 정의에 type 추가 (bulletStore.d.ts)
+- PopupContainer에 타입 전환 버튼 추가 ("Someday로 이동" / "Task로 이동")
+- 테스트 9개 Green (TaskCore 2 + bulletStore 3 + PopupContainer 4)
+- Plan 모드로 설계 후 TDD RED → GREEN 사이클 완료
+
+[2026-06-14] F012 완료: 스와이프 삭제
+- 삭제 아이콘 상시노출 → 왼쪽 슬라이드 시 노출로 UX 변경
+- src/hooks/useSwipeToReveal.ts 신규 — window 포인터 리스너, 첫 이동에서 가로/세로 축 잠금, 떼는 순간 임계값 기준 열림/닫힘 스냅. jsdom 호환 위해 setPointerCapture 미사용
+- TaskItem 재구성 — 오른쪽 고정 삭제 버튼(평소 aria-hidden + pointer-events-none) 위로 본문이 translateX로 슬라이드. 열린 상태에서 본문 클릭 시 닫기 우선
+- SectionList dnd-kit 센서 축 분리: activationConstraint { distance:{y:10}, tolerance:{x:12} } — 세로 이동은 순서변경 활성, 활성 전 가로 이동은 드래그 취소해 스와이프에 양보 (F010 회귀 없음)
+- 테스트 12개 Green (useSwipeToReveal 7 + TaskItem 5), 전체 validate 통과 (176 passed / 1 skipped)
+- 참고: 데스크톱에서는 마우스로 좌측 드래그 = 스와이프. 터치 세로 순서변경은 touch-action:pan-y 영향(기존부터 제한적, 회귀 아님)
+
+[2026-06-14] F012 보강: 스와이프 단일 열림 조율
+- 요구: 다른 태스크를 스와이프/드래그하면 열려 있던 스와이프가 닫히게
+- src/shared/swipeRevealStore.ts 신규 — openId(활성 태스크 1개) 추적 스토어
+- TaskItem: 자기 행에서 스와이프/열림 시작 시 openId 소유권 claim, openId가 다른 id면 자동 close
+- SectionList: DndContext onDragStart에서 setOpenId(null) → 순서변경 드래그 시작 시 열린 행 닫힘
+- 테스트 2개 추가(TaskItem 단일 열림 조율), 전체 validate 통과 (178 passed / 1 skipped)
+
+[2026-06-14] F012 보강: 삭제 확인 모달
+- 요구: 태스크 삭제 시 "정말 삭제하시겠습니까?" 확인 알럿(모달)
+- src/components/modal/ConfirmDialog.tsx 신규 — 기존 ModalContainer(포털·배경/Esc 닫기) + shadcn Button(destructive/outline) 재사용
+- TaskItem: 삭제 버튼 클릭 시 즉시 삭제 대신 확인 모달 표시(confirmOpen). 확인 시 deleteBullet, 취소/배경/Esc 시 닫기
+- 테스트: 즉시삭제 1개 → 확인 플로우 3개로 교체(TaskItem 9개). 전체 validate 통과 (180 passed / 1 skipped)
+
+[2026-06-14] F003 보강: 롱프레스 타이머화 (BulletIcon)
+- 요구: 롱프레스 시 손을 떼지 않아도 지정 시간(500ms) 경과하면 팝업이 뜨게
+- 기존: onMouseUp에서 누른 시간 계산 → 손을 떼야만 팝업 오픈
+- 변경: onPointerDown에서 setTimeout(500) 시작 → 발동 시 누른 채로 togglePopup. 떼는 순간 longPressFired면 무시, 아니면 짧은 클릭(toggleDone/상태변경). pointerleave·pointercancel 시 타이머 취소. 마우스·터치 모두 지원(포인터 이벤트)
+- BulletIcon.test.tsx 신규(롱프레스 3개), 전체 validate 통과 (183 passed / 1 skipped)
+
+[2026-06-14] F003 보강: 팝업 외부 클릭 닫기
+- 요구: 롱프레스로 뜬 상태 팝업을 모달 바깥 클릭 시 닫기
+- 버그: PopupContainer useEffect의 첫 if(isModalOpen) early return 때문에 외부클릭(mousedown) 리스너가 죽은 코드였음 → 기존엔 Esc로만 닫힘
+- 수정: 단일 effect에서 keydown(Esc) + pointerdown(외부 클릭) 리스너를 함께 등록. 롱프레스(포인터)·터치와 일관되게 pointerdown 사용. 팝업을 연 pointerdown은 리스너 등록 이전에 끝나 자기-닫힘 없음
+- PopupContainer.test 2개 추가(외부/내부 클릭), 전체 validate 통과 (185 passed / 1 skipped)
+
+[2026-06-14] F003 버그수정: 상태 팝업 중복 렌더 → 상태 변경이 닫힘에 가로채임
+- 증상: 외부 클릭 닫기는 동작하나, 상태 옵션을 누르면 변경이 안 되고 닫힘
+- 원인: Body가 task/someday 섹션마다 SectionList를 렌더 → 각 SectionList가 PopupContainer를 렌더해 팝업이 2개 마운트. 한 팝업 내부 클릭 시 다른 인스턴스의 외부-클릭(pointerdown) 리스너가 자기 modalRef 기준 "바깥"으로 판단해 closePopup → onClick 상태변경 전에 언마운트 (외부-클릭 리스너를 활성화한 직전 커밋이 잠재 버그를 드러냄)
+- 수정(A): PopupContainer를 SectionList에서 제거하고 Body에서 1회만 렌더
+- 수정(B): 외부 판정을 modalRef.contains → closest('[data-popup-root]')로 변경해 다중 인스턴스에도 안전
+- PopupContainer.test 중복-인스턴스 방어 1개 추가, 전체 validate 통과 (186 passed / 1 skipped)
+
+[2026-06-14] 타이틀 편집 blur 저장 (TaskItem/EditTask)
+- 요구: 타이틀 수정 중 Enter를 누르지 않아도 타이틀 영역 바깥을 클릭(blur)하면 반영
+- EditTask에 onBlur=save 추가. Enter·blur는 저장, Escape는 취소(저장 안 함)
+- settledRef 가드로 Enter·blur·Escape 후 언마운트 시 발생하는 blur의 중복 저장/취소 가로채임 방지
+- TaskItem.test 편집 3개(Enter/blur/Escape) 추가, 전체 validate 통과 (189 passed / 1 skipped)
+
+[2026-06-14] 스와이프 바깥 클릭 해제 (TaskItem)
+- 요구: 스와이프된 상태에서 해당 태스크 외 다른 영역을 선택하면 스와이프가 풀리게
+- 기존 조율(swipeRevealStore)은 다른 행 스와이프/순서변경 드래그에만 닫힘 → 빈 영역·다른 UI 클릭엔 안 풀림
+- TaskItem 루트에 ref + isOpen일 때 document pointerdown 리스너: 루트 바깥 클릭이면 close()+setOpenId(null)
+- 내부(삭제 버튼 등) 클릭은 유지. 스와이프를 연 pointerdown은 isOpen=true 이전이라 자기-닫힘 없음
+- TaskItem.test 2개(바깥/내부 클릭) 추가, 전체 validate 통과 (191 passed / 1 skipped)
+
+[2026-06-16] 긴 태스크 제목 줄바꿈 (TaskItem)
+- 요구: 태스크 이름이 매우 길어 컨테이너 오른쪽 끝에 닿거나 넘칠 때 줄바꿈 처리
+- 원인: 제목 span의 whitespace-nowrap + 컨테이너 고정 높이 h-[38px]로 넘침/잘림
+- 수정: whitespace-nowrap 제거 + break-words 추가(공백 없는 긴 단어 강제 줄바꿈),
+  h-[38px] → min-h-[38px](여러 줄 시 행이 늘어나도록). flex-1 min-w-0는 유지
+- TaskItem.test 회귀 1개(긴 제목: nowrap 없음 + break-* 존재) 추가, 전체 validate 통과 (196 passed / 1 skipped)
+- 후속: 줄바꿈 시 아이콘이 세로 중앙에 뜨지 않도록 행 컨테이너 items-center → items-start
+  (아이콘 24px == 첫 줄 높이 24px이라 한 줄일 때도 정렬 동일). 정렬 회귀 테스트 1개 추가 (197 passed / 1 skipped)
+
+[2026-06-17] F013 완료: 섹션 단일 확장(아코디언) + 부드러운 전환 + 추가 버튼 확대
+- 요구: 진입 시 투데이/섬데이 둘 다 확장되던 것을 태스크가 더 많은 한쪽만 확장. ease 애니메이션. 투데이 우하단 + 버튼 확대.
+- 확장 상태를 per-section context(useBulletSection.isFold)에서 공유 store로 분리: src/shared/sectionExpandStore.ts 신규
+  - 두 섹션 중 항상 하나만 확장(아코디언). reportCount(섹션별 태스크 수 보고)로 진입 시 1회 자동 확장(pickInitialExpanded: 많은 쪽, 동률 task). toggle은 어느 탭을 눌러도 확장 전환.
+- 애니메이션: SectionContainer를 flex-grow(0↔1) 전환으로 변경(basis-auto 고정, transition-[flex-grow] ease-in-out 0.3s, motion-reduce:transition-none).
+  두 grow의 합이 항상 1이라 높이가 선형으로 변해 부드럽고 글리치 없음(브라우저 실측: mid flex-grow 0.39/0.61 → 0.03/0.97, 합=1.0).
+  TodoContainer는 basis-[138px] peek 유지 + grow로 부모를 채움 → 부모 전환을 따라가므로 별도 transition 불필요(접힘 컨테이너 내부 스크롤 유지: scrollH 222 > clientH 136).
+- 추가 버튼 40→48px: AddBulletBtn 우측 분기 w-12 h-12, Ico에 box(viewBox) 분리로 40-unit 패스를 48px로 스케일. data-testid=add-bullet-task.
+- SectionContainer에 data-section/data-expanded 부여(E2E 견고성). useBulletSection에서 isFold/setIsFold 제거, sectionFold.shouldAutoExpand→pickInitialExpanded.
+- 테스트: 유닛 10개(pickInitialExpanded 4 + sectionExpandStore 6) + E2E 5개(@feature:F013). validate(207 passed/1 skipped) + E2E 6 passed.
+- 브라우저 검증 케이스: 6:5→투데이 확장, 토글→섬데이 확장(애니메이션), 3:6→섬데이 확장, 빈 상태→투데이 기본 확장.
+
+SESSION_ID: 2026-06-17T02-52-00Z-b7k2
+
+[2026-06-17] F013 폴리시: 섬데이 추가 버튼 확장 동기화 애니메이션
+- 요구: 섬데이 컨테이너 확장 시 AddBulletBtn이 너무 깜빡거리며 생김 → 확장과 함께 부드럽게 올라오도록.
+- 원인: 좌측(섬데이) AddBulletBtn이 접힘 시 null 반환 → 확장 순간 풀사이즈로 즉시 mount(깜빡임). SectionContainer는 0.3s로 부드럽게 여는데 버튼만 동기화 안 됨.
+- 수정(src/components/bulletList/AddBulletBtn.tsx): 언마운트 대신 항상 DOM 유지.
+  바깥 div를 grid + grid-rows 0fr↔1fr(transition-[grid-template-rows] 0.3s ease-in-out, motion-reduce 대응)로 높이를 0↔콘텐츠(48px) 전환(고정 px 불필요). 버튼은 opacity 0↔1 동일 전환.
+  접힘 시 aria-hidden=true / tabIndex=-1 / pointer-events-none(a11y). testid: add-bullet-someday-region(바깥), add-bullet-someday(버튼).
+  부수효과: 투데이 섹션 첫 렌더(tabPosition 기본 left) 시 기존엔 섬데이 버튼이 한 프레임 보였으나, 이제 접힘 래퍼(높이0)라 미노출 — 개선.
+- RED→GREEN: 유닛 4개(AddBulletBtn.test.tsx — 접힘에도 DOM 잔존/opacity·aria 토글/transition 클래스) 신규. E2E 1개(section-expand.e2e.ts @feature:F013 — 접힘 attached+height<4·transition≠none, 확장 visible+height>40) 신규.
+- 검증: yarn validate(211 passed/1 skipped) + E2E @feature:F013 6 passed. 브라우저 실측: 확장 h48/opacity1/aria-hidden false, 접힘 h0/opacity0/aria-hidden true·DOM 유지·transitionProperty=grid-template-rows.
+- 후속(타이밍 stagger): 컨테이너·버튼이 동시(0→0.3s) 시작·종료라 어색하다는 피드백 → 버튼을 늦게 출발시키되 끝은 같게.
+  열림 상태 클래스에만 delay-150 + duration-150 부여(컨테이너 0.3s, 버튼 0.15s 지연 후 0.15s → 둘 다 0.3s에 종료). CSS timing은 "도착 상태"에서 읽히므로 닫힘(도착=접힘)엔 delay 없이 duration-200로 빠르게 접혀 오버플로 방지.
+  유닛 +1(닫힘 delay 없음) → AddBulletBtn.test 5개. E2E에 computed transitionDelay=0.15s·Duration=0.15s 실측 추가. validate(212 passed/1 skipped) + E2E 6 passed.
+  (stagger 폭은 delay-100→150으로 한 차례 상향 조정; 끝나는 시점 0.3s 불변.)
+
+[2026-06-17] F014: TODAY 탭 오늘 이동 + 날짜 변경 시 확장 재판단
+- 요구: TODAY 버튼이 컨테이너 확장/축소 토글이었는데, 누르면 '오늘 날짜로 이동'하게. 날짜가 바뀌면 확장 판단도 다시.
+- 변경(RED→GREEN):
+  · DateTab(SectionTab.tsx): TODAY onClick toggle()→setDate()(오늘). 토글 의미의 ↑↓ 화살표 제거(SOMEDAY 탭은 토글+화살표 유지). isExpanded/toggle 의존 제거.
+  · sectionExpandStore: reevaluate() 추가 — initialized·counts만 해제, 현재 expanded는 유지(재판단 전 깜빡임 방지). reset과 구분.
+  · useSyncExpandWithDate 훅(신규): dateStore.subscribe(subscribeWithSelector, s=>s.toBulletString()) → 일 문자열 변경 시 reevaluate(). Body에서 1회 마운트. 마운트 시 미발화(구독은 변경에만)라 진입 자동확장과 무충돌, 같은 날 시각 변경엔 무반응.
+- 동작: 다른 날짜로 가면 그 날짜의 task 수 기준 재판단(과거일은 task 0→SOMEDAY 확장), TODAY로 오면 오늘 기준 재판단(보통 TASK). 토글은 SOMEDAY 탭이 담당.
+- 테스트: 유닛 7개(store reevaluate 2 + 훅 3 + SectionTab 2) + E2E 1개(@feature:F014). F013 E2E '탭 전환'은 TODAY→SOMEDAY 양방향 토글로 갱신.
+- 검증: validate 219 passed/1 skipped, E2E 8 passed. 브라우저 실측: 진입 TASK확장 → 2026-06-01 선택 시 SOMEDAY확장 → TODAY 클릭 시 오늘복귀+TASK확장.
+- 결정/되돌리기 쉬움: TODAY 화살표 제거(원하면 1줄 복구), '이미 오늘'이면 무동작(날짜 변경 없음 → 재판단 없음).
+
+[2026-06-17] F007 버그수정: 진행률 파이차트에 someday 태스크가 섞이는 문제
+- 요구: progress 파이차트 계산에 someday 태스크가 들어감 → 각 날의 태스크만 집계되도록.
+- 원인(SectionList.tsx): setSelectedTasks(tasks)로 보고했는데 tasks의 날짜 필터가 someday는 날짜 무관 전부 포함(task 타입만 해당 날짜로 스코핑). 그래서 someday 백로그가 분모/분자에 유입.
+  구조 함정: SectionList는 type=task(우)·someday(좌) 두 인스턴스가 Body에서 항상 함께 마운트되고 둘 다 동일 tasks를 보고 중 → 단순히 visibleTasks로 바꾸면 두 섹션이 서로 다른 값으로 store를 덮어쓰는 경쟁(race) 발생.
+- 수정: dailyTasks = tasks.filter(t=>t.type==="task") 메모 추가. 진행률 보고는 type==="task" 인스턴스 1곳만(단일 보고자) → someday 제외 + 경쟁 제거.
+- RED→GREEN: SectionList.test.tsx 신규 2개 — (someday 섞여도 각 날 태스크만 50%) / (someday만 있으면 0%). 두 섹션 모두 마운트해 실제 store로 회귀 재현(현재코드 40%·50% → 수정후 50%·0%).
+- 검증: yarn validate 통과(build+lint+lint:arch, 221 passed/1 skipped). PieChart/Progress/progressStore는 무변경(계산 입력만 교정).
+- 되돌리기 쉬움: SectionList 진행률 보고부 1블록 한정 변경. F007 passes 유지(더 정확해짐).
+
+[2026-06-17] F015(infra) 착수: Figma → 디자인 토큰 추출 파이프라인 (PAT 대기)
+- 계기: 사용자가 Figma 파일 링크 공유(gEWbtX9XnpzkHc9eVpv4j5). exec-plan(figma-design-extraction.md, Option A=REST+PAT)의 실행 트리거.
+- 진실 소스=Figma, design.md/tokens.json=추출 산출물(수작업 금지). 재추출→git diff로 드리프트 감지.
+- 구현(하이브리드 — 인프라 게이트의 '부정 테스트' 규칙 적용):
+  · 변환은 테스트 가능한 로직 → TDD. scripts/figma/tokens.ts(순수 모듈: 색 hex/rgba, effect→box-shadow, FILL/TEXT/EFFECT→토큰, design.md 생성) + tokens.test.ts 12개 GREEN.
+  · fetch+파일 I/O만 인프라 → scripts/extract-figma-tokens.ts(CLI). .env의 FIGMA_TOKEN 또는 env로 인증, 파일키/URL 모두 수용, styles+nodes 호출(청크), 산출물 2개 기록.
+  · package.json에 figma:extract 스크립트 추가.
+- 검증: 신규 유닛 12개 + 전체 233 passed/1 skipped, yarn lint 0 errors. (build 무영향 — scripts/는 tsc 빌드 그래프 밖.)
+- 블로커(사용자 액션): 읽기전용 Figma PAT 필요. .env에 FIGMA_TOKEN=figd_... 추가 후 yarn figma:extract 실행하면 tokens.json+design.md 생성 → 실값 검토 후 passes 판정. PAT는 채팅에 붙여넣지 말고 .env에 직접(.env는 gitignore).
+- 후속(별도 작업): effect 0개 확인 시 shadow-* 금지 ESLint/structural 가드(TECH_DEBT 승격 큐). FigmaTest.tsx/mcp 라우트 정리는 TECH_DEBT 별건.
+
+[2026-06-17] F015(infra) 완료: 추출 성공 + 접근 피벗(퍼블리시 스타일 → full-file/로컬 스타일)
+- PAT 확보 후 실행: 인증 정상이나 /files/:key/styles(퍼블리시 스타일)는 0개. 진단 결과 이 파일은 스타일을 라이브러리로 퍼블리시하지 않고 로컬 스타일로만 둠.
+- 사용자 결정(질문): "로컬 스타일로 피벗". 추출기를 full-file API(/files/:key) 기반으로 재작성:
+  · 타이포: file.styles 맵의 TEXT 스타일을 참조 노드(node.styles.text)의 style 값으로 해석 → 8개.
+  · 색: FILL 스타일 없음 → designSystem 페이지 raw SOLID fill에서 팔레트 도출(이름=hex, 불투명도는 이름에 %) → 7개(#000 @45/50/70/100% + #d9d9d9 + #f0f0f0 + #fff).
+  · effect: 문서 전체 노드 그림자 스캔 → 0개. ★원래 드리프트 가설(shadcn shadow=HAJA 언어와 충돌) 실증 확인.
+- 변환 모듈/테스트 재작성: tokens.ts(buildTokensFromFile 등) + tokens.test.ts 14개. CLI는 full-file fetch로 단순화.
+- 검증: yarn validate 통과(build+lint+lint:arch, 236 passed/1 skipped). 산출물 tokens.json + docs/design-docs/design.md 생성.
+- 데이터 품질 메모(사용자 몫): 타이포 이름/웨이트 불일치(Title 1/Bold=300=Light, Title 2/Regular=600=SemiBold). 색 의미명 부재(색 스타일 만들면 해소).
+- shadow-* 금지 가드: 현 시점 오버스펙으로 보류(사용자 결정) — 토큰 추출만으로 충분. 커밋은 feature/F015-figma-tokens 브랜치(2커밋: 코드 / 산출물).
+
+[2026-06-17] 태스크 생성/제목 인터랙션 폴리시 (F004 보강 + TaskItem)
+- 요구: ① 빈 제목으로도 태스크가 생성되던 것 차단 ② Enter 키로도 생성 ③ 모바일 웹에서 제목 더블클릭 시 텍스트가 선택영역으로 잡힘 방지.
+- AddTaskInput.tsx(F004): handleSubmit 추출 — input.trim()이 비면 생성·모달닫힘 모두 스킵(계속 입력 가능), 저장은 trim된 값. input에 onKeyDown 추가해 Enter 제출. 한글 IME 조합 확정 Enter는 e.nativeEvent.isComposing 가드로 제외(첫 Enter에 조합 중 글자 오등록 방지). 전송 버튼 onClick도 handleSubmit 공유.
+- TaskItem.tsx: 제목 표시 span에 select-none(user-select:none) 추가 — 더블탭/더블클릭 텍스트 선택 차단. 편집 input엔 미영향. handleDoubleClick의 디버그 console.log(toJSON) 제거(deps [bulletTask]→[]).
+- RED→GREEN: AddTaskInput.test +6(빈제목 3·Enter 2·IME 1), TaskItem.test +1(select-none 클래스 존재). yarn validate 통과(242 passed/1 skipped).
+- 검증 한계: select-none 실제 브라우저 선택 차단은 jsdom 미검증(클래스 존재로 회귀 가드 — break-words 선례와 동일). 필요 시 E2E(getSelection 빈 문자열) 추가 가능.
+
+=== END ===

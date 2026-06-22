@@ -1,0 +1,325 @@
+{
+  "harness": {
+    "version": "1.23.0",
+    "skillVersion": "1.23.0",
+    "installedAt": "2026-04-09T12:00:00Z",
+    "upgradedAt": "2026-06-22T03:13:04Z",
+    "upgradeInProgress": false,
+    "preset": "custom",
+    "structuralTestEnforcement": "enforced",
+    "semanticApprovalAt": null
+  },
+  "profile": {
+    "architectureType": "layer-based",
+    "srcRoot": "src/",
+    "pathAlias": "@/",
+    "layers": {
+      "order": [
+        "types",
+        "utils",
+        "lib",
+        "shared",
+        "hooks",
+        "contexts",
+        "components",
+        "pages",
+        "app"
+      ],
+      "rules": {
+        "types": {
+          "allowedImports": []
+        },
+        "utils": {
+          "allowedImports": [
+            "types"
+          ]
+        },
+        "lib": {
+          "allowedImports": [
+            "types"
+          ]
+        },
+        "shared": {
+          "allowedImports": [
+            "types",
+            "utils",
+            "lib"
+          ]
+        },
+        "hooks": {
+          "allowedImports": [
+            "types",
+            "utils",
+            "lib",
+            "shared"
+          ]
+        },
+        "contexts": {
+          "allowedImports": [
+            "types",
+            "lib",
+            "shared",
+            "hooks"
+          ]
+        },
+        "components": {
+          "allowedImports": [
+            "types",
+            "utils",
+            "lib",
+            "shared",
+            "hooks"
+          ]
+        },
+        "pages": {
+          "allowedImports": [
+            "types",
+            "utils",
+            "lib",
+            "shared",
+            "hooks",
+            "contexts",
+            "components"
+          ]
+        },
+        "app": {
+          "allowedImports": [
+            "types",
+            "utils",
+            "lib",
+            "shared",
+            "hooks",
+            "contexts",
+            "components",
+            "pages"
+          ]
+        }
+      }
+    },
+    "naming": {
+      "components": "PascalCase (예: TaskItem.tsx)",
+      "hooks": "camelCase + use 접두사 (예: useAuth.ts)",
+      "stores": "camelCase + Store 접미사 (예: bulletStore.ts)",
+      "types": "PascalCase + Type/Props 접미사",
+      "tests": "원본명.test.ts(x)"
+    },
+    "devServer": {
+      "command": "yarn dev",
+      "port": 5173,
+      "readyCheck": "curl -s -o /dev/null -w '%{http_code}' http://localhost:5173"
+    },
+    "scripts": {
+      "validate": "yarn build && yarn test:run && yarn lint",
+      "test": "yarn test:run",
+      "build": "yarn build",
+      "lint": "yarn lint"
+    },
+    "tdd": {
+      "securityCategories": "auth, security, api",
+      "maxImplementerAttempts": 3,
+      "maxDebuggerAttempts": 2
+    },
+    "git": {
+      "commitScopes": null,
+      "commitLang": "ko",
+      "branchPrefixes": [
+        "feature/",
+        "fix/",
+        "docs/",
+        "refactor/",
+        "chore/"
+      ],
+      "mainBranch": "main"
+    },
+    "docFreshnessDays": 14,
+    "e2e": {
+      "enabled": true,
+      "framework": "playwright",
+      "playwrightVersion": "1.61.0",
+      "prePush": true,
+      "mcp": {
+        "enabled": true,
+        "version": "0.0.76"
+      }
+    },
+    "integrations": {
+      "superpowers": {
+        "enabled": true,
+        "source": "plugin",
+        "detectedVersion": "6.0.0",
+        "installPath": "/Users/daehyun/.claude/plugins/cache/claude-plugins-official/superpowers/6.0.0",
+        "linkedSkills": [
+          "brainstorming",
+          "systematic-debugging",
+          "writing-plans"
+        ]
+      },
+      "multiModelConsult": {
+        "enabled": true,
+        "source": "bundled",
+        "detectedVersion": null,
+        "installPath": null,
+        "advisors": [
+          "codex",
+          "gemini"
+        ]
+      }
+    },
+    "autoCommit": {
+      "mode": "auto",
+      "pushAfterCommit": false
+    }
+  },
+  "files": {
+    "ARCHITECTURE.md": {
+      "category": "custom",
+      "templateHash": "sha256:efeacb1079ce8184007b33b7de78e887a1ac875a30ffd4bf96299c158eb276f1",
+      "generatedAt": "2026-04-09T12:00:00Z"
+    },
+    "AGENTS.md": {
+      "category": "custom",
+      "templateHash": "sha256:275afc297c4150daa19f198c51a6f886c06d48e8e2d6e0c70d12ada474f48ee4",
+      "generatedAt": "2026-06-13T11:39:01Z"
+    },
+    "CLAUDE.md": {
+      "category": "custom",
+      "templateHash": "sha256:d8d838ab9a313f127b6cbcc6c9fddbb85a1db9b5015fcce2628ce84a2c0acaf2",
+      "generatedAt": "2026-06-12T10:36:05Z"
+    },
+    ".claude/rules/session-routine.md": {
+      "category": "managed",
+      "templateHash": "sha256:53aa2f760440db71686af51c27359c56e0e525bb441d0a9cbd40789e0c26b89a",
+      "generatedAt": "2026-06-22T03:13:04Z"
+    },
+    ".claude/rules/coding-standards.md": {
+      "category": "managed",
+      "templateHash": "sha256:463fbe5d76420ad0908cdd0891c5392dfabb1c5d3b993ced3594f4861621bf19",
+      "generatedAt": "2026-06-16T16:26:50Z"
+    },
+    ".claude/rules/git-workflow.md": {
+      "category": "managed",
+      "templateHash": "sha256:ebe51184164f362c4bd400bb2e470ef33984df236681bf34a5114ee22776e478",
+      "generatedAt": "2026-06-13T18:11:02Z"
+    },
+    "agents/architect.md": {
+      "category": "managed",
+      "templateHash": "sha256:024a0e30f641fed96dfed46fc13a7c046413a140c34425bc2075deba4fa1a61c",
+      "generatedAt": "2026-06-16T00:00:00Z"
+    },
+    "agents/test-engineer.md": {
+      "category": "managed",
+      "templateHash": "sha256:4e90719e87725156c974ea8c9501066593aeb8a7e9706a75b783c44da154c413",
+      "generatedAt": "2026-06-16T16:26:50Z"
+    },
+    "agents/implementer.md": {
+      "category": "managed",
+      "templateHash": "sha256:d5d5bfa15cdf6505c32e782f0ab63fae9932f0f7b342635d5d198a906cccb1ab",
+      "generatedAt": "2026-06-10T08:45:00Z"
+    },
+    "agents/reviewer.md": {
+      "category": "managed",
+      "templateHash": "sha256:73e3f1a3b00ae68b03597a4e828a6d8a4bc3bcafb3bcdb413e6c14aa33b998a9",
+      "generatedAt": "2026-06-10T05:54:07Z"
+    },
+    "agents/simplifier.md": {
+      "category": "managed",
+      "templateHash": "sha256:e1a478b3e5ea5b5bacaa89b751d2d5a3c006d6bb69e839fe600b6dc4297fb926",
+      "generatedAt": "2026-06-10T08:45:00Z"
+    },
+    "agents/debugger.md": {
+      "category": "managed",
+      "templateHash": "sha256:d4c07cdb7abfa1fde4c3ad459f15f7d7f30d41bf0ca4829c447ff45346146dcf",
+      "generatedAt": "2026-06-16T16:26:50Z"
+    },
+    "agents/security-reviewer.md": {
+      "category": "managed",
+      "templateHash": "sha256:e6c9b2625479fcff998935bcfbc039871d7eaad8ab64f6e96ae3aef273ccfcba",
+      "generatedAt": "2026-04-09T12:00:00Z"
+    },
+    "feature_list.json": {
+      "category": "data",
+      "templateHash": "sha256:f8aa41bb431ca6cdd2782b28f665ce1684b3670af8464fd8c0b230b7ca861405",
+      "generatedAt": "2026-04-09T12:00:00Z"
+    },
+    "claude-progress.txt": {
+      "category": "data",
+      "templateHash": "sha256:7d6a2814408b238f265114029e68d39ca95edbf2fa2674cd2b4973e41ba87cf0",
+      "generatedAt": "2026-04-09T12:00:00Z"
+    },
+    "init.sh": {
+      "category": "managed",
+      "templateHash": "sha256:af74146338fb384f948a8486b0ee9fad8c7c4f6ba2dde2f86baa5ebaf10b3fbc",
+      "generatedAt": "2026-04-09T12:00:00Z"
+    },
+    "scripts/structural-test.ts": {
+      "category": "managed",
+      "templateHash": "sha256:809458b79e7fa4f9b96c0301ac11989780a5450eddeb7fecbb52c2ca20257d18",
+      "generatedAt": "2026-06-13T18:11:02Z"
+    },
+    "scripts/doc-freshness.ts": {
+      "category": "managed",
+      "templateHash": "sha256:9fbd68d0c1296826f80bbcf8ce73a967469ad694523c2336e3a8a00cef29d434",
+      "generatedAt": "2026-04-09T12:00:00Z"
+    },
+    "docs/QUALITY_SCORE.md": {
+      "category": "data",
+      "templateHash": "sha256:11f8845ed33cbd34673f2aa2f5d70ceb6735f65cc89baedad5485e21a846e68b",
+      "generatedAt": "2026-06-10T05:54:07Z"
+    },
+    "docs/TECH_DEBT.md": {
+      "category": "data",
+      "templateHash": "sha256:a5fd6e18f536a0949c1119a702bd7cd18766e8a7c39fa8e3da976bbdea917917",
+      "generatedAt": "2026-06-10T05:54:07Z"
+    },
+    "docs/HARNESS_FRICTION.md": {
+      "category": "managed",
+      "templateHash": "sha256:5980ae6fce0e07e3e1428e91cd70ddfa5ba891b91cb2497b4096a65853d5b236",
+      "generatedAt": "2026-06-16T16:26:50Z"
+    },
+    "scripts/harness-check.sh": {
+      "category": "managed",
+      "templateHash": "sha256:99dd3e96bfad43739735c063b409fbaffe8ab6fa1b90367dec5f985437785ccd",
+      "generatedAt": "2026-06-16T16:26:50Z"
+    },
+    "playwright.config.ts": {
+      "category": "managed",
+      "templateHash": "sha256:71f669c937e953fbb4c52a7bd3deb8c9d9187d167d1f2cad1db7a48052719c8a",
+      "generatedAt": "2026-06-16T00:00:00Z"
+    },
+    "e2e/tsconfig.json": {
+      "category": "managed",
+      "templateHash": "sha256:49ceb430896a135c31d793ae87628de3c9184e4887435d5085de1ef526dc0d3a",
+      "generatedAt": "2026-06-16T00:00:00Z"
+    },
+    "e2e/fixtures/test.ts": {
+      "category": "custom",
+      "templateHash": "sha256:8c80fff9454c7608042f63043393989cb00f209cdb726316954743e816d77b61",
+      "generatedAt": "2026-06-16T00:00:00Z"
+    },
+    "e2e/fixtures/seed.ts": {
+      "category": "custom",
+      "templateHash": "sha256:2769ee87b6539b1c5d3e6cc5e39c558cac031b89be66636d23083c07302762ab",
+      "generatedAt": "2026-06-16T00:00:00Z"
+    },
+    "e2e/specs/smoke.e2e.ts": {
+      "category": "custom",
+      "templateHash": "sha256:0faa0e28ce5b5bbe00dfd12458a08531f7acdee202a76da97f0ba72d07f41c47",
+      "generatedAt": "2026-06-16T00:00:00Z"
+    },
+    ".harness-friction.jsonl": {
+      "category": "data",
+      "templateHash": "sha256:6d8d305c3935010b35731b9c5b079a5f524bc4a316e9b319dd1649c98b842f7b",
+      "generatedAt": "2026-06-16T16:26:50Z"
+    },
+    ".githooks/pre-push": {
+      "category": "managed",
+      "templateHash": "sha256:61d2173ecff5f3374979bc0d622871c41eb910ce79e4e428193aca9db2a70c9e",
+      "generatedAt": "2026-06-16T16:26:50Z"
+    },
+    ".harness-feedback-cursor": {
+      "category": "data",
+      "templateHash": "sha256:7c395f61188a163da619d76b2e57ccfd6e1b29efdf99ce40200620f83c5c7d1e",
+      "generatedAt": "2026-06-22T03:13:04Z"
+    }
+  }
+}

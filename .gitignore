@@ -12,16 +12,49 @@ dist
 dist-ssr
 *.local
 
+# Environment files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env*.local
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
+.vscode
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
+# Sensitive infrastructure docs (SQL schemas, RLS policies)
+docs/private/
+
+# Build output
+build/
+
 # Bundlers
 .react-router/
+
+# Vercel
+.vercel
+
+# Claude Code 개인 설정 (팀 공유 금지)
+.claude/settings.local.json
+
+# Claude Code 멀티모델 자문 아티팩트 (감사용 로컬 보관, 공유 불필요)
+.claude/artifacts/
+
+# Playwright E2E 산출물
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# 브라우저 검증용 임시 스크린샷 (verify/run 스킬 산출물)
+/.screenshots/
