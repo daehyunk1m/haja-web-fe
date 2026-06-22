@@ -1,5 +1,5 @@
 {
-  "version": "1.20.0",
+  "version": "1.23.0",
   "preset": "custom",
   "projectName": "haja-web-fe",
   "description": "이벤트 히스토리 모델과 불렛저널 시스템을 결합한 하루 단위 태스크 관리 웹 앱",
@@ -208,8 +208,8 @@
     "superpowers": {
       "enabled": true,
       "source": "plugin",
-      "detectedVersion": "5.1.0",
-      "installPath": "/Users/daehyun/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0",
+      "detectedVersion": "6.0.0",
+      "installPath": "/Users/daehyun/.claude/plugins/cache/claude-plugins-official/superpowers/6.0.0",
       "linkedSkills": [
         "brainstorming",
         "systematic-debugging",
@@ -218,9 +218,9 @@
     },
     "multiModelConsult": {
       "enabled": true,
-      "source": "companion",
+      "source": "bundled",
       "detectedVersion": null,
-      "installPath": "/Users/daehyun/.claude/skills/multi-model-consult",
+      "installPath": null,
       "advisors": [
         "codex",
         "gemini"
@@ -264,75 +264,35 @@
   ],
   "skipFiles": [],
   "approved": true,
-  "approvedAt": "2026-06-16T16:18:03Z",
+  "approvedAt": "2026-06-22T03:05:45Z",
   "mode": "upgrade",
-  "fromVersion": "1.13.1",
-  "toVersion": "1.20.0",
+  "fromVersion": "1.20.0",
+  "toVersion": "1.23.0",
   "migrations": [],
   "fileActions": {
     ".claude/rules/session-routine.md": {
       "action": "overwrite",
-      "reason": "1.16 E2E 레이아웃 회귀 트리거 확장 + 1.18 SESSION_ID 생성·JSONL 마찰 기록 + 1.20 인프라/설정 트랙 (managed 자동 감지, 사용자 미수정·해시 일치). INTEGRATION_NOTES는 profile.integrations 재렌더로 보존",
+      "reason": "1.22.0 세션 종료 피드백 보고 트리거 추가 (managed 자동 감지, 사용자 미수정·해시 일치 458516). INTEGRATION_NOTES는 profile.integrations 재렌더로 보존 (superpowers 3종 + consult 텍스트 안정)",
       "source": "auto-detect"
     },
-    ".claude/rules/coding-standards.md": {
-      "action": "overwrite",
-      "reason": "1.16 검증 레벨에 jsdom 한계 명시 (managed 자동 감지, 사용자 미수정·해시 일치)",
-      "source": "auto-detect"
-    },
-    "agents/test-engineer.md": {
-      "action": "overwrite",
-      "reason": "1.16 E2E 작성 트리거를 UI 상호작용 또는 시각/레이아웃 회귀 위험으로 확장 (managed 자동 감지, 사용자 미수정·해시 일치)",
-      "source": "auto-detect"
-    },
-    "agents/debugger.md": {
-      "action": "overwrite",
-      "reason": "1.15 {{MCP_DEBUG_PROTOCOL}} 브라우저 MCP 진단 블록 주입 — e2e.mcp 옵트인 수락에 따른 재렌더 (managed)",
-      "source": "auto-detect"
-    },
-    "scripts/harness-check.sh": {
-      "action": "overwrite",
-      "reason": "1.18 .harness-friction.jsonl 필수 파일 점검 추가 + 1.19 node_modules 미설치 사전 감지(④⑤⑥ 보류·exit 0 분기) (managed 자동 감지, 사용자 미수정·해시 일치)",
-      "source": "auto-detect"
-    },
-    "playwright.config.ts": {
-      "action": "overwrite",
-      "reason": "1.17 §12.6.1 매핑 편입 → 자동 감지 대상. 실제 템플릿 diff는 scaffold가 렌더 후 판정(무변경 시 멱등 스킵)",
-      "source": "auto-detect"
-    },
-    "e2e/tsconfig.json": {
-      "action": "overwrite",
-      "reason": "1.17 §12.6.1 매핑 편입 → 자동 감지 대상. 실제 템플릿 diff는 scaffold가 렌더 후 판정(무변경 시 멱등 스킵)",
-      "source": "auto-detect"
-    },
-    "docs/HARNESS_FRICTION.md": {
-      "action": "overwrite",
-      "reason": "1.18.0 data→managed 정적 참조 문서 전환(로그 테이블 제거, 로그는 .harness-friction.jsonl로 분리). 기존 로그 4건은 셋업이 jsonl로 이관 보존 후 덮어쓰기. 매니페스트 카테고리 data→managed 갱신",
-      "source": "migration"
-    },
-    ".harness-friction.jsonl": {
+    ".harness-feedback-cursor": {
       "action": "new",
-      "reason": "1.18.0 마찰 자동 기록 싱크(append-only JSONL, category data). scaffold가 빈 파일 생성·매니페스트 등록 후 setup이 HARNESS_FRICTION.md 기존 로그 4건을 append 이관",
+      "reason": "1.22.0 보고 위치 북마크(category data). scaffold §5.12.2가 빈 초기값 {processedLines:0, lastReportedAt:null}로 생성·매니페스트 등록. 1.18.0 .harness-friction.jsonl 신규 data 파일 선례와 동일 처리. cursor 부재=graceful 전체 미보고와 동작 동일하나 매니페스트 추적 위해 생성",
       "source": "migration"
-    },
-    ".githooks/pre-push": {
-      "action": "new",
-      "reason": "1.14.0 pre-push 게이트(managed) — e2e.prePush 옵트인 수락. validate 통과 후 @critical E2E fail-fast. 활성화(git config core.hooksPath)는 Phase U5 수동 안내",
-      "source": "auto-detect"
     },
     "AGENTS.md": {
       "action": "skip",
-      "reason": "custom — 1.13.1→1.20.0 구간 적용 마이그레이션 없음",
+      "reason": "custom — 1.20.0→1.23.0 구간 적용 마이그레이션 없음. 보조 스킬 consult 참조는 경로 없는 일반 문구라 1.23.0 번들 전환에 무영향",
       "source": "migration"
     },
     "CLAUDE.md": {
       "action": "skip",
-      "reason": "custom — 1.13.1→1.20.0 구간 적용 마이그레이션 없음",
+      "reason": "custom — 1.20.0→1.23.0 구간 적용 마이그레이션 없음",
       "source": "migration"
     },
     "ARCHITECTURE.md": {
       "action": "skip",
-      "reason": "custom — 1.13.1→1.20.0 구간 적용 마이그레이션 없음",
+      "reason": "custom — 1.20.0→1.23.0 구간 적용 마이그레이션 없음",
       "source": "migration"
     }
   },

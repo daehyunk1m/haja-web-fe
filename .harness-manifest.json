@@ -1,9 +1,9 @@
 {
   "harness": {
-    "version": "1.20.0",
-    "skillVersion": "1.20.0",
+    "version": "1.23.0",
+    "skillVersion": "1.23.0",
     "installedAt": "2026-04-09T12:00:00Z",
-    "upgradedAt": "2026-06-16T16:26:50Z",
+    "upgradedAt": "2026-06-22T03:13:04Z",
     "upgradeInProgress": false,
     "preset": "custom",
     "structuralTestEnforcement": "enforced",
@@ -146,8 +146,8 @@
       "superpowers": {
         "enabled": true,
         "source": "plugin",
-        "detectedVersion": "5.1.0",
-        "installPath": "/Users/daehyun/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0",
+        "detectedVersion": "6.0.0",
+        "installPath": "/Users/daehyun/.claude/plugins/cache/claude-plugins-official/superpowers/6.0.0",
         "linkedSkills": [
           "brainstorming",
           "systematic-debugging",
@@ -156,9 +156,9 @@
       },
       "multiModelConsult": {
         "enabled": true,
-        "source": "companion",
+        "source": "bundled",
         "detectedVersion": null,
-        "installPath": "/Users/daehyun/.claude/skills/multi-model-consult",
+        "installPath": null,
         "advisors": [
           "codex",
           "gemini"
@@ -188,8 +188,8 @@
     },
     ".claude/rules/session-routine.md": {
       "category": "managed",
-      "templateHash": "sha256:458516805e2e6e3afa0c16acfcab846107f201f2184a9e28026f3a627ab28cf8",
-      "generatedAt": "2026-06-16T16:26:50Z"
+      "templateHash": "sha256:53aa2f760440db71686af51c27359c56e0e525bb441d0a9cbd40789e0c26b89a",
+      "generatedAt": "2026-06-22T03:13:04Z"
     },
     ".claude/rules/coding-standards.md": {
       "category": "managed",
@@ -315,6 +315,11 @@
       "category": "managed",
       "templateHash": "sha256:61d2173ecff5f3374979bc0d622871c41eb910ce79e4e428193aca9db2a70c9e",
       "generatedAt": "2026-06-16T16:26:50Z"
+    },
+    ".harness-feedback-cursor": {
+      "category": "data",
+      "templateHash": "sha256:7c395f61188a163da619d76b2e57ccfd6e1b29efdf99ce40200620f83c5c7d1e",
+      "generatedAt": "2026-06-22T03:13:04Z"
     }
   }
 }
